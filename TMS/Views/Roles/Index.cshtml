@@ -1,0 +1,59 @@
+﻿@model IEnumerable<TMS.Model.RolesModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+<br><br/>
+<br><br/>
+<h2>Roles Index</h2>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RoleCode)
+        </th>
+        <th>
+            @Html.DisplayName("Action")
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+
+                @if (@item.IsActive)
+                {<div class="img-circle"><img src="~/Content/images/check.png" alt="editok" width="18"></div>}
+                else
+                { <div class=""><img src="~/Content/images/delete.png" alt="edit" width="18"></div>}
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoleCode)
+            </td>
+            <td>
+                <a href="@Url.Action("ViewPermission", "FormRoleMapping", new { Id = item.Id })"><img src="~/Content/images/settings.png" alt="edit" width="18"></a>
+              
+            </td>
+
+
+        </tr>
+    }
+
+</table>

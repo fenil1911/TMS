@@ -1,0 +1,27 @@
+﻿@using TMS.Model;
+@{
+
+}
+@if (Request.IsAuthenticated)
+{
+    <div class="user_box dropdown d-flex align-items-center justify-content-end">
+        @if (!String.IsNullOrWhiteSpace(SessionHelper.EmailId))
+        {
+            <div class="d-flex align-items-center justify-content-end" style="justify-content:center">
+                <h6 class="user_name d-flex align-items-center">
+                    @{ var email = SessionHelper.EmailId.ToString();
+                        String[] parts = email.Split(new[] { '@' });
+                        String username = parts[0];
+                        String domain = parts[1];
+                    }
+                    @username
+                </h6>
+                <span class="user_img ">
+                    @SessionHelper.EmailId[0].ToString().ToUpper()
+                </span>
+            </div>
+        }
+    </div>
+}
+
+

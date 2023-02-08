@@ -1,0 +1,178 @@
+﻿@model  IEnumerable<TMS.Model.FormRoleMappingModel>
+
+@{
+    ViewBag.Title = "ViewPermission";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="section">
+    <div class="container">
+        <h4 class="h4 mb-4">Access List</h4>
+        <label id="alertid" class="bg-success text-white"></label>
+        <div class="table-responsive">
+            @Html.Hidden("RoleId", Model.FirstOrDefault().RoleId)
+
+            <table id="RoleRights" class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FormName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FullRights)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AllowMenu)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AllowView)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AllowInsert)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AllowUpdate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AllowDelete)
+                        </th>
+                    </tr>
+                </thead>
+
+                @foreach (var item in Model)
+                {
+                    <tbody>
+                        <tr class="align-middle" id="row_@item.MenuId">
+                            <td>
+                                @Html.HiddenFor(modelItem => item.MenuId)
+                                @Html.DisplayFor(modelItem => item.FormName)
+                            </td>
+                            <td>
+                                <input type="checkbox" class="Selectall" id="FullRights_@item.MenuId" @(item.FullRights == false ? "" : "checked='checked'") onclick="SelectAll(this)" />
+                            </td>
+                            <td>
+                                <input type="checkbox" value="@item.AllowMenu" @(item.AllowMenu == false ? "" : "checked='checked'") class="Checkbox" onclick="CheckValue(@item.MenuId)" id="allowmenu_@item.MenuId" />
+                            </td>
+                            <td>
+                                <input type="checkbox" value="@item.AllowView" @(item.AllowView == false ? "" : "checked='checked'") class="Checkbox" onclick="CheckValue(@item.MenuId)" id="View_@item.MenuId" />
+                            </td>
+                            <td>
+                                <input type="checkbox" value="@item.AllowInsert" @(item.AllowInsert == false ? "" : "checked='checked'") class="Checkbox" onclick="CheckValue(@item.MenuId)" id="Insert_@item.MenuId" />
+                            </td>
+                            <td>
+                                <input type="checkbox" value="@item.AllowUpdate" @(item.AllowUpdate == false ? "" : "checked='checked'") class="Checkbox" onclick="CheckValue(@item.MenuId)" id="Update_@item.MenuId" />
+                            </td>
+                            <td>
+                                <input type="checkbox" value="@item.AllowDelete" @(item.AllowDelete == false ? "" : "checked='checked'") class="Checkbox" onclick="CheckValue(@item.MenuId)" id="Delete_@item.MenuId" />
+                            </td>
+                        </tr>
+                    </tbody>
+                }
+            </table>
+        </div>
+        <button class="btn btn-primary btn-md" id="btnAdd" style="margin-top: 0px;" type="submit">Save</button>
+        <button class="btn btn-danger btn-md" id="btnCancel" name="cancel" type="button" value="Cancel">Cancel</button>
+    </div>
+</section>
+
+<script>
+        function SelectAll(a) {
+            /*a.closet*/
+            $("#row_"+a +".Checkbox").each(function () {
+                this.checked = true;
+            });
+        }
+
+        $(".Selectall").click(function () {
+            if (this.checked) {
+                $(this).closest('tr').find('.Checkbox').each(function () {
+                    this.checked = true;
+                });
+            }
+            else {
+                $(this).closest('tr').find('.Checkbox').each(function () {
+                    this.checked = false;
+                });
+            }
+        });
+
+        function CheckValue(a) {
+            if ($("#allowmenu_" + a).prop("checked") == true && $("#View_" + a).prop("checked") == true && $("#Insert_" + a).prop("checked") == true && $("#Update_" + a).prop("checked") == true && $("#Delete_" + a).prop("checked") == true) {
+                $("#FullRights_" + a).prop("checked", true);
+            }
+            else {
+                $("#FullRights_" + a).prop("checked", false);
+            }
+        }
+
+
+         $('#btnCancel').click(function () {
+            window.location.href = '@Url.Action("Index", "Roles")';
+            return false;
+         });
+
+        $('#btnAdd').click(function () {
+
+            var MenuID = new Array();
+            var AllowMenu = new Array();
+            var AllowInsert = new Array();
+            var AllowUpdate = new Array();
+            var AllowView = new Array();
+            var AllowDelete = new Array();
+            var FullRights = new Array();
+
+            var trs = $("#RoleRights").find("tbody>tr>td>input");
+
+            var flagcount = 0;
+
+            for (var i = 0; i < trs.length; i = i + 7) {
+                MenuID[flagcount] = trs[i].value;
+                FullRights[flagcount] = trs[i + 1].checked;
+                AllowMenu[flagcount] = trs[i + 2].checked;
+                AllowView[flagcount] = trs[i + 3].checked;
+                AllowInsert[flagcount] = trs[i + 4].checked;
+                AllowUpdate[flagcount] = trs[i + 5].checked;
+                AllowDelete[flagcount] = trs[i + 6].checked;
+                flagcount++;
+            }
+
+            var RoleMapping = [];
+
+            var RoleID = $("#RoleId").val();
+
+            for (var i = 0; i < MenuID.length; i++) {
+
+                RoleMapping.push({
+                    RoleID: RoleID,
+                    MenuID: MenuID[i],
+                    FullRights: FullRights[i],
+                    AllowMenu: AllowMenu[i],
+                    AllowInsert: AllowInsert[i],
+                    AllowUpdate: AllowUpdate[i],
+                    AllowDelete: AllowDelete[i],
+                    AllowView: AllowView[i],
+                });
+            }
+
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: '@Url.Action("UpdatePermission", "FormRoleMapping")',
+                data: JSON.stringify(RoleMapping),
+                dataType: "json",
+                async: true,
+                success: function (data) {
+                if (data = true) {
+                $("#alertid").show();
+                $("#alertid").fadeIn(1000);
+                $("#alertid").html("Permission save successfully.");
+                    $("#alertid").fadeOut(5000);
+                }
+                },
+                error: function () {
+                $("#alertid").html("Error in update permission.");
+                }
+             });
+                return false;
+        });
+</script>
