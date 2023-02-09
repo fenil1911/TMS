@@ -12,16 +12,19 @@ namespace TMS.Model
         public int Id { get; set; }
         [Required]
         public string TicketName { get; set; }
-        public string Type { get; set; }
+        [Display(Name = "Type")]
+        public int TypeId { get; set; }
+        public string TypeName { get; set; }
         public string DescriptionData { get; set; }
-        public int PriorityID { get; set; }
+        public int PriorityId { get; set; }
+        public string PriorityName { get; set; }
         public int StatusId { get; set; }
+        public string StatusName { get; set; }
         public string AssignedTo { get; set; }
         public DateTime CreatedOn { get; set; }
         public string ImageName { get; set; }
         public List<MyDropdown> StatusDropdown { get; set; }
         public List<MyDropdown> PriorityDropdown { get; set; }
         public List<MyDropdown> TypeDropdown { get; set; }
-
     }
 }

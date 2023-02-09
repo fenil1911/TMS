@@ -21,10 +21,41 @@ namespace TMS.Data
         }
         public List<TicketModel> GetAllTickets()
         {
+            var all = (from t in _db.Tickets
+                       select t);
+
+            var alltickets = (from t in _db.Tickets
+                              join c in _db.CommonLookup on
+                              t.StatusId equals c.Id
+                              join c1 in _db.CommonLookup on
+                              t.PriorityId equals c1.Id
+                              join c2 in _db.CommonLookup on
+                              t.TypeId equals c2.Id
+
+                              select new TicketModel
+                              {
+                                  Id = t.Id,
+                                  TicketName = t.TicketName,
+                                  AssignedTo = t.AssignedTo,
+                                  TypeName = c2.Name,
+                                  DescriptionData = t.DescriptionData,
+                                  StatusName = c.Name,
+                                  PriorityName = c1.Name,
+                                  CreatedOn = DateTime.Now
 
 
 
-            return GetAllTickets();
+                              }).ToList();
+            return alltickets;
+            /*    return _db.Tickets.Select(x => new TicketModel
+                {
+                    Id = x.Id,
+                    Type = x.Type,
+                    AssignedTo = x.AssignedTo,
+                    DescriptionData = x.DescriptionData,
+                    StatusId = statusStr
+
+                }).ToList();*/
 
         }
         public int CreateTickets(TicketModel ticket)
@@ -37,8 +68,8 @@ namespace TMS.Data
                 DescriptionData = ticket.DescriptionData,
                 TicketName = ticket.TicketName,
                 StatusId = ticket.StatusId,
-                PriorityID = ticket.PriorityID,
-                Type = ticket.Type,
+                PriorityId = ticket.PriorityId,
+                TypeId = ticket.TypeId,
                 CreatedOn = DateTime.Now
 
 
@@ -54,27 +85,22 @@ namespace TMS.Data
             }
             return _ticket.Id;
         }
-        public int CreateTicketStatus(TicketModel ticket)
+        public int CreateTicketStatus(TicketStatus model)
         {
-            //var statusStr = _db.CommonLookup.Where(x => x.Id == ticket.StatusId).Select(x => x.Name).ToString();
-            var statusStr = (from c in _db.CommonLookup
-                             where c.Id == ticket.StatusId
-                             select c.Name).FirstOrDefault();
-            TicketStatus ticketStatus = new TicketStatus()
+            _db.TicketStatus.Add(model);
+            _db.SaveChanges();
+            return model.Id;
+        }
+        public int CreateAttachment(TicketAttachment model1)
+        {
+            TicketAttachment _ticket = new TicketAttachment()
             {
 
-
-                TicketId = ticket.Id,
-                NewStatus = statusStr
-
             };
-
-            _db.TicketStatus.Add(ticketStatus);
+            _db.TicketAttachment.Add(model1);
             _db.SaveChanges();
-            return ticketStatus.Id;
-
+            return model1.Id;
         }
-        
     }
 
 }
