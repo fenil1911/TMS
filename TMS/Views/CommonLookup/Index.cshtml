@@ -2,18 +2,21 @@
 
 @{
     ViewBag.Title = "Index";
+ 
 }
-<br>
-<br />
-<br>
-<br />
 
+<br />
 <h2>CommonLookup Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create" ,null, new { @class="btn btn-primary" })
+<p >
+    @Html.ActionLink("Create New", "Create" ,null, new { @class= "btn primaryCreateNew" })
 </p>
-<table class="table">
+
+
+
+<br />
+<br />
+<table class="table table-bordered  table-hover">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Type)
@@ -33,7 +36,7 @@
         <th>
             @Html.DisplayName("Action")
         </th>
-        <th></th>
+        
     </tr>
 
     @foreach (var item in Model)
@@ -59,7 +62,7 @@
 
             </td>
             <td>
-                <a href="@Url.Action("Create", "CommonLookup", new { Id = item.Id })"><img src="~/Content/images/draw.png" alt="edit" width="21"></a>
+                <a href="@Url.Action("Edit", "CommonLookup", new { Id = item.Id })"><img src="~/Content/images/draw.png" alt="edit" width="21"></a>
                
 
             </td>

@@ -1,17 +1,27 @@
 ﻿@model IEnumerable<TMS.Model.FormModel>
+@using PagedList.Mvc;
+@using PagedList;
 
 @{
     ViewBag.Title = "Index";
 }
-<br><br />
-<br><br />
+<br>
+<br />
+<br>
+<br />
 
-    <h2>Form Index</h2>
+<h2>Form Index</h2>
+
+
+<br />
+<br />
 <p>
-   
-    @Html.ActionLink("Create New", "Create", null,new{ @class = "btn btn-primary" }) 
+
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })
 </p>
-<table class="table">
+
+<br />
+<table class="table table-bordered  table-hover">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Name)
@@ -37,7 +47,7 @@
         <th>
             @Html.DisplayName("Action")
         </th>
-        <th></th>
+
     </tr>
 
     @foreach (var item in Model)
@@ -66,7 +76,7 @@
 
             </td>
             <td>
-               @if (@item.IsActive)
+                @if (@item.IsActive)
                 {<div class="img-circle"><img src="~/Content/images/check.png" alt="editok" width="18"></div>}
                 else
                 { <div class=""><img src="~/Content/images/delete.png" alt="edit" width="18"></div>}

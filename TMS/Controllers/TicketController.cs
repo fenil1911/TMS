@@ -15,7 +15,6 @@ namespace TMS.Controllers
     {
         private readonly TicketService _ticketService;
         private readonly CommonLookupService _commonLookupService;
-
         public TicketController()
         {
             _ticketService = new TicketService();
@@ -24,18 +23,16 @@ namespace TMS.Controllers
 
         public ActionResult Index()
         {
+            List<TicketModel> List;
             try
             {
-                ViewBag.StatusList = _ticketService.GetDropdownBykey("Status");
-                List<TicketModel> List = _ticketService.GetAllTickets();
-
-                return View(List);
-
+                List = _ticketService.GetAllTickets();
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+            return View(List);
         }
 
         public ActionResult Create()
@@ -62,7 +59,6 @@ namespace TMS.Controllers
                 model.ImageName = imgfile.FileName + Path.GetExtension(imgfile.FileName);
                 imgfile.SaveAs(Server.MapPath("//Content//Uploadimage//") + model.ImageName);
             }
-
             TicketStatus obj = new TicketStatus()
             {
                 TicketId = ticketId,
@@ -72,17 +68,68 @@ namespace TMS.Controllers
             TicketAttachment obj1 = new TicketAttachment()
             {
                 TicketId = ticketId,
-                Filename =,
+                Filename = model.ImageName,
                 CreatedOn = DateTime.Now
-                
-
             };
             _ticketService.CreateTicketStatus(obj);
             _ticketService.CreateAttachment(obj1);
-
-
             return RedirectToAction("Index");
         }
+        public FileResult DownloadFile(string fileName)
+        {
+            string contentType = string.Empty;
+            contentType = "application/force-download";
+            string fullPath = Path.Combine(Server.MapPath("~/Content/Uploadimage/") + fileName);
+            return File(fullPath, contentType, fileName);
+        }
+        public ActionResult Edit(int Id)
+        {
+            TicketModel obj = _ticketService.GetTicketsById(Id);
+            return View(obj);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(TicketModel model, HttpPostedFileBase imgfile)
+        {
+            var ticketId = _ticketService.UpdateTicket(model);
+
+            //var statusStr = _commonLookupService.GetCommonLookupById(model.StatusId).Name;
+            if (imgfile != null)
+            {
+                model.ImageName = imgfile.FileName + Path.GetExtension(imgfile.FileName);
+
+            }
+          /*  TicketStatus obj = new TicketStatus()
+            {
+                TicketId = ticketId,
+                NewStatus = statusStr,
+                CreatedOn = DateTime.Now
+            };
+          */  TicketAttachment obj1 = new TicketAttachment()
+            {
+              //  TicketId = ticketId,
+                Filename = model.ImageName,
+                CreatedOn = DateTime.Now
+            };
+            TicketService objProductservice = new TicketService();
+            TicketModel objproductmodels = objProductservice.UpdateTicket(model);
+            return RedirectToAction("Index");
+        }
+        public ActionResult Display(int Id)
+        {
+            TicketModel obj = new TicketModel();
+            obj = _ticketService.GetTicketsById(Id);
+           
+            //List<TicketModel> List = _ticketService.GetAllTickets();
+             
+            return View(obj);
+
+        }
+        /*public ActionResult Comment()
+        {
+
+        }*/
+        
     }
 }
 

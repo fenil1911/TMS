@@ -1,89 +1,102 @@
 ﻿@model IEnumerable<TMS.Model.TicketModel>
 
+@using PagedList.Mvc;
+@using PagedList;
+
 @{
     ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
+<br />
+<br />
+<h1>Tickets</h1>
+@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary primaryCreateNew" })
+<table class="table table-hover table-bordered   ">
+    <tr>
+        <th scope="col">
+            @Html.DisplayNameFor(model => model.Id)
+        </th>
+        <th>
+            @Html.DisplayName("CreatedOn")
+        </th>
+        <th>
+            @Html.DisplayName("Ticket Name")
+        </th>
+        <th>
+            @Html.DisplayName("Type Name")
+        </th>
+        <th>
+            @Html.DisplayName("Description Data")
+        </th>
+        <th>
+            @Html.DisplayName("Assigned To")
+        </th>
+        <th>
+            @Html.DisplayName("Priority Name")
+        </th>
+        <th>
+            @Html.DisplayName("Status Name")
+        </th>
+        <th>
+            @Html.DisplayName("Attachment ")
+        </th>
+        <th>
+            @Html.DisplayName("ChatBox")
+        </th>
+        <th>
+            @Html.DisplayName("Action")
+        </th>
 
-<h2>Index</h2>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @item.CreatedOn.ToString("dd/ " +
+               "MMM/yyyy").Replace('-', '/')
+                @*@item.CreatedOn.ToShortDateString()*@
+                @*@Html.DisplayFor(modelItem => item.CreatedOn.ToShortDateString())*@
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TicketName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TypeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DescriptionData)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssignedTo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PriorityName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StatusName)
+            </td>
+            <td>
+                @if (item.ImageName != null)
+                {
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<div class="container-xxl">
+                    @Html.ActionLink(item.ImageName, "DownloadFile", new { fileName = item.ImageName.ToString() });
+                }
+            </td>
+            <td>
+                <a href="@Url.Action("Display", "Ticket", new { Id = item.Id })"><img src="~/Content/images/comment.png" alt="edit" width="18"></a>
 
-    <table class="table table-hover table-bordered table-striped">
-      
-            <tr>
-                <th scope="col">
-                    @Html.DisplayNameFor(model => model.Id)
-                </th>
-                <th>
-                    @Html.DisplayName("Ticket Name")
-                </th>
-                <th>
-                    @Html.DisplayName("Type Name")
-                </th>
-                <th>
-                    @Html.DisplayName("Description Data")
-                </th>
-                <th>
-                    @Html.DisplayName("Priority Name")
-                </th>
-                <th>
-                    @Html.DisplayName("Status Name")
-                </th>
-                <th>
-                    @Html.DisplayName("Assigned To")
-                </th>
-                <th>
-                    @Html.DisplayName("CreatedOn")
-                </th>
-                <th>
-                    @Html.DisplayName("Image Name")
-                </th>
-                <th>
-                    @Html.DisplayName("Action")
-                </th>
-               
-            </tr>
-   
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TicketName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TypeName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DescriptionData)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PriorityName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StatusName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AssignedTo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreatedOn)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ImageName)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                </td>
-            </tr>
-        }
+            </td>
+            <td>
+                <a href="@Url.Action("Edit", "Ticket", new { Id = item.Id })"><img src="~/Content/images/editt.png" alt="edit" width="18"></a>
 
-    </table>
-</div>
+            </td>
+        </tr>
+    }
+
+
+</table>
+    </div>

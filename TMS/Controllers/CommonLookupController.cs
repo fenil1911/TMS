@@ -26,7 +26,7 @@ namespace TMS.Controllers
 
                 }
                 List<CommonLookupModel> List = commonLookupService.GetAllCommonLookup();
-                return View(List.ToPagedList(page ?? 1, 9));
+                return View(List);
             }
             catch (Exception ex)
             {
@@ -41,13 +41,43 @@ namespace TMS.Controllers
         [HttpPost]
         public ActionResult Create(CommonLookupModel model)
         {
-          
+
             commonLookupService.CreateCommonLookup(model);
             return View();
-          
+
 
         }
+        public ActionResult Edit(int Id)
+        {
 
+            CommonLookupModel EditCommonLookup = commonLookupService.GetCommonLookupById(Id);
+            return PartialView("Edit", EditCommonLookup);
+        }
+        [HttpPost]
+        public ActionResult Edit(CommonLookupModel commonlookupmodel)
+        {
+            try
+            {
+                if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.COMMONLOOKUP.ToString(), AccessPermission.IsEdit))
+                {
+                   
+                }
+                if (ModelState.IsValid)
+                {
+                    CommonLookupModel commonlookup_model = commonLookupService.UpdateCommonLookup(commonlookupmodel);
+                    TempData["Message"] = "Data Updated Successfully!!";
+                    return View("Index");
+                }
+                else
+                {
+                    return Content("false");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
 
+        }
     }
 }

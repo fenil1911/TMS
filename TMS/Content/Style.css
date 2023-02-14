@@ -167,6 +167,12 @@ html body {
 
 .btn-primary btn-md {
     width: 145px;
+   
+}
+.primaryCreateNew{
+    margin-top: -35px;
+    margin-left: 1025px;
+    margin-bottom:5px;
 }
 
 
@@ -257,7 +263,7 @@ le >
     margin: auto;
     margin-left: auto;
 }
-
+/*--------------Ticket--------------------*/
 
 /*
 #myChart {
@@ -300,7 +306,9 @@ le >
 }
 
 .table {
-    margin-top: 35px;
+    margin-left: -13px;
+    
+}
 }
 
 .h5, h5 {
@@ -317,7 +325,7 @@ table {
     }
 
 .btn-primary {
-    margin-top: -92px;
+    margin-top: 52px;
 }
 
 .table-responsive {

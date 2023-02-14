@@ -31,11 +31,7 @@ namespace TMS.Data
 
                         roles.Add(item);
                     }
-
-
-
                 }
-
             }
             return roles;
         }

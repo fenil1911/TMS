@@ -163,10 +163,12 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\images\background.jpg" />
+    <Content Include="Content\images\comment.png" />
     <Content Include="Content\images\check.png" />
     <Content Include="Content\images\delete.png" />
     <Content Include="Content\images\draw.png" />
-    <Content Include="Content\images\edit.png" />
+    <Content Include="Content\images\editt.png" />
+    <Content Include="Content\images\loginbackground.png" />
     <Content Include="Content\images\settings.png" />
     <Content Include="Content\images\tms.png" />
     <Content Include="Content\main.css" />
@@ -215,6 +217,10 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Ticket\Index.cshtml" />
     <Content Include="Views\Ticket\Create.cshtml" />
+    <Content Include="Views\Ticket\Chat.cshtml" />
+    <Content Include="Views\Ticket\Edit.cshtml" />
+    <Content Include="Views\CommonLookup\Edit.cshtml" />
+    <Content Include="Views\Ticket\Display.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

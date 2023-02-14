@@ -23,6 +23,7 @@ namespace TMS.Service
             var data = ticketProvider.GetTicketsById(id);
             TicketModel category = new TicketModel
             {
+                TicketName=data.TicketName,
                 Id = data.Id,
                 AssignedTo = data.AssignedTo,
                 TypeId = data.TypeId,
@@ -31,15 +32,21 @@ namespace TMS.Service
             return category;
 
         }
+        public TicketModel UpdateTicket(TicketModel model)
+        {
+            return ticketProvider.UpdateTicket(model);
+        }
         public List<TicketModel> GetAllTickets()
         {
             var commonlookup = ticketProvider.GetAllTickets();
-            return commonlookup;
+            return commonlookup;    
         }
         public int CreateTickets(TicketModel ticket)
         {
             return ticketProvider.CreateTickets(ticket);
         }
+       
+
         public int CreateTicketStatus(TicketStatus ticket)
         {
             return ticketProvider.CreateTicketStatus(ticket);
@@ -64,6 +71,11 @@ namespace TMS.Service
         {
             return commonLookupProvider.GetAllCommonLookup().Where(a => a.Type.ToLower() == key.ToLower()).ToList();
 
-        }        
+        }
+        /*public int TicketComment(TicketComment ticket)
+        {
+            return ticketProvider.TicketComment(ticket);
+        }*/
+
     }
 }

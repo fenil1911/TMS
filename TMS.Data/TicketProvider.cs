@@ -21,8 +21,7 @@ namespace TMS.Data
         }
         public List<TicketModel> GetAllTickets()
         {
-            var all = (from t in _db.Tickets
-                       select t);
+           
 
             var alltickets = (from t in _db.Tickets
                               join c in _db.CommonLookup on
@@ -31,7 +30,9 @@ namespace TMS.Data
                               t.PriorityId equals c1.Id
                               join c2 in _db.CommonLookup on
                               t.TypeId equals c2.Id
-
+                              join a in _db.TicketAttachment
+                              on t.Id equals a.TicketId into a
+                              from ta in a.DefaultIfEmpty()
                               select new TicketModel
                               {
                                   Id = t.Id,
@@ -41,29 +42,17 @@ namespace TMS.Data
                                   DescriptionData = t.DescriptionData,
                                   StatusName = c.Name,
                                   PriorityName = c1.Name,
-                                  CreatedOn = DateTime.Now
-
-
-
+                                  CreatedOn = (DateTime)t.CreatedOn,
+                                  ImageName = ta.Filename
                               }).ToList();
-            return alltickets;
-            /*    return _db.Tickets.Select(x => new TicketModel
-                {
-                    Id = x.Id,
-                    Type = x.Type,
-                    AssignedTo = x.AssignedTo,
-                    DescriptionData = x.DescriptionData,
-                    StatusId = statusStr
-
-                }).ToList();*/
-
+            return alltickets;            
         }
         public int CreateTickets(TicketModel ticket)
         {
 
             Tickets _ticket = new Tickets()
             {
-                Id = ticket.Id,
+                //Id = ticket.Id,
                 AssignedTo = ticket.AssignedTo,
                 DescriptionData = ticket.DescriptionData,
                 TicketName = ticket.TicketName,
@@ -75,15 +64,35 @@ namespace TMS.Data
 
             };
             _db.Tickets.Add(_ticket);
-            try
-            {
-                _db.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            _db.SaveChanges();
             return _ticket.Id;
+        }
+        /*public int TicketComment(TicketModel model)
+        {
+
+            TicketComment _comment = new TicketComment()
+            {
+                
+
+            };
+            _db.TicketComment.Add(_comment);
+            _db.SaveChanges();
+            return model.Id;
+        }*/
+        public TicketModel UpdateTicket(TicketModel model)
+        {
+            var obj = GetTicketsById(model.Id);
+            obj.AssignedTo = model.AssignedTo;
+            obj.DescriptionData = model.DescriptionData;
+            obj.TicketName = model.TicketName;
+            obj.StatusId = model.StatusId;
+            obj.PriorityId = model.PriorityId;
+            obj.TypeId = model.TypeId;
+            obj.UpdatedOn = DateTime.Now;
+
+            _db.SaveChanges();
+            return model;
+
         }
         public int CreateTicketStatus(TicketStatus model)
         {

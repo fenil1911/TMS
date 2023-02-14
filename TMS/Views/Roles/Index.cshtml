@@ -3,10 +3,14 @@
 @{
     ViewBag.Title = "Index";
 }
-<br><br/>
-<br><br/>
+<br />
 <h2>Roles Index</h2>
-<table class="table">
+
+<br />
+<br />
+<br />
+<br />
+<table class="table table-bordered  table-hover" >
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Id)
@@ -24,7 +28,7 @@
             @Html.DisplayName("Action")
         </th>
 
-        <th></th>
+        
     </tr>
 
     @foreach (var item in Model)
@@ -49,7 +53,7 @@
             </td>
             <td>
                 <a href="@Url.Action("ViewPermission", "FormRoleMapping", new { Id = item.Id })"><img src="~/Content/images/settings.png" alt="edit" width="18"></a>
-              
+
             </td>
 
 
