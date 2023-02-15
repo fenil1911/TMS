@@ -26,5 +26,7 @@ namespace TMS.Model
         public List<MyDropdown> StatusDropdown { get; set; }
         public List<MyDropdown> PriorityDropdown { get; set; }
         public List<MyDropdown> TypeDropdown { get; set; }
+        public DateTime UpdatedOn { get; set; }
+        public TicketCommentViewModel TicketComment { get; set; }
     }
 }

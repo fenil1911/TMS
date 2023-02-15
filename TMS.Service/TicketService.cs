@@ -21,15 +21,21 @@ namespace TMS.Service
         public TicketModel GetTicketsById(int id)
         {
             var data = ticketProvider.GetTicketsById(id);
-            TicketModel category = new TicketModel
-            {
-                TicketName=data.TicketName,
-                Id = data.Id,
-                AssignedTo = data.AssignedTo,
-                TypeId = data.TypeId,
-                DescriptionData = data.DescriptionData
-            };
-            return category;
+            data.StatusDropdown = GetDropdownBykey("Status")
+               .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
+            data.PriorityDropdown = GetDropdownBykey1("Priority")
+               .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
+            data.TypeDropdown = GetDropdownBykey2("Task")
+                .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
+            /* TicketModel category = new TicketModel
+             {
+                 TicketName=data.TicketName,
+                 Id = data.Id,
+                 AssignedTo = data.AssignedTo,
+                 TypeId = data.TypeId,
+                 DescriptionData = data.DescriptionData
+             };*/
+            return data;
 
         }
         public TicketModel UpdateTicket(TicketModel model)
@@ -55,6 +61,7 @@ namespace TMS.Service
         {
             return ticketProvider.CreateAttachment(ticket);
         }
+        
 
         public List<CommonLookupModel> GetDropdownBykey(string key)
         {
@@ -76,6 +83,9 @@ namespace TMS.Service
         {
             return ticketProvider.TicketComment(ticket);
         }*/
-
+        public int CreateTicketComment(TicketCommentViewModel comment)
+        {
+            return ticketProvider.CreateTicketComment(comment);
+        }
     }
 }

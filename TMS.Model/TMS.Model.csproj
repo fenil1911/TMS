@@ -78,6 +78,7 @@
     <Compile Include="RegisterModel.cs" />
     <Compile Include="RolesModel.cs" />
     <Compile Include="SessionHelper.cs" />
+    <Compile Include="TicketCommentViewModel.cs" />
     <Compile Include="TicketListModel.cs" />
     <Compile Include="TicketModel.cs" />
     <Compile Include="UsersModel.cs" />

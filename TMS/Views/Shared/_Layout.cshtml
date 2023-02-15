@@ -22,7 +22,7 @@
     <link rel="icon" href="images/favicon.ico" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
     @*<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-   *@
+    *@
     <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
     <link href="~/Content/style.css" rel="stylesheet" />
     <link href="~/Content/bootstrap-chosen.css" rel="stylesheet" />
@@ -64,22 +64,24 @@
                                 <li class="navLinkMargin nav-item">
                                     <a class="nav-link" href="@Url.Action("Index", "Ticket")">Ticket</a>
                                 </li>
-
-
-                            </ul>@*
-                            <ul class="navbar-brand navbar-nav navbar-header" style="list-style-type: none ">
-                                <li class="navLinkMargin nav-item">
-
-                                    <div class="dropdown">
+                            </ul>
+                            <div class="head_right_col d-flex align-items-center justify-content-end ">
+                                <div class="dropdown">
+                                    <div class="toprightbar d-flex align-items-center justify-content-end">
+                                        @Html.Partial("_LoginPartial")
+                                        @*<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false"> </a>*@
+                                    </div>
+                                    <ul class="dropdown-menu text-small shadow">
                                         @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
                                         {
-                                    <li><a class="dropdown-item" href="@Url.Action("ChangePassword","Account")">Change Password</a></li>
-                                    <li><a class="dropdown-item" href="javascript:document.getElementById('logoutForm').submit()">Logout</a></li>
-                                }
+                                            <li><a class="dropdown-item" href="@Url.Action("ChangePassword","Account")">Change Password</a></li>
+                                            <li><a class="dropdown-item" href="javascript:document.getElementById('logoutForm').submit()">Logout</a></li>
+                                        }
+                                    </ul>
                                 </div>
-                                </li>
-                            </ul>*@
-                                </div>
+                            </div>
+                            
+                        </div>
                     </div>
                 </div>
                 <div class="container body-content">

@@ -10,18 +10,48 @@ namespace TMS.Data
 {
     public class TicketProvider : BaseProvider
     {
-
-
         public TicketProvider()
         {
         }
-        public Tickets GetTicketsById(int Id)
+
+        public TicketModel GetTicketsById(int Id)
+        {
+            var alltickets = (from t in _db.Tickets
+                              join c in _db.CommonLookup on
+                              t.StatusId equals c.Id
+                              join c1 in _db.CommonLookup on
+                              t.PriorityId equals c1.Id
+                              join c2 in _db.CommonLookup on
+                              t.TypeId equals c2.Id
+                              join a in _db.TicketAttachment
+                              on t.Id equals a.TicketId into a
+                              from ta in a.DefaultIfEmpty()
+                              where t.Id == Id
+                              select new TicketModel
+                              {
+                                  Id = t.Id,
+                                  TicketName = t.TicketName,
+                                  AssignedTo = t.AssignedTo,
+                                  TypeName = c2.Name,
+                                  DescriptionData = t.DescriptionData,
+                                  StatusName = c.Name,
+                                  PriorityName = c1.Name,
+                                  CreatedOn = (DateTime)t.CreatedOn,
+                                  ImageName = ta.Filename,
+                                  StatusId = c.Id,
+                                  PriorityId = c1.Id,
+                                  TypeId = c2.Id,
+
+                              }).FirstOrDefault();
+            return alltickets;
+        }
+        public Tickets GetTicketsByUpdateId(int Id)
         {
             return _db.Tickets.Find(Id);
         }
         public List<TicketModel> GetAllTickets()
         {
-           
+
 
             var alltickets = (from t in _db.Tickets
                               join c in _db.CommonLookup on
@@ -33,6 +63,7 @@ namespace TMS.Data
                               join a in _db.TicketAttachment
                               on t.Id equals a.TicketId into a
                               from ta in a.DefaultIfEmpty()
+
                               select new TicketModel
                               {
                                   Id = t.Id,
@@ -45,7 +76,19 @@ namespace TMS.Data
                                   CreatedOn = (DateTime)t.CreatedOn,
                                   ImageName = ta.Filename
                               }).ToList();
-            return alltickets;            
+            return alltickets;
+        }
+        public int CreateTicketComment(TicketCommentViewModel comment)
+        {
+            TicketComment _comment = new TicketComment()
+            {
+                Comment = comment.Comment,
+                Id=comment.Id,
+                TicketId =comment.TicketId
+            };
+            _db.TicketComment.Add(_comment);
+            _db.SaveChanges();
+            return _comment.Id;
         }
         public int CreateTickets(TicketModel ticket)
         {
@@ -67,21 +110,20 @@ namespace TMS.Data
             _db.SaveChanges();
             return _ticket.Id;
         }
-        /*public int TicketComment(TicketModel model)
+        public int CreateComment(TicketModel model)
         {
-
-            TicketComment _comment = new TicketComment()
+            TicketComment comment = new TicketComment()
             {
-                
-
+                //Comment = model.Comment,
             };
-            _db.TicketComment.Add(_comment);
+            _db.TicketComment.Add(comment);
             _db.SaveChanges();
-            return model.Id;
-        }*/
+            return comment.Id;
+        }
+
         public TicketModel UpdateTicket(TicketModel model)
         {
-            var obj = GetTicketsById(model.Id);
+            var obj = GetTicketsByUpdateId(model.Id);
             obj.AssignedTo = model.AssignedTo;
             obj.DescriptionData = model.DescriptionData;
             obj.TicketName = model.TicketName;

@@ -85,7 +85,7 @@ namespace TMS.Controllers
         public ActionResult Edit(int Id)
         {
             TicketModel obj = _ticketService.GetTicketsById(Id);
-            return View(obj);
+            return View(obj); 
         }
 
         [HttpPost]
@@ -93,43 +93,50 @@ namespace TMS.Controllers
         {
             var ticketId = _ticketService.UpdateTicket(model);
 
-            //var statusStr = _commonLookupService.GetCommonLookupById(model.StatusId).Name;
+            var statusStr = _commonLookupService.GetCommonLookupById(model.StatusId).Name;
             if (imgfile != null)
             {
                 model.ImageName = imgfile.FileName + Path.GetExtension(imgfile.FileName);
-
+                imgfile.SaveAs(Server.MapPath("//Content//Uploadimage//") + model.ImageName);
             }
-          /*  TicketStatus obj = new TicketStatus()
+            TicketStatus obj = new TicketStatus()
             {
-                TicketId = ticketId,
+                TicketId = ticketId.Id,
                 NewStatus = statusStr,
                 CreatedOn = DateTime.Now
             };
-          */  TicketAttachment obj1 = new TicketAttachment()
+            TicketAttachment obj1 = new TicketAttachment()
             {
-              //  TicketId = ticketId,
+                TicketId = ticketId.Id,
                 Filename = model.ImageName,
                 CreatedOn = DateTime.Now
             };
-            TicketService objProductservice = new TicketService();
-            TicketModel objproductmodels = objProductservice.UpdateTicket(model);
+            TicketService objservice = new TicketService();
+            TicketModel objmodels = objservice.UpdateTicket(model);
             return RedirectToAction("Index");
         }
         public ActionResult Display(int Id)
         {
-            TicketModel obj = new TicketModel();
-            obj = _ticketService.GetTicketsById(Id);
+            TicketModel obj = _ticketService.GetTicketsById(Id);
            
-            //List<TicketModel> List = _ticketService.GetAllTickets();
-             
-            return View(obj);
-
+            return View(obj);   
+           
         }
-        /*public ActionResult Comment()
+        public ActionResult Display1()
+        {
+            TicketCommentViewModel model = new TicketCommentViewModel();
+            return View(model);
+                
+        }
+        [HttpPost]
+        public ActionResult Comment(TicketCommentViewModel model)
         {
 
-        }*/
-        
+            _ticketService.CreateTicketComment(model);
+            return View();
+
+
+        }
     }
 }
 
