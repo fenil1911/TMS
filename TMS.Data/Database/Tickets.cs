@@ -20,7 +20,7 @@ namespace TMS.Data.Database
         public int StatusId { get; set; }
     
         public bool IsActive { get; set; }
-        public bool IsDeleted { get; set; }
+        public int IsDeleted { get; set; }
         public DateTime? CreatedOn { get; set; }
         public int CreatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }

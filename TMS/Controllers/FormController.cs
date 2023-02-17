@@ -28,6 +28,7 @@ namespace TMS.Controllers
         [HttpGet]
         public ActionResult Create(int? id)
         {
+            int CreatedBy = SessionHelper.UserId;
             string actionPermission = "";
             if (id == null)
             {
@@ -48,7 +49,7 @@ namespace TMS.Controllers
             FormModel model = new FormModel();
             if (id.HasValue)
             {
-                var formDetail = _formsService.GetFormsById(id.Value);
+                var formDetail = _formsService.GetFormsById(id.Value, CreatedBy);
                 if (formDetail != null)
                 {
                     model.Id = id.Value;
@@ -120,6 +121,12 @@ namespace TMS.Controllers
             {
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
+        }
+        public ActionResult Delete(int Id)
+        {
+            _formsService.DeleteForm(Id);
+
+            return RedirectToAction("Index");
         }
     }
 }

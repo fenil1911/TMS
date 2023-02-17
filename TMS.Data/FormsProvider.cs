@@ -86,6 +86,7 @@ namespace TMS.Data
         public List<FormModel> GetAllForms()
         {
             var allForms = (from f in _db.FormMst
+                            where f.IsDeleted == 0
                             select new FormModel
                             {
                                 Id = f.Id,
@@ -112,6 +113,18 @@ namespace TMS.Data
                            where form.FormAccessCode.ToUpper().Trim() == formAccessCode.ToUpper().Trim()
                            select form).ToList();
             return getForm;
+        }
+        public void DeleteForm(int Id)
+        {
+            var data = GetFormsById(Id);
+            if (data != null)
+            {
+
+                FormMst model = _db.FormMst.Find(Id);
+                model.IsDeleted = 1;
+
+                _db.SaveChanges();
+            }
         }
     }
 }

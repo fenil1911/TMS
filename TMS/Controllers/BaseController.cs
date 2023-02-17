@@ -16,13 +16,13 @@ namespace TMS.Controllers
         {
             _formService = new FormRoleMappingService();
         }
-        
-        
-       /* [AllowAnonymous]
-        public ActionResult AccessDenied()
-        {
-            return View();
-        }*/
+
+
+        /* [AllowAnonymous]
+         public ActionResult AccessDenied()
+         {
+             return View();
+         }*/
 
         public bool CheckPermission(string formCode, string formAction)
         {

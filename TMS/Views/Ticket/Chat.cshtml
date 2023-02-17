@@ -47,47 +47,48 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.TicketName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TypeId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TypeName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DescriptionData)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PriorityId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PriorityName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.StatusId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.StatusName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AssignedTo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreatedOn)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ImageName)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TicketName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TypeId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TypeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DescriptionData)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PriorityId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PriorityName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StatusId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StatusName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssignedTo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedOn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ImageName)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
 
 </table>

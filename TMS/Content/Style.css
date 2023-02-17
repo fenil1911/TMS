@@ -1,15 +1,16 @@
 ﻿body {
 }
-    .navLinkMargin{
-        margin: 0px 10px;
-        
-    }
-    bg {
-        background-image: url('../Content/images/utki.jpg');
-        background-color: #FF6600;
-        width: 100%;
-        height: auto;
-    }
+
+.navLinkMargin {
+    margin: 0px 10px;
+}
+
+bg {
+    background-image: url('../Content/images/utki.jpg');
+    background-color: #FF6600;
+    width: 100%;
+    height: auto;
+}
 
 .user_img {
     width: 30px !important;
@@ -28,6 +29,7 @@
     font-size: 18px;
     font-weight: 500;
 }
+
 html body {
     font-size: 14px;
     background: white;
@@ -36,9 +38,11 @@ html body {
 .section {
     padding: 40px 0;
 }
+
 .box-shadow {
     box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px
 }
+
 .dropdown-right .dropdown-menu {
     left: auto;
     right: 0;
@@ -169,14 +173,19 @@ html body {
 
 .btn-primary btn-md {
     width: 145px;
-   
-}
-.primaryCreateNew{
-    margin-top: -35px;
-    margin-left: 1025px;
-    margin-bottom:5px;
+    margin-top: -28px;
 }
 
+
+.primaryCreateNew {
+    margin-left: 1163px;
+    margin-bottom: 5px;
+    background: #0268ff;
+    color: white;
+    border-color: #0268ff;
+    border-radius: 10px;
+    margin-top: -2px;
+}
 
 /*PRODUCT HISTORY INDEX */
 .ProductHistoryBG {
@@ -269,15 +278,15 @@ le >
 
 /*
 #myChart {
-    width: 958px !important;
-    height: 435px !important;
-    max-height: 2000px;
-    display: block;
-    padding: 28px;
-    margin: -11px;
-    padding-left: 159px;
-    padding-right: 13px;
-    margin-left: 48px;
+width: 958px !important;
+height: 435px !important;
+max-height: 2000px;
+display: block;
+padding: 28px;
+margin: -11px;
+padding-left: 159px;
+padding-right: 13px;
+margin-left: 48px;
 }*/
 .mb-0 {
     margin-top: 20px;
@@ -309,8 +318,8 @@ le >
 
 .table {
     margin-left: -13px;
-    
 }
+
 }
 
 .h5, h5 {
@@ -364,4 +373,187 @@ h3 {
 }
 
 
+.status {
+    display: inline-block;
+    padding: 6px 10px;
+    font-size: 14px;
+    color: #fff;
+    background: #213146;
+    border-radius: 10px;
+    line-height: 1;
+}
 
+.statustext {
+    display: inline-block;
+    padding: 8px 10px;
+    font-size: 16px;
+    color: black;
+    line-height: 1;
+    font-weight: bold;
+    background: #ffffff;
+    border-radius: 10px;
+}
+
+.Created {
+    color: #43d800;
+}
+
+.Approved {
+    color: #039487;
+}
+
+.Rejected {
+    color: red
+}
+
+.Pending {
+    color: #ddad00
+}
+
+.Assigned {
+    color: #0052CC
+}
+
+.InProgress {
+    color: yellow;
+}
+
+.Closed {
+    color: red
+}
+
+.Returned {
+    color: orangered
+}
+
+.New {
+    color: lawngreen
+}
+
+.Resolved {
+    color: green
+}
+
+
+.Low {
+    background: #c1ff9a;
+    color: seagreen;
+    font-weight: bold;
+}
+
+.High {
+    background: #ffacac;
+    color: red;
+    font-weight: bold;
+}
+
+.Medium {
+    background: #f6ff90;
+    color: #ddad00;
+    font-weight: bold;
+}
+
+.Immediate {
+    background: #96c0ff;
+    color: #05168e;
+    font-weight: bold;
+}
+
+.ticket {
+    display: inline-block;
+    padding: 6px 10px;
+    font-size: 14px;
+    color: black;
+    font-weight: bold;
+}
+
+.image {
+    display: inline-block;
+    padding: 6px 10px;
+    background: #d0e4ff;
+    border-radius: 10px;
+    line-height: 1;
+}
+
+.ticketall {
+    background: #f4f4f42e;
+    font-family: 'Segoe UI Symbol';
+    font-weight: bold;
+    font-size: 15px;
+    color: black;
+    font-style: unset;
+}
+
+.tickethead {
+    background: #b1b1b133;
+    font-family: 'Segoe UI Symbol';
+    font-weight: bold;
+    font-size: 15px;
+    color: black;
+    font-style: unset;
+}
+
+.table {
+    width: 126%;
+    max-width: 152%;
+    margin-bottom: 20px;
+    //box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+    //box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+}
+
+.table {
+    margin-left: -168px;
+}
+
+.btn-primary {
+    margin-top: -20px;
+}
+
+.tablewidth {
+    width: 235px;
+    /* word-break: break-all;*/
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tableovertext {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.details {
+    text-align: center;
+    display: inline-block;
+    padding: 10px 8px;
+    font-size: 14px;
+    color: #032a5a;
+    background: #a9cfff;
+    /*border-radius: 10px;*/
+    margin-top: 10px;
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 15px;
+}
+
+.details-data {
+    margin-left: 250px;
+    text-align: center;
+    display: inline-block;
+    padding: 10px 8px;
+    font-size: 14px;
+    color: #032a5a;
+    background: #a9cfff;
+    /* border-radius: 10px;*/
+    margin-top: 10px;
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 15px;
+}

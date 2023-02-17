@@ -51,7 +51,8 @@ namespace TMS.Controllers
         [HttpPost]
         public ActionResult Create(TicketModel model, HttpPostedFileBase imgfile)
         {
-            var ticketId = _ticketService.CreateTickets(model);
+            int CreatedBy = SessionHelper.UserId;
+            var ticketId = _ticketService.CreateTickets(model, CreatedBy);
 
             var statusStr = _commonLookupService.GetCommonLookupById(model.StatusId).Name;
             if (imgfile != null)
@@ -63,16 +64,18 @@ namespace TMS.Controllers
             {
                 TicketId = ticketId,
                 NewStatus = statusStr,
-                CreatedOn = DateTime.Now
+                CreatedOn = DateTime.Now,
+                CreatedBy = CreatedBy
             };
             TicketAttachment obj1 = new TicketAttachment()
             {
                 TicketId = ticketId,
                 Filename = model.ImageName,
-                CreatedOn = DateTime.Now
+                CreatedOn = DateTime.Now,
+                CreatedBy = CreatedBy
             };
-            _ticketService.CreateTicketStatus(obj);
-            _ticketService.CreateAttachment(obj1);
+            _ticketService.CreateTicketStatus(obj, CreatedBy);
+            _ticketService.CreateAttachment(obj1, CreatedBy);
             return RedirectToAction("Index");
         }
         public FileResult DownloadFile(string fileName)
@@ -85,13 +88,15 @@ namespace TMS.Controllers
         public ActionResult Edit(int Id)
         {
             TicketModel obj = _ticketService.GetTicketsById(Id);
-            return View(obj); 
+            return View(obj);
         }
 
         [HttpPost]
         public ActionResult Edit(TicketModel model, HttpPostedFileBase imgfile)
         {
-            var ticketId = _ticketService.UpdateTicket(model);
+            int UpdatedBy = SessionHelper.UserId;
+
+            var ticketId = _ticketService.UpdateTicket(model, UpdatedBy);
 
             var statusStr = _commonLookupService.GetCommonLookupById(model.StatusId).Name;
             if (imgfile != null)
@@ -103,30 +108,33 @@ namespace TMS.Controllers
             {
                 TicketId = ticketId.Id,
                 NewStatus = statusStr,
+                CreatedBy = UpdatedBy,
                 CreatedOn = DateTime.Now
             };
             TicketAttachment obj1 = new TicketAttachment()
             {
                 TicketId = ticketId.Id,
                 Filename = model.ImageName,
-                CreatedOn = DateTime.Now
+                CreatedOn = DateTime.Now,
+                CreatedBy = UpdatedBy
             };
+
             TicketService objservice = new TicketService();
-            TicketModel objmodels = objservice.UpdateTicket(model);
+            TicketModel objmodels = objservice.UpdateTicket(model, UpdatedBy);
             return RedirectToAction("Index");
         }
         public ActionResult Display(int Id)
         {
             TicketModel obj = _ticketService.GetTicketsById(Id);
-           
-            return View(obj);   
-           
+
+            return View(obj);
+
         }
         public ActionResult Display1()
         {
             TicketCommentViewModel model = new TicketCommentViewModel();
             return View(model);
-                
+
         }
         [HttpPost]
         public ActionResult Comment(TicketCommentViewModel model)
@@ -136,6 +144,12 @@ namespace TMS.Controllers
             return View();
 
 
+        }
+        public ActionResult Delete(int Id)
+        {
+            _ticketService.DeleteTicket(Id);
+
+            return RedirectToAction("Index");
         }
     }
 }

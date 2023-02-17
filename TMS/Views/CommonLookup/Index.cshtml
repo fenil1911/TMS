@@ -2,14 +2,14 @@
 
 @{
     ViewBag.Title = "Index";
- 
+
 }
 
 <br />
 <h2>CommonLookup Index</h2>
 
-<p >
-    @Html.ActionLink("Create New", "Create" ,null, new { @class= "btn primaryCreateNew" })
+<p>
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn primaryCreateNew" })
 </p>
 
 
@@ -36,7 +36,7 @@
         <th>
             @Html.DisplayName("Action")
         </th>
-        
+
     </tr>
 
     @foreach (var item in Model)
@@ -62,9 +62,9 @@
 
             </td>
             <td>
-                <a href="@Url.Action("Edit", "CommonLookup", new { Id = item.Id })"><img src="~/Content/images/draw.png" alt="edit" width="21"></a>
-               
+                <a href="@Url.Action("Edit", "CommonLookup", new { Id = item.Id })"><img src="~/Content/images/draww.png" alt="edit" width="18"></a>
 
+                <a href="@Url.Action("delete", "CommonLookup", new { Id = item.Id }) " onclick="return confirm('Are you sure to Delete?')"><img src="~/Content/images/deletee.png" alt="delete" width="18"></a>
             </td>
         </tr>
     }

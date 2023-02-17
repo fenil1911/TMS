@@ -38,28 +38,28 @@ namespace TMS.Service
             return data;
 
         }
-        public TicketModel UpdateTicket(TicketModel model)
+        public TicketModel UpdateTicket(TicketModel model, int UpdatedBy)
         {
-            return ticketProvider.UpdateTicket(model);
+            return ticketProvider.UpdateTicket(model,  UpdatedBy);
         }
         public List<TicketModel> GetAllTickets()
         {
             var commonlookup = ticketProvider.GetAllTickets();
             return commonlookup;    
         }
-        public int CreateTickets(TicketModel ticket)
+        public int CreateTickets(TicketModel ticket,int CreatedBy)
         {
-            return ticketProvider.CreateTickets(ticket);
+            return ticketProvider.CreateTickets(ticket, CreatedBy);
         }
        
 
-        public int CreateTicketStatus(TicketStatus ticket)
+        public int CreateTicketStatus(TicketStatus ticket, int CreatedBy)
         {
-            return ticketProvider.CreateTicketStatus(ticket);
+            return ticketProvider.CreateTicketStatus(ticket ,CreatedBy);
         }
-        public int CreateAttachment(TicketAttachment ticket)
+        public int CreateAttachment(TicketAttachment ticket, int CreatedBy)
         {
-            return ticketProvider.CreateAttachment(ticket);
+            return ticketProvider.CreateAttachment(ticket,CreatedBy);
         }
         
 
@@ -86,6 +86,10 @@ namespace TMS.Service
         public int CreateTicketComment(TicketCommentViewModel comment)
         {
             return ticketProvider.CreateTicketComment(comment);
+        }
+        public void DeleteTicket(int Id)
+        {
+            ticketProvider.DeleteTicket(Id);
         }
     }
 }

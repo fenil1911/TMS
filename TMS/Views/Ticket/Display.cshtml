@@ -8,144 +8,106 @@
 
 <h2>Display</h2>
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h4>TicketCommentViewModel</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.TicketComment.TicketId, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.TicketComment.TicketId, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.TicketComment.TicketId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.TicketComment.Comment, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.TicketComment.Comment, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.TicketComment.Comment, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.TicketComment.CreatedBy, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.TicketComment.CreatedBy, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.TicketComment.CreatedBy, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
-}
 
 <div>
     <h4>TicketModel</h4>
     <hr />
     <div class="container">
         <dl class="dl-horizontal col-xs-6  ">
-            <dt>
+            <dt class="details">
                 @Html.DisplayNameFor(model => model.TicketName)
             </dt>
 
-            <dd>
+            <dd class="details-data">
                 @Html.DisplayFor(model => model.TicketName)
             </dd>
 
-            @*<dt>
+            @*<dt class="details">
                     @Html.DisplayNameFor(model => model.TypeId)
                 </dt>
 
-                <dd>
+                 <dd class="details-data">
                     @Html.DisplayFor(model => model.TypeId)
                 </dd>
             *@
-            <dt>
+            <dt class="details">
                 @Html.DisplayNameFor(model => model.TypeName)
             </dt>
 
-            <dd>
+            <dd class="details-data">
                 @Html.DisplayFor(model => model.TypeName)
             </dd>
 
-            <dt>
+            <dt class="details">
                 @Html.DisplayNameFor(model => model.DescriptionData)
             </dt>
 
-            <dd>
+            <dd class="details-data">
                 @Html.DisplayFor(model => model.DescriptionData)
             </dd>
 
-            @*      <dt>
+            @*      <dt class="details">
                     @Html.DisplayNameFor(model => model.PriorityId)
                 </dt>
 
-                <dd>
+                 <dd class="details-data">
                     @Html.DisplayFor(model => model.PriorityId)
                 </dd>
             *@
-            <dt>
+            <dt class="details">
                 @Html.DisplayNameFor(model => model.PriorityName)
             </dt>
 
-            <dd>
+            <dd class="details-data">
                 @Html.DisplayFor(model => model.PriorityName)
             </dd>
 
-            @*<dt>
+            @*<dt class="details">
                     @Html.DisplayNameFor(model => model.StatusId)
                 </dt>
 
-                <dd>
+                 <dd class="details-data">
                     @Html.DisplayFor(model => model.StatusId)
                 </dd>
             *@
-            <dt>
+            <dt class="details">
                 @Html.DisplayNameFor(model => model.StatusName)
             </dt>
 
-            <dd>
+            <dd class="details-data">
                 @Html.DisplayFor(model => model.StatusName)
             </dd>
 
-            <dt>
+            <dt class="details">
                 @Html.DisplayNameFor(model => model.AssignedTo)
             </dt>
 
-            <dd>
+            <dd class="details-data">
                 @Html.DisplayFor(model => model.AssignedTo)
             </dd>
 
-            <dt>
+            <dt class="details">
                 @Html.DisplayNameFor(model => model.CreatedOn)
             </dt>
 
-            <dd>
+            <dd class="details-data">
                 @Html.DisplayFor(model => model.CreatedOn)
             </dd>
 
-            <dt>
+            <dt class="details">
                 @Html.DisplayNameFor(model => model.ImageName)
             </dt>
 
-            <dd>
+            <dd class="details-data">
                 @Html.DisplayFor(model => model.ImageName)
             </dd>
 
-            <dt>
+            <dt class="details">
                 @Html.DisplayNameFor(model => model.UpdatedOn)
             </dt>
 
-            <dd>
+            <dd class="details-data">
                 @Html.DisplayFor(model => model.UpdatedOn)
             </dd>
 

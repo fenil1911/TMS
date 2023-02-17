@@ -24,17 +24,17 @@ namespace TMS.Controllers
                 throw ex;
             }
         }
-     
+
         public ActionResult Index(int? page)
         {
-                if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.ROLE.ToString(), AccessPermission.IsView))
-                {
-                   
-                }
-                List<RolesModel> RoleList = _rolesService.GetAllRoles();
-                return View(RoleList.ToPagedList(page ?? 1, 6));
-            
-       
+            if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.ROLE.ToString(), AccessPermission.IsView))
+            {
+
+            }
+            List<RolesModel> RoleList = _rolesService.GetAllRoles();
+            return View(RoleList.ToPagedList(page ?? 1, 6));
+
+
         }
     }
 }

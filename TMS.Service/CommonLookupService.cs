@@ -36,13 +36,17 @@ namespace TMS.Service
             var cammonlookup = commonLookupProvider.GetAllCommonLookup();
             return cammonlookup;
         }
-        public int CreateCommonLookup(CommonLookupModel objcommonLookup)
+        public int CreateCommonLookup(CommonLookupModel objcommonLookup, int CreatedBy)
         {
-            return commonLookupProvider.CreateCommonLookup(objcommonLookup);
+            return commonLookupProvider.CreateCommonLookup(objcommonLookup,  CreatedBy);
         }
-        public CommonLookupModel UpdateCommonLookup(CommonLookupModel model)
+        public CommonLookupModel UpdateCommonLookup(CommonLookupModel model, int UpdatedBy )
         {
-            return commonLookupProvider.UpdateCommonLookup(model);
+            return commonLookupProvider.UpdateCommonLookup(model, UpdatedBy);
+        }
+        public void DeleteCommonLookup(int Id)
+        {
+            commonLookupProvider.DeleteCommonLookup(Id);
         }
     }
 }

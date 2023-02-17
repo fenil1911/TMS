@@ -21,7 +21,7 @@
 </p>
 
 <br />
-<table class="table table-bordered  table-hover">
+<table class="table table-bordered table-hover">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Name)
@@ -83,7 +83,9 @@
             </td>
 
             <td>
-                <a href="@Url.Action("Create", "Form", new { Id = item.Id })"><img src="~/Content/images/draw.png" alt="edit" width="21"></a>
+                <a href="@Url.Action("Create", "Form", new { Id = item.Id })"><img src="~/Content/images/draww.png" alt="edit" width="21"></a>
+                <a href="@Url.Action("delete", "Form", new { Id = item.Id }) " onclick="return confirm('Are you sure to Delete?')"><img src="~/Content/images/deletee.png" alt="edit" width="21"></a>
+
 
             </td>
         </tr>

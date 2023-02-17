@@ -21,8 +21,27 @@ namespace TMS.Data
         }
         public List<CommonLookupModel> GetAllCommonLookup()
         {
-            //var ram = _db.CategoryMst.ToList();
-            return _db.CommonLookup.Select(x => new CommonLookupModel
+            var allCommonLookup = (from c in _db.CommonLookup
+                                   where c.IsDeleted != 1
+                                   select new CommonLookupModel
+                                   {
+                                       Code = c.Code,
+                                       DisplayOrder = c.DisplayOrder,
+                                       Id = c.Id,
+                                       IsActive = c.IsActive,
+                                       Name = c.Name,
+                                       Type = c.Type
+
+                                   }).ToList();
+
+            return allCommonLookup;
+
+
+        }
+
+
+            /*return _db.CommonLookup.Select(x => new CommonLookupModel  
+            
             {
                 Id = x.Id,
                 Type = x.Type,
@@ -30,9 +49,11 @@ namespace TMS.Data
                 Name = x.Name,
                 DisplayOrder = x.DisplayOrder,
                 IsActive = x.IsActive
-            }).ToList();
-        }
-        public int CreateCommonLookup(CommonLookupModel commonLookup)
+            }).ToList();*/
+
+
+        
+        public int CreateCommonLookup(CommonLookupModel commonLookup, int CreatedBy)
         {
             CommonLookup _commonLookup = new CommonLookup()
             {
@@ -42,13 +63,16 @@ namespace TMS.Data
                 Type = commonLookup.Type,
                 DisplayOrder = commonLookup.DisplayOrder,
                 IsActive = commonLookup.IsActive,
-                CreatedOn = DateTime.Now
+                CreatedOn = DateTime.Now,
+                CreatedBy = CreatedBy,
+
+
             };
             _db.CommonLookup.Add(_commonLookup);
             _db.SaveChanges();
             return _commonLookup.Id;
         }
-        public CommonLookupModel UpdateCommonLookup(CommonLookupModel model)
+        public CommonLookupModel UpdateCommonLookup(CommonLookupModel model, int UpdatedBy)
         {
             var objclup = GetCommonLookupById(model.Id);
             objclup.Type = model.Type;
@@ -57,8 +81,24 @@ namespace TMS.Data
             objclup.DisplayOrder = model.DisplayOrder;
             objclup.IsActive = model.IsActive;
             objclup.UpdatedOn = DateTime.Now;
+            objclup.UpdatedBy = UpdatedBy;
+            objclup.UpdatedOn = DateTime.Now;
+
+
             _db.SaveChanges();
             return model;
+        }
+        public void DeleteCommonLookup(int Id)
+        {
+            var data = GetCommonLookupById(Id);
+            if (data != null)
+            {
+
+                CommonLookup model = _db.CommonLookup.Find(Id);
+                model.IsDeleted = 1;
+
+                _db.SaveChanges();
+            }
         }
     }
 }

@@ -22,5 +22,6 @@ namespace TMS.Data.Database
         public int? CreatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public int? UpdatedBy { get; set; }
+        public int? IsDeleted { get; set; }
     }
 }

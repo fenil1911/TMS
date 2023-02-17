@@ -19,6 +19,7 @@ namespace TMS.Data.Database
         public string FormAccessCode { get; set; }
         public int? DisplayOrder { get; set; }
         public bool? IsActive { get; set; }
+        public int IsDeleted { get; set; }
         public bool IsDisplayMenu { get; set; }
         public int? CreatedBy { get; set; }
         public DateTime? CreatedOn { get; set; }

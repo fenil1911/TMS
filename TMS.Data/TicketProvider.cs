@@ -63,8 +63,8 @@ namespace TMS.Data
                               join a in _db.TicketAttachment
                               on t.Id equals a.TicketId into a
                               from ta in a.DefaultIfEmpty()
-
-                              select new TicketModel
+                              where t.IsDeleted != 1
+                              select new TicketModel 
                               {
                                   Id = t.Id,
                                   TicketName = t.TicketName,
@@ -90,7 +90,7 @@ namespace TMS.Data
             _db.SaveChanges();
             return _comment.Id;
         }
-        public int CreateTickets(TicketModel ticket)
+        public int CreateTickets(TicketModel ticket,int CreatedBy)
         {
 
             Tickets _ticket = new Tickets()
@@ -102,7 +102,8 @@ namespace TMS.Data
                 StatusId = ticket.StatusId,
                 PriorityId = ticket.PriorityId,
                 TypeId = ticket.TypeId,
-                CreatedOn = DateTime.Now
+                CreatedOn = DateTime.Now,
+                CreatedBy=CreatedBy
 
 
             };
@@ -110,18 +111,9 @@ namespace TMS.Data
             _db.SaveChanges();
             return _ticket.Id;
         }
-        public int CreateComment(TicketModel model)
-        {
-            TicketComment comment = new TicketComment()
-            {
-                //Comment = model.Comment,
-            };
-            _db.TicketComment.Add(comment);
-            _db.SaveChanges();
-            return comment.Id;
-        }
+      
 
-        public TicketModel UpdateTicket(TicketModel model)
+        public TicketModel UpdateTicket(TicketModel model,int UpdatedBy)
         {
             var obj = GetTicketsByUpdateId(model.Id);
             obj.AssignedTo = model.AssignedTo;
@@ -131,26 +123,42 @@ namespace TMS.Data
             obj.PriorityId = model.PriorityId;
             obj.TypeId = model.TypeId;
             obj.UpdatedOn = DateTime.Now;
+            obj.UpdatedBy = UpdatedBy;
 
             _db.SaveChanges();
             return model;
 
         }
-        public int CreateTicketStatus(TicketStatus model)
+        public int CreateTicketStatus(TicketStatus model,int CreatedBy)
         {
+            CreatedBy = model.CreatedBy;
             _db.TicketStatus.Add(model);
             _db.SaveChanges();
             return model.Id;
         }
-        public int CreateAttachment(TicketAttachment model1)
+        public int CreateAttachment(TicketAttachment model1, int CreatedBy)
         {
             TicketAttachment _ticket = new TicketAttachment()
             {
+                CreatedBy = model1.CreatedBy,
 
-            };
+        };
+            
             _db.TicketAttachment.Add(model1);
             _db.SaveChanges();
             return model1.Id;
+        }
+        public void DeleteTicket(int Id)
+        {
+            var data = GetTicketsByUpdateId(Id);
+            if (data != null)
+            {
+
+                Tickets model = _db.Tickets.Find(Id);
+                model.IsDeleted = 1;
+
+                _db.SaveChanges();
+            }
         }
     }
 

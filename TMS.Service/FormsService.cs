@@ -26,7 +26,7 @@ namespace TMS.Service
         {
             return _formsProvider.SaveUpdateForm(forms);
         }
-        public FormModel GetFormsById(int id)
+        public FormModel GetFormsById(int id, int CreatedBy)
         {
             var data = _formsProvider.GetFormsById(id);
             FormModel form = new FormModel()
@@ -40,6 +40,7 @@ namespace TMS.Service
                 IsDisplayMenu = data.IsDisplayMenu,
                 ParentFormId = data.ParentFormId,
                 CreatedOn = DateTime.Now,
+                CreatedBy =CreatedBy
             };
             return form;
         }
@@ -50,6 +51,10 @@ namespace TMS.Service
         public List<FormMst> CheckDuplicateFormAccessCode(string formAccessCode)
         {
             return _formsProvider.CheckDuplicateFormAccessCode(formAccessCode);
+        }
+        public void DeleteForm(int Id)
+        {
+            _formsProvider.DeleteForm(Id);
         }
     }
 }

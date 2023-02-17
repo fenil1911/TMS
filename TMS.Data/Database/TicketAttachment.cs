@@ -15,7 +15,7 @@ namespace TMS.Data.Database
         public int Id { get; set; }
         public int TicketId { get; set; }
         public string Filename { get; set; }
-        public String CreatedBy{ get; set; }
+        public int CreatedBy{ get; set; }
         public DateTime CreatedOn { get; set; }
 
 

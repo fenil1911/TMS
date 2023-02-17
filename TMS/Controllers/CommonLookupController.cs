@@ -19,30 +19,27 @@ namespace TMS.Controllers
         }
         public ActionResult Index(int? page)
         {
-            try
+            if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.COMMONLOOKUP.ToString(), AccessPermission.IsView))
             {
-                if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.COMMONLOOKUP.ToString(), AccessPermission.IsView))
-                {
 
-                }
-                List<CommonLookupModel> List = commonLookupService.GetAllCommonLookup();
-                return View(List);
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            List<CommonLookupModel> List = commonLookupService.GetAllCommonLookup();
+            return View(List);
+
+
         }
         public ActionResult Create()
         {
+
             CommonLookupModel model = new CommonLookupModel();
             return PartialView("Create", model);
         }
         [HttpPost]
         public ActionResult Create(CommonLookupModel model)
         {
+            int CreatedBy = SessionHelper.UserId;
 
-            commonLookupService.CreateCommonLookup(model);
+            commonLookupService.CreateCommonLookup(model, CreatedBy);
             return View();
 
 
@@ -58,19 +55,21 @@ namespace TMS.Controllers
         {
             try
             {
+                int UpdatedBy = SessionHelper.UserId;
+
                 if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.COMMONLOOKUP.ToString(), AccessPermission.IsEdit))
                 {
-                   
+
                 }
                 if (ModelState.IsValid)
                 {
-                    CommonLookupModel commonlookup_model = commonLookupService.UpdateCommonLookup(commonlookupmodel);
+                    CommonLookupModel commonlookup_model = commonLookupService.UpdateCommonLookup(commonlookupmodel, UpdatedBy);
                     TempData["Message"] = "Data Updated Successfully!!";
                     return View("Index");
                 }
                 else
                 {
-                    return Content("false");
+                    return View("Index");
                 }
             }
             catch (Exception ex)
@@ -78,6 +77,12 @@ namespace TMS.Controllers
                 throw ex;
             }
 
+        }
+        public ActionResult Delete(int Id)
+        {
+            commonLookupService.DeleteCommonLookup(Id);
+
+            return RedirectToAction("Index");
         }
     }
 }
