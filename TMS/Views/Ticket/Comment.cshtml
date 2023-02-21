@@ -1,0 +1,158 @@
+﻿@model TMS.Model.TicketCommentViewModel
+
+@{
+    ViewBag.Title = "Comment";
+}
+<div>
+    <div class="col-md-6">
+        @*@Html.Action("TicketDetails", new { TicketId = Model.TicketId })*@
+        <br /><br /><br /><br /><br /><br />
+        <table id="tblTicketDetails" class="table table-bordered table-striped table-responsive table-hover">
+            <thead>
+                <tr>
+                    <th style="background-color:darkblue; color:white;" colspan=2><center>Ticket Details</center></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+    </div>
+    <div class="col-md-6">
+            <h2>Comment</h2>
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Ticket Comment</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        
+        <div class="form-group col-md-1">
+            <div style="float: right; display:inline-block;" >
+                <input class="btn btn-primary " style="margin-top: -1px; margin-left: 634px; margin-right: -136px;" name="submitButton" id="btnSave" value="Save" type="submit">
+            </div>
+        </div>
+    </div>
+            }
+ </div>
+
+        <div class="col-md-6">
+            @*@Html.Action("CommentIndex", new { TicketId = Model.TicketId })*@
+            <table id="tblTicketComment" class="tablecomment table-bordered table-striped table-responsive table-hover">
+                <thead>
+                    <tr>
+                        <th style="background-color:darkblue; color:white; align="left" class="productth">Comment</th>
+                        <th style="background-color:darkblue; color:white; align="left" class="productth">CreatedBy</th>
+                        <th style="background-color:darkblue; color:white; align="left" class="productth">CreatedOn</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+        </div>
+    </div>
+<script>
+    $(document).ready(function () {
+        getTicketDetails();
+        getTicketComment();
+    });
+
+    $(function () {
+        $("#btnSave").click(function () {
+            //alert("");
+            var model = {};
+            model.Comment = $("#Comment").val();
+            model.TicketId = '@Model.TicketId';
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Comment")',
+                data: '{ model : ' + JSON.stringify(model) + '}',
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function () {
+                    getTicketDetails();
+                    getTicketComment();
+                },
+                error: function () {
+                    alert("Error while inserting data");
+                }
+            });            
+            return false;
+        });
+    });
+
+
+
+    function getTicketDetails() {
+        $("#tblTicketDetails tbody tr").remove();
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("getTicketDetails")',
+            dataType: 'json',
+            data: { id: '@Model.TicketId' },
+            success: function (data) {
+                var record =
+                        "<tr>"
+                           + "<th>Ticket Name</th>" +  "<td>" + data.TicketName + "</td>"+ "</tr>"
+
+                        +"<tr>"
+                          + "<th>PriorityName </th>" + "<td>" + data.PriorityName + "</td>" + "</tr>"
+
+                        +"<tr>"
+                          + "<th>StatusName</th>" + "<td>" + data.StatusName + "</td>" + "</tr>"
+
+                        +"<tr>"
+                         + "<th>AssignedTo </th>" + "<td>" + data.AssignedTo + "</td>" + "</tr>"
+
+                         +"<tr>"
+                            + "<th>Type Name</th>" + "<td>" + data.TypeName + "</td>" + "</tr>"
+
+                      + "<tr>"
+                           + "<th>Description Data</th>" + "<td>" + data.DescriptionData + "</td>"
+                    + "</tr>"  ;
+                
+                $('#tblTicketDetails tbody').append(record);
+            },
+            error: function (ex) {
+
+            }
+        });
+        return false;
+    }
+
+    function getTicketComment() {
+        $("#tblTicketComment tbody tr").remove();
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("getTicketComment")',
+            dataType: 'json',
+            data: { id: '@Model.TicketId' },
+            success: function (data) {
+                var items = '';
+                $.each(data, function (i, item) {
+                    var rows = "<tr>"
+                        + "<td class='prtoducttd'>" + item.Comment + "</td>"
+                        + "<td class='prtoducttd'>" + item.CreatedBy + "</td>"
+                        + "<td class='prtoducttd'>" + new Date(parseInt(item.CreatedOn.substr(6))).toDateString("dd-mm-yyyy").toString("    ") + "</td>"
+                        + "</tr>";
+                    $('#tblTicketComment tbody').append(rows);
+                });                
+            },
+            error: function (ex) {
+
+            }
+        });
+        return false;
+    }
+</script>

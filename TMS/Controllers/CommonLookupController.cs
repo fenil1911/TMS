@@ -65,7 +65,7 @@ namespace TMS.Controllers
                 {
                     CommonLookupModel commonlookup_model = commonLookupService.UpdateCommonLookup(commonlookupmodel, UpdatedBy);
                     TempData["Message"] = "Data Updated Successfully!!";
-                    return View("Index");
+                    return RedirectToAction("Index");
                 }
                 else
                 {

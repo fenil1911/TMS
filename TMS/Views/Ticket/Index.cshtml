@@ -10,7 +10,7 @@
 }
 <br />
 <br />
-<h1>Tickets</h1>
+<h1 style="font-size: 44px; margin-top: 35px; margin-bottom: -15px; margin-left: -165px; font-family:'Segoe UI Symbol';font-weight:bold ">Tickets</h1>
 @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary primaryCreateNew" })
 <table class="table table-hover table-bordered ticketall  ">
     <tr class="tickethead">
@@ -111,7 +111,7 @@
                     </div>}
             </td>
             <td>
-                <a href="@Url.Action("Display", "Ticket", new { Id = item.Id })"><img src="~/Content/images/chatt.png" alt="edit" width="18" data-toggle="tooltip" data-placement="left" title="Open Ticket Comment"></a>
+                <a href="@Url.Action("Comment", "Ticket", new { Id = item.Id })"><img src="~/Content/images/chatt.png" alt="edit" width="18" data-toggle="tooltip" data-placement="left" title="Open Ticket Comment"></a>
 
             </td>
             <td>

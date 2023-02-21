@@ -557,3 +557,26 @@ h3 {
     text-align: center;
     line-height: 15px;
 }
+.tablecomment {
+    width: 80%;
+    max-width: 100%;
+    margin-bottom: 20px;
+    margin-left: 0px;
+}
+
+.formbutton{
+    margin-top: -22px;
+    margin-left: -154px;
+}
+.h4form {
+    margin-top: 24px;
+    margin-bottom: -35px;
+    margin-left: -168px;
+}
+
+.tablemapping {
+    margin-left: -166px;
+    width: 128%;
+    max-width: 133%;
+    margin-bottom: 20px;
+}

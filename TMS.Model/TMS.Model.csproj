@@ -69,6 +69,7 @@
     <Compile Include="AccountModel.cs" />
     <Compile Include="AuthorizeFormAccess.cs" />
     <Compile Include="CommonLookupModel.cs" />
+    <Compile Include="EmailModel.cs" />
     <Compile Include="MyDropdown.cs" />
     <Compile Include="FormModel.cs" />
     <Compile Include="FormRoleMappingModel.cs" />

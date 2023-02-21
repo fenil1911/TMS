@@ -83,13 +83,18 @@ namespace TMS.Service
         {
             return ticketProvider.TicketComment(ticket);
         }*/
-        public int CreateTicketComment(TicketCommentViewModel comment)
+        public int CreateTicketComment(TicketCommentViewModel comment,int CreatedBy)
         {
-            return ticketProvider.CreateTicketComment(comment);
+            return ticketProvider.CreateTicketComment(comment, CreatedBy);
         }
         public void DeleteTicket(int Id)
         {
             ticketProvider.DeleteTicket(Id);
+        }
+        public List<TicketCommentViewModel> GetAllComment(int Id)
+        {
+            var GetAllComment = ticketProvider.GetAllComment(Id);
+            return GetAllComment;
         }
     }
 }

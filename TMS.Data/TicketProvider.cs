@@ -64,7 +64,7 @@ namespace TMS.Data
                               on t.Id equals a.TicketId into a
                               from ta in a.DefaultIfEmpty()
                               where t.IsDeleted != 1
-                              select new TicketModel 
+                              select new TicketModel
                               {
                                   Id = t.Id,
                                   TicketName = t.TicketName,
@@ -78,19 +78,21 @@ namespace TMS.Data
                               }).ToList();
             return alltickets;
         }
-        public int CreateTicketComment(TicketCommentViewModel comment)
+        public int CreateTicketComment(TicketCommentViewModel model, int CreatedBy)
         {
-            TicketComment _comment = new TicketComment()
+            TicketComment obj = new TicketComment()
             {
-                Comment = comment.Comment,
-                Id=comment.Id,
-                TicketId =comment.TicketId
+                Comment = model.Comment,
+
+                TicketId = model.TicketId,
+                CreatedBy = CreatedBy,
+                CreatedOn = DateTime.Now
             };
-            _db.TicketComment.Add(_comment);
+            _db.TicketComment.Add(obj);
             _db.SaveChanges();
-            return _comment.Id;
+            return obj.Id;
         }
-        public int CreateTickets(TicketModel ticket,int CreatedBy)
+        public int CreateTickets(TicketModel ticket, int CreatedBy)
         {
 
             Tickets _ticket = new Tickets()
@@ -103,17 +105,15 @@ namespace TMS.Data
                 PriorityId = ticket.PriorityId,
                 TypeId = ticket.TypeId,
                 CreatedOn = DateTime.Now,
-                CreatedBy=CreatedBy
-
-
+                CreatedBy = CreatedBy
             };
             _db.Tickets.Add(_ticket);
             _db.SaveChanges();
             return _ticket.Id;
         }
-      
 
-        public TicketModel UpdateTicket(TicketModel model,int UpdatedBy)
+
+        public TicketModel UpdateTicket(TicketModel model, int UpdatedBy)
         {
             var obj = GetTicketsByUpdateId(model.Id);
             obj.AssignedTo = model.AssignedTo;
@@ -124,26 +124,26 @@ namespace TMS.Data
             obj.TypeId = model.TypeId;
             obj.UpdatedOn = DateTime.Now;
             obj.UpdatedBy = UpdatedBy;
-
             _db.SaveChanges();
             return model;
 
         }
-        public int CreateTicketStatus(TicketStatus model,int CreatedBy)
+        public int CreateTicketStatus(TicketStatus model, int CreatedBy)
         {
             CreatedBy = model.CreatedBy;
             _db.TicketStatus.Add(model);
             _db.SaveChanges();
             return model.Id;
         }
+
         public int CreateAttachment(TicketAttachment model1, int CreatedBy)
         {
             TicketAttachment _ticket = new TicketAttachment()
             {
                 CreatedBy = model1.CreatedBy,
 
-        };
-            
+            };
+
             _db.TicketAttachment.Add(model1);
             _db.SaveChanges();
             return model1.Id;
@@ -159,6 +159,20 @@ namespace TMS.Data
 
                 _db.SaveChanges();
             }
+        }
+        public List<TicketCommentViewModel> GetAllComment(int Id)
+        {
+            var GetAllComment = (from t in _db.TicketComment
+                                 where t.TicketId == Id
+                                 select new TicketCommentViewModel
+                                 {
+                                     Comment = t.Comment,
+                                     CreatedOn = t.CreatedOn,
+                                     CreatedBy = t.CreatedBy
+                                 })
+                                 .OrderByDescending(x => x.CreatedOn)
+                                 .ToList();
+            return GetAllComment;
         }
     }
 

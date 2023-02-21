@@ -130,27 +130,59 @@ namespace TMS.Controllers
             return View(obj);
 
         }
-        public ActionResult Display1()
+        public ActionResult TicketDetails(int TicketId)
+        {
+            TicketModel obj = _ticketService.GetTicketsById(TicketId);        
+            return View(obj);        
+        }
+        // AJAX GET METHOD
+        public JsonResult getTicketDetails(int id)
+        {
+            TicketModel obj = _ticketService.GetTicketsById(id);
+            return Json(obj, JsonRequestBehavior.AllowGet);            
+        }
+        public ActionResult Comment(int Id)
         {
             TicketCommentViewModel model = new TicketCommentViewModel();
+            model.TicketId = Id;
             return View(model);
-
         }
-        [HttpPost]
-        public ActionResult Comment(TicketCommentViewModel model)
+        public JsonResult getTicketComment(int id)
         {
-
-            _ticketService.CreateTicketComment(model);
-            return View();
-
-
+            List<TicketCommentViewModel> List = _ticketService.GetAllComment(id);
+           
+            return Json(List, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        public JsonResult Comment(TicketCommentViewModel model)
+        {
+            int CreatedBy = SessionHelper.UserId;            
+            _ticketService.CreateTicketComment(model, CreatedBy);
+            
+            string message = "SUCCESS";
+            return Json(new { model = message, JsonRequestBehavior.AllowGet });
+        }
+
+        public JsonResult postTicketComment(int id)
+        {
+            List<TicketCommentViewModel> tickets = new List<TicketCommentViewModel>();
+            
+            return Json(tickets, JsonRequestBehavior.AllowGet);
+        }
+        
         public ActionResult Delete(int Id)
         {
             _ticketService.DeleteTicket(Id);
 
             return RedirectToAction("Index");
         }
+        public ActionResult CommentIndex(int Id)
+        {
+            List<TicketCommentViewModel> List = _ticketService.GetAllComment(Id);
+            return View(List);
+        }
+
     }
 }
 

@@ -13,9 +13,10 @@ namespace TMS.Data.Database
     {
         [Key]
         public int Id { get; set; }
-        public string TicketId { get; set; }
+        public int TicketId { get; set; }
         public string Comment { get; set; }
-        public string CreatedBy { get; set; }
+        public int CreatedBy { get; set; }
+        public DateTime CreatedOn { get; set; }
 
     }
 }
