@@ -1,4 +1,4 @@
-﻿using TMS.Model;
+﻿ using TMS.Model;
 using TMS.Service;
 using PagedList;
 using System;
@@ -20,7 +20,7 @@ namespace TMS.Controllers
         {
             if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.FORMMASTER.ToString(), AccessPermission.IsView))
             {
-
+                return RedirectToAction("AccessDenied", "Base");
             }
             List<FormModel> FormsList = _formsService.GetAllForms();
             return View(FormsList.ToPagedList(page ?? 1, 6));

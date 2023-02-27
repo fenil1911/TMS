@@ -13,7 +13,7 @@ namespace TMS.Model
         [Display(Name = "User Name")]
         // [Remote("CheckDuplicateUserName", "Users", HttpMethod = "Post", AdditionalFields = "UserId")]
         public string UserName { get; set; }
-
+       
         [Required]
         [RegularExpression(@"^[a-zA-Z ]+$", ErrorMessage = "Only Letters and Spaces are allowed")]
         public string Name { get; set; }

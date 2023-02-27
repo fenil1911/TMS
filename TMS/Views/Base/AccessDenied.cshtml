@@ -1,0 +1,24 @@
+﻿@{
+    ViewBag.Title = "AccessDenied";
+    Layout = null;
+
+}
+<head>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/style.css" rel="stylesheet" />
+</head>
+<div class="container">
+    <div class="accessDenied">
+        We're sorry, you do not have access to this page!
+
+
+    </div>
+    <br />
+    <div class="text-center">
+        <p> If you have access with another account then please login. <a href="@Url.Action("Register", "Account")" class="text-decoration-none link-info"><b>Login</b></a> </p>  
+                  
+    </div>
+
+
+
+</div>

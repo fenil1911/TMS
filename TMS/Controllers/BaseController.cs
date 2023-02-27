@@ -18,11 +18,11 @@ namespace TMS.Controllers
         }
 
 
-        /* [AllowAnonymous]
+        [AllowAnonymous]
          public ActionResult AccessDenied()
          {
              return View();
-         }*/
+         }
 
         public bool CheckPermission(string formCode, string formAction)
         {

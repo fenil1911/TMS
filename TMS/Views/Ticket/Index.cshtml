@@ -20,7 +20,7 @@
             @Html.DisplayNameFor(model => model.Id)
         </th>
         <th>
-            @Html.DisplayName("CreatedOn")
+            @Html.DisplayName("Created On")
         </th>
         <th>
             @Html.DisplayName("Priority Name")
@@ -32,9 +32,10 @@
         <th>
             @Html.DisplayName("Type Name")
         </th>
-        <th>
-            @Html.DisplayName("Description Data")
-        </th>
+        @*<th>
+                @Html.DisplayName("Description")
+            </th>
+        *@
         <th>
             @Html.DisplayName("Assigned To")
         </th>
@@ -45,84 +46,85 @@
             @Html.DisplayName("Attachment ")
         </th>
         <th>
-            @Html.DisplayName("ChatBox")
-        </th>
-        <th>
             @Html.DisplayName("Action")
         </th>
 
     </tr>
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                <div class=" tableovertext @item.Id">
+        @*<tr onclick="alert('hello'+@item.Id)">*@
+<tr onclick="location.href='@Url.Action("Comment", "Ticket",new { Id = item.Id })  '">
 
-                    @Html.DisplayFor(modelItem => item.Id)
-                </div>
-            </td>
-            <td>
-                <div class=" tableovertext @item.CreatedOn">
+    @*<a href="@Url.Action("Display", "Ticket",new { Id = item.Id })  ">aaa</a>*@
+    <td>
+        <div class=" tableovertext @item.Id">
 
-                    @item.CreatedOn.ToString("dd/MM/yyyy")
-                    @*@item.CreatedOn.ToShortDateString()*@
-                    @*@Html.DisplayFor(modelItem => item.CreatedOn.ToShortDateString())*@
-                </div>
-            </td>
+            @Html.DisplayFor(modelItem => item.Id)
+        </div>
+    </td>
+    <td>
+        <div class=" tableovertext @item.CreatedOn">
 
-            <td>
-                <div class="status tableovertext @item.PriorityName ">
+            @item.CreatedOn.ToString("dd/MM/yyyy")
+            @*@item.CreatedOn.ToShortDateString()*@
+            @*@Html.DisplayFor(modelItem => item.CreatedOn.ToShortDateString())*@
+        </div>
+    </td>
 
-                    @Html.DisplayFor(modelItem => item.PriorityName)
-                </div>
-            </td>
-            <td>
-                <div class=" tablewidth tableovertext @item.TicketName">
-                    @Html.DisplayFor(modelItem => item.TicketName)
-                </div>
-            </td>
-            <td>
-                <div class=" tableovertext @item.TypeName">
+    <td>
+        <div class="status tableovertext @item.PriorityName ">
 
-                    @Html.DisplayFor(modelItem => item.TypeName)
-            </td>
+            @Html.DisplayFor(modelItem => item.PriorityName)
+        </div>
+    </td>
+    <td>
+        <div class=" tablewidth tableovertext @item.TicketName">
+            @Html.DisplayFor(modelItem => item.TicketName)
+        </div>
+    </td>
+    <td>
+        <div class=" tableovertext @item.TypeName">
 
-            <td>
-                <div class=" tablewidth tableovertext @item.DescriptionData">
-                    @Html.DisplayFor(modelItem => item.DescriptionData)
-                </div>
-            </td>
-            <td>
-                <div class=" tableovertext @item.AssignedTo">
-                    @Html.DisplayFor(modelItem => item.AssignedTo)
-                </div>
-            </td>
+            @Html.DisplayFor(modelItem => item.TypeName)
+        </div>
+    </td>
+    <td>
 
-            <td>
-                <div class=" tableovertext  statustext @item.StatusName dot">
-                    @Html.DisplayFor(modelItem => item.StatusName)
-                </div>
-            </td>
-            <td>
-                @if (item.ImageName != null)
-                {
-                    <div class="image data  tableovertext " - toggle="tooltip" data - placement="left" title="Download Ticket Attachment">
-                        @Html.ActionLink(item.ImageName, "DownloadFile", new { fileName = item.ImageName.ToString() })
-                    </div>}
-            </td>
-            <td>
-                <a href="@Url.Action("Comment", "Ticket", new { Id = item.Id })"><img src="~/Content/images/chatt.png" alt="edit" width="18" data-toggle="tooltip" data-placement="left" title="Open Ticket Comment"></a>
+        <div class=" tablewidthsmall tableovertext @item.AssignedTo">
+            @Html.DisplayFor(modelItem => item.AssignedTo)
+        </div>
+    </td>
 
-            </td>
-            <td>
-                <a href="@Url.Action("Edit", "Ticket", new { Id = item.Id })"><img src="~/Content/images/edit.png" alt="edit" width="18" data-toggle="tooltip" data-placement="bottom" title="Ticket Edit"></a>&nbsp &nbsp
+    <td>
+        <div class=" tableovertext  statustext @item.StatusName ">
+            @Html.DisplayFor(modelItem => item.StatusName)
+        </div>
+    </td>
+    <td>
+        @if (item.ImageName != null)
+        {
+            <div class="image data tablewidthsmall tableovertext " - toggle="tooltip" data - placement="left" title="Download Ticket Attachment">
+                @Html.ActionLink(item.ImageName, "DownloadFile", new { fileName = item.ImageName.ToString() })
+            </div>}
+    </td>
 
-                <a href="@Url.Action("delete", "Ticket",new { Id = item.Id }) " onclick="return confirm('Are you sure to Delete?')"><img src="~/Content/images/trashh.png" alt="edit" width="19" data-toggle="tooltip" data-placement="left" title="Delete Ticket"></a>&nbsp &nbsp
-                <a href="@Url.Action("Display", "Ticket",new { Id = item.Id })  "><img src="~/Content/images/info.png" alt="edit" width="18" data-toggle="tooltip" data-placement="left" title="Details Ticket"></a>&nbsp &nbsp
+    <td>
+        <a href="@Url.Action("Comment", "Ticket", new { Id = item.Id })"><img src="~/Content/images/chatt.png" alt="edit" width="18" data-toggle="tooltip" data-placement="left" title="Open Ticket Comment"></a>&nbsp &nbsp
+        <a href="@Url.Action("Comment", "Ticket",new { Id = item.Id })  "><img src="~/Content/images/info.png" alt="edit" width="18" data-toggle="tooltip" data-placement="left" title="Details Ticket"></a>&nbsp &nbsp
+        <a href="@Url.Action("Edit", "Ticket", new { Id = item.Id })"><img src="~/Content/images/edit.png" alt="edit" width="18" data-toggle="tooltip" data-placement="bottom" title="Ticket Edit"></a>&nbsp &nbsp
 
+        <a href="@Url.Action("delete", "Ticket",new { Id = item.Id }) " onclick="return confirm('Are you sure to Delete?')"><img src="~/Content/images/trashh.png" alt="edit" width="19" data-toggle="tooltip" data-placement="left" title="Delete Ticket"></a>&nbsp &nbsp
+@*
+        @if (item.ImageName != null)
+        {
+    <div class="image data tablewidthsmall tableovertext " - toggle="tooltip" data - placement="left" title="Download Ticket Attachment">
+        <img src="~/Content/images/greenattachment.png" alt="edit" width="18" data-toggle="tooltip" data-placement="bottom" title="Ticket Edit">
+        <a href="@Html.ActionLink(item.ImageName, "DownloadFile", new { fileName = item.ImageName })">
 
-            </td>
-        </tr>
+    </div>}*@
+
+    </td>
+</tr>
     }
 
 

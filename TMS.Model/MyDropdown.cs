@@ -8,7 +8,7 @@ namespace TMS.Model
 {
     public class MyDropdown
     {
-        public int id { get; set; }
+        public int? id { get; set; }
         public string name { get; set; }
     }
 }

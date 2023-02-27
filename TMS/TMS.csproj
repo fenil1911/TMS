@@ -119,6 +119,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="TimeAgo, Version=1.0.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TimeAgo.1.0.8\lib\portable-net4+sl5\TimeAgo.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
@@ -147,8 +150,10 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CommonLookupController.cs" />
     <Compile Include="Controllers\DashBoardController.cs" />
+    <Compile Include="Controllers\EmailController.cs" />
     <Compile Include="Controllers\FormController.cs" />
     <Compile Include="Controllers\FormRoleMappingController.cs" />
+    <Compile Include="Controllers\MailUsername.cs" />
     <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Controllers\TicketController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
@@ -164,10 +169,12 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\images\20209.jpg" />
     <Content Include="Content\images\44.jpg" />
+    <Content Include="Content\images\60028-Converted.png" />
     <Content Include="Content\images\chatt.png" />
     <Content Include="Content\images\draww.png" />
     <Content Include="Content\images\edit.png" />
     <Content Include="Content\images\filee.png" />
+    <Content Include="Content\images\greenattachment.png" />
     <Content Include="Content\images\info.png" />
     <Content Include="Content\images\login1.jpg" />
     <Content Include="Content\images\background.jpg" />
@@ -2065,7 +2072,6 @@
     <Content Include="Views\FormRoleMapping\ViewPermission.cshtml" />
     <Content Include="Views\CommonLookup\Index.cshtml" />
     <Content Include="Views\CommonLookup\Create.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Ticket\Index.cshtml" />
     <Content Include="Views\Ticket\Create.cshtml" />
     <Content Include="Views\Ticket\Chat.cshtml" />
@@ -2075,13 +2081,16 @@
     <Content Include="Views\Ticket\Comment.cshtml" />
     <Content Include="Views\Ticket\TicketDetails.cshtml" />
     <Content Include="Views\Ticket\CommentIndex.cshtml" />
-    <Content Include="Views\SendEmail.cshtml" />
+    <Content Include="Views\Email\SendEmail.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Base\AccessDenied.cshtml" />
+    <Content Include="Views\Account\ChangePassword.cshtml" />
+    <Content Include="Views\Account\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Uploadimage\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\Base\" />
     <Folder Include="Views\Users\" />
   </ItemGroup>
   <ItemGroup>

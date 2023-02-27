@@ -29,7 +29,7 @@ namespace TMS.Controllers
         {
             if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.ROLE.ToString(), AccessPermission.IsView))
             {
-
+                return RedirectToAction("AccessDenied", "Base");
             }
             List<RolesModel> RoleList = _rolesService.GetAllRoles();
             return View(RoleList.ToPagedList(page ?? 1, 6));

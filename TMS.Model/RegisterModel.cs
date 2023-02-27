@@ -9,6 +9,7 @@ namespace TMS.Model
 {
     public class RegisterModel
     {
+
         [Display(Name = "FirstName")]
         [Required(ErrorMessage = "FirstName is required")]
         public string FirstName { get; set; }
@@ -26,11 +27,12 @@ namespace TMS.Model
         [Required(ErrorMessage = "ConfirmPassword  is required")]
         [Compare(otherProperty: "Password", ErrorMessage = "Password doesn't match.")]
         public string ConfirmPassword { get; set; }
-        [Display(Name = "Role")]
-        [Required(ErrorMessage = "Role is required")]
+
+        
         public string Role { get; set; }
         [EmailAddress]
         public string EmailId { get; set; }
+
     }
     
 }

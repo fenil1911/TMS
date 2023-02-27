@@ -7,10 +7,10 @@
     <div class="col-md-6">
         @*@Html.Action("TicketDetails", new { TicketId = Model.TicketId })*@
         <br /><br /><br /><br /><br /><br />
-        <table id="tblTicketDetails" class="table table-bordered table-striped table-responsive table-hover">
+        <table id="tblTicketDetails" class="table ticketall table-bordered  table-responsive table-hover">
             <thead>
                 <tr>
-                    <th style="background-color:darkblue; color:white;" colspan=2><center>Ticket Details</center></th>
+                    <th style="background-color: #b1b1b133; color: black; font-size:18px" colspan=2><center>Ticket Details</center></th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -18,50 +18,57 @@
 
     </div>
     <div class="col-md-6">
-            <h2>Comment</h2>
-            @using (Html.BeginForm())
-            {
-                @Html.AntiForgeryToken()
+        <h2>Comment</h2>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h4>Ticket Comment</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-horizontal">
+                <h4 style="font-size: 40px; font-family: 'Segoe UI Symbol'; font-weight: bold; margin-top: 60px; margin-bottom: -16px; ">Comment</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div>
+                    <div class="form-group">
+                        @*  @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
+
+                    <div class="form-group col-md-1">
+                        <div style="float: right; display:inline-block;">
+                            <input class="btn btn-primary " style="margin-top: -1px; margin-left: 634px; margin-right: -42px;" name="submitButton" id="btnSave" value="Save" type="submit">
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-
-        
-        <div class="form-group col-md-1">
-            <div style="float: right; display:inline-block;" >
-                <input class="btn btn-primary " style="margin-top: -1px; margin-left: 634px; margin-right: -136px;" name="submitButton" id="btnSave" value="Save" type="submit">
-            </div>
-        </div>
+        }
     </div>
-            }
- </div>
 
-        <div class="col-md-6">
-            @*@Html.Action("CommentIndex", new { TicketId = Model.TicketId })*@
-            <table id="tblTicketComment" class="tablecomment table-bordered table-striped table-responsive table-hover">
-                <thead>
-                    <tr>
-                        <th style="background-color:darkblue; color:white; align="left" class="productth">Comment</th>
-                        <th style="background-color:darkblue; color:white; align="left" class="productth">CreatedBy</th>
-                        <th style="background-color:darkblue; color:white; align="left" class="productth">CreatedOn</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+    <div class="col-md-6">
+        @*@Html.Action("CommentIndex", new { TicketId = Model.TicketId })*@
+        <table id="tblTicketComment" class="tablecomment table-bordered ticketall table-responsive table-hover">
+            <thead>
+                <tr>
+                    <th style="background-color: #b1b1b133; color: black; font-size:18px" colspan=3><center>Comments</center></th>
+                </tr>
+            <thead>
+                <tr>
+                    <th style="background-color:#b1b1b133 ; class="productth">Comment</th>
+                    <th style="background-color:#b1b1b133; class="productth">CreatedBy</th>
+                    <th style="background-color:#b1b1b133; class="productth">CreatedOn</th>
+                </tr>
+            </thead> </thead>
 
-        </div>
+            <tbody></tbody>
+        </table>
+
     </div>
+</div>
 <script>
+
     $(document).ready(function () {
         getTicketDetails();
         getTicketComment();
@@ -87,7 +94,7 @@
                 error: function () {
                     alert("Error while inserting data");
                 }
-            });            
+            });
             return false;
         });
     });
@@ -121,7 +128,7 @@
                       + "<tr>"
                            + "<th>Description Data</th>" + "<td>" + data.DescriptionData + "</td>"
                     + "</tr>"  ;
-                
+
                 $('#tblTicketDetails tbody').append(record);
             },
             error: function (ex) {
@@ -143,11 +150,11 @@
                 $.each(data, function (i, item) {
                     var rows = "<tr>"
                         + "<td class='prtoducttd'>" + item.Comment + "</td>"
-                        + "<td class='prtoducttd'>" + item.CreatedBy + "</td>"
+                        + "<td class='prtoducttd'>" + item.CreatedBy  + "</td>"
                         + "<td class='prtoducttd'>" + new Date(parseInt(item.CreatedOn.substr(6))).toDateString("dd-mm-yyyy").toString("    ") + "</td>"
                         + "</tr>";
                     $('#tblTicketComment tbody').append(rows);
-                });                
+                });
             },
             error: function (ex) {
 
@@ -156,3 +163,12 @@
         return false;
     }
 </script>
+
+<div style="margin-left:200px">
+    
+</div>
+<div class="form-group col-md-1">
+    <div style="float: right; display: inline-block; margin-right: 10px;">
+        @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-default" })
+    </div>
+</div>

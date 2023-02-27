@@ -83,6 +83,7 @@
     <Compile Include="TicketListModel.cs" />
     <Compile Include="TicketModel.cs" />
     <Compile Include="UsersModel.cs" />
+    <Compile Include="webpages_RolesModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\bootstrap-theme.css.map" />

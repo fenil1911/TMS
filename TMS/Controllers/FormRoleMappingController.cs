@@ -31,7 +31,7 @@ namespace TMS.Controllers
                 string role = _roleService.GetRolesById().Name;
                 if (role != "Administrator")
                 {
-                   
+                    return RedirectToAction("AccessDenied", "Base");
                 }
 
                 FormRoleMappingModel model = new FormRoleMappingModel();

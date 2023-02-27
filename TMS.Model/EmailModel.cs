@@ -14,6 +14,9 @@ namespace TMS.Model
         public string Body { get; set; }
         public string Subject { get; set; }
         public string UserName { get; set; }
+        
+        
+
         public HttpPostedFileBase AttachmentFile { get; set; }
     }
 }

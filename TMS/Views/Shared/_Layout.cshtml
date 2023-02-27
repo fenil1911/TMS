@@ -16,7 +16,8 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-con  firm/3.3.2/jquery-confirm.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-
+    <script src="jquery.min.js" type="text/javascript"></script>
+    <script src="jquery.timeago.js" type="text/javascript"></script>
     <meta name="description" content="" />
     <meta name="generator" content="" />
     <link rel="icon" href="images/favicon.ico" />
@@ -35,73 +36,90 @@
 
 <body>
     <div class="bg">
-        <nav class="navbar navbar-dark navbar-expand-lg">
+        <nav class="navbar navbar navbar-expand-lg">
             <div class="container">
-                <div class="navbar navbar-inverse navbar-fixed-top">
+                <div class="navbar navbar-inversetms navbar-fixed-top">
                     <div class="container">
-                        <div class="navbar-header">
+                        <div class="navbar-header" style="color :#a7a7a7">
+
                             @Html.ActionLink("TMS", "Index", "DashBoard", new { area = "" }, new { @class = "navbar-brand " })
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                if (User.IsInRole("Administrator"))
+                                {
 
-                            <ul class="navbar-brand navbar-nav navbar-header" style="list-style-type: none ">
-                                <li class="navLinkMargin nav-item">
 
-                                    <div class="dropdown">
+                                    <ul class="navbar-brand navbar-nav navbar-header " style="list-style-type: none ">
+                                        <li class="navLinkMargin nav-item">
 
-                                        <a class="nav-link " style="list-style: none ;color :greenyellow">System</a>
-                                        <br />
+                                            <div class="dropdown">
 
-                                        <ul class="dropdown-menu table-hover text-primary bold shadow">
-                                            <li><a class="dropdown-item" href="@Url.Action("Index","Form")">Form</a></li>
-                                            <li><a class="dropdown-item" href="@Url.Action("Index","Roles")">Role</a></li>
-                                            <li><a class="dropdown-item" href="@Url.Action("Index","CommonLookup")">CommonLookup</a></li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                <li class="navLinkMargin nav-item">
-                                    <a class="nav-link" href="@Url.Action("Register", "Account")">Register</a>
-                                </li>
+                                                <a class="nav-link " style="list-style: none ;color :#a7a7a7">System</a>
+                                                <br />
 
-                                <li class="navLinkMargin nav-item">
-                                    <a class="nav-link" href="@Url.Action("Index", "Ticket")">Ticket</a>
-                                </li>
-                                <li class="navLinkMargin nav-item">
-                                    <a class="nav-link" href="@Url.Action("SendMail", "EmailHelper")">email</a>
-                                </li>
-                            </ul>
-                            <div class="head_right_col d-flex align-items-center justify-content-end ">
-                                <div class="dropdown">
-                                    <div class="toprightbar d-flex align-items-center justify-content-end">
-                                        @Html.Partial("_LoginPartial")
-                                        @*<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false"> </a>*@
-                                    </div>
-                                    <ul class="dropdown-menu text-small shadow">
-                                        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
-                                        {
-                                            <li><a class="dropdown-item" href="@Url.Action("ChangePassword","Account")">Change Password</a></li>
-                                            <li><a class="dropdown-item" href="javascript:document.getElementById('logoutForm').submit()">Logout</a></li>
-                                        }
+                                                <ul class="dropdown-menu table-hover text-primary bold shadow">
+                                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Form")">Form</a></li>
+                                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Roles")">Role</a></li>
+                                                    <li><a class="dropdown-item" href="@Url.Action("Index", "CommonLookup")">CommonLookup</a></li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        <li class="navLinkMargin nav-item">
+                                            <a class="nav-link" style="color :#a7a7a7" href="@Url.Action("Register", "Account")">Register</a>
+                                        </li>
+
                                     </ul>
-                                </div>
-                            </div>
+                                }
+                            }
+                            <ul class="navbar-brand navbar-nav navbar-header " style="list-style-type: none ">
+                                <li class="navLinkMargin nav-item">
 
+                                <li class="navLinkMargin nav-item">
+                                    <a class="nav-link" style="color :#a7a7a7" href="@Url.Action("Index", "Ticket")">Ticket</a>
+                                </li>
+                                </li>
+                                </ul>
+
+                                <ul class="navbar-brand navbar-nav navbar-header" style="list-style-type: none ; margin-left:555px ">
+                                    <div class="head_right_col d-flex align-items-center justify-content-end ">
+                                    <li class="navLinkMargin nav-item">
+
+                                        <div class="dropdown">
+
+                                            <a class="nav-link " style="list-style: none ;color :#a7a7a7">System</a>
+                                            <br />
+                                            <div class="toprightbar d-flex align-items-center justify-content-end">
+                                                @Html.Partial("_LoginPartial")
+                                                @*<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false"> </a>*@
+                                            </div>
+                                            <ul class="dropdown-menu table-hover text-primary bold shadow">
+                                                <li><a class="dropdown-item" href="@Url.Action("ChangePassword","Account")">Change Password</a></li>
+                                                <li><a class="dropdown-item" href="@Url.Action("Logout","Account")">Logout</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
                         </div>
                     </div>
-                </div>
-                <div class="container body-content">
-                    @RenderBody()
-                    <footer>
-                        <p>&copy; Ticket Management System</p>
-                    </footer>
-                </div>
-                @Scripts.Render("~/bundles/jquery")
-                @Scripts.Render("~/bundles/jqueryval")
-                @Scripts.Render("~/bundles/bootstrap")
-                @RenderSection("scripts", required: false)
-                <script src="~/Scripts/jquery-3.4.1.min.js"></script>
-                <script src="~/Scripts/chosen.jquery.js"></script>
+                        </ul>
 
+                    </div>
+                </div>
             </div>
-        </nav>
+            <div class="container body-content">
+                @RenderBody()
+                <footer>
+
+                </footer>
+            </div>
+            @Scripts.Render("~/bundles/jquery")
+            @Scripts.Render("~/bundles/jqueryval")
+            @Scripts.Render("~/bundles/bootstrap")
+            @RenderSection("scripts", required: false)
+            <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+            <script src="~/Scripts/chosen.jquery.js"></script>
+
+    </div>
+    </nav>
     </div>
 </body>
 </html>

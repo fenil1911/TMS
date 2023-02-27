@@ -414,8 +414,8 @@ h3 {
     color: #0052CC
 }
 
-.InProgress {
-    color: yellow;
+.In-Progress {
+    color: #00b425;
 }
 
 .Closed {
@@ -476,13 +476,14 @@ h3 {
 }
 
 .ticketall {
-    background: #f4f4f42e;
+    background: #f5f5f7;
     font-family: 'Segoe UI Symbol';
     font-weight: bold;
     font-size: 15px;
     color: black;
     font-style: unset;
 }
+gba(22, 22, 23, .8);
 
 .tickethead {
     background: #b1b1b133;
@@ -511,6 +512,13 @@ h3 {
 
 .tablewidth {
     width: 235px;
+    /* word-break: break-all;*/
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.tablewidthsmall{
+    width: 135px;
     /* word-break: break-all;*/
     overflow: hidden;
     text-overflow: ellipsis;
@@ -579,4 +587,9 @@ h3 {
     width: 128%;
     max-width: 133%;
     margin-bottom: 20px;
+}
+.navbar-inversetms {
+    background-color: rgb(53 53 53);
+    
+    border-color: rgb(53 53 53);
 }

@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.IO;
 using TMS.Data.Database;
+using TMS.Helper;
 
 namespace TMS.Controllers
 {
@@ -23,6 +24,10 @@ namespace TMS.Controllers
 
         public ActionResult Index()
         {
+            if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.ROLE.ToString(), AccessPermission.IsView))
+            {
+                return RedirectToAction("AccessDenied", "Base");
+            }
             List<TicketModel> List;
             try
             {
@@ -45,6 +50,9 @@ namespace TMS.Controllers
                .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
             model.TypeDropdown = _ticketService.GetDropdownBykey2("Task")
                 .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
+            /*model.RoleDropdown = _ticketService.GetDropdownBykey3("Role")
+              .Select(x => new MyDropdown() { id = x.RoleId, name = x.RoleName }).ToList();*/
+
             return PartialView("Create", model);
         }
 
@@ -74,6 +82,9 @@ namespace TMS.Controllers
                 CreatedOn = DateTime.Now,
                 CreatedBy = CreatedBy
             };
+            EmailController objEmail = new EmailController();
+            objEmail.SendMyMail(model.AssignedTo,model.TicketName, model.DescriptionData, imgfile, ticketId);
+
             _ticketService.CreateTicketStatus(obj, CreatedBy);
             _ticketService.CreateAttachment(obj1, CreatedBy);
             return RedirectToAction("Index");
@@ -88,6 +99,7 @@ namespace TMS.Controllers
         public ActionResult Edit(int Id)
         {
             TicketModel obj = _ticketService.GetTicketsById(Id);
+
             return View(obj);
         }
 
@@ -118,7 +130,8 @@ namespace TMS.Controllers
                 CreatedOn = DateTime.Now,
                 CreatedBy = UpdatedBy
             };
-
+            _ticketService.CreateTicketStatus(obj, UpdatedBy);
+            _ticketService.CreateAttachment(obj1, UpdatedBy);
             TicketService objservice = new TicketService();
             TicketModel objmodels = objservice.UpdateTicket(model, UpdatedBy);
             return RedirectToAction("Index");

@@ -19,6 +19,22 @@ namespace TMS.Data
         {
             return _db.Users.Where(a => a.UserId == Id).FirstOrDefault();
         }
-       
+        public List<webpages_RolesModel> GetAllCommonLookup()
+        {
+            var allCommonLookup = (from c in _db.webpages_Roles
+                                   select new webpages_RolesModel
+                                   {
+                                        RoleCode = c.RoleCode,
+                                        RoleName = c.RoleName,
+                                        RoleId = c.RoleId,
+                                        Type = c.Type
+                                       
+
+                                   }).ToList();
+
+            return allCommonLookup;
+
+
+        }
     }
 }

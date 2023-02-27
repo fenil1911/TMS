@@ -21,7 +21,7 @@ namespace TMS.Controllers
         {
             if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.COMMONLOOKUP.ToString(), AccessPermission.IsView))
             {
-
+                return RedirectToAction("AccessDenied", "Base");
             }
             List<CommonLookupModel> List = commonLookupService.GetAllCommonLookup();
             return View(List);
@@ -30,7 +30,10 @@ namespace TMS.Controllers
         }
         public ActionResult Create()
         {
-
+            if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.COMMONLOOKUP.ToString(), AccessPermission.IsAdd))
+            {
+                return RedirectToAction("AccessDenied", "Base");
+            }
             CommonLookupModel model = new CommonLookupModel();
             return PartialView("Create", model);
         }
@@ -46,7 +49,10 @@ namespace TMS.Controllers
         }
         public ActionResult Edit(int Id)
         {
-
+            if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.COMMONLOOKUP.ToString(), AccessPermission.IsEdit))
+            {
+                return RedirectToAction("AccessDenied", "Base");
+            }
             CommonLookupModel EditCommonLookup = commonLookupService.GetCommonLookupById(Id);
             return PartialView("Edit", EditCommonLookup);
         }
@@ -57,10 +63,7 @@ namespace TMS.Controllers
             {
                 int UpdatedBy = SessionHelper.UserId;
 
-                if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.COMMONLOOKUP.ToString(), AccessPermission.IsEdit))
-                {
-
-                }
+                
                 if (ModelState.IsValid)
                 {
                     CommonLookupModel commonlookup_model = commonLookupService.UpdateCommonLookup(commonlookupmodel, UpdatedBy);
@@ -80,6 +83,10 @@ namespace TMS.Controllers
         }
         public ActionResult Delete(int Id)
         {
+            if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.COMMONLOOKUP.ToString(), AccessPermission.IsDelete))
+            {
+                return RedirectToAction("AccessDenied", "Base");
+            }
             commonLookupService.DeleteCommonLookup(Id);
 
             return RedirectToAction("Index");

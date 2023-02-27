@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TMS.Model;
 
 namespace TMS.Service
 {
@@ -20,6 +21,11 @@ namespace TMS.Service
         {
             return usersProvider.GetUserById(UserId);
         }
-       
+        public List<webpages_RolesModel> GetDropdownBykey3(string key)
+        {
+            return usersProvider.GetAllCommonLookup().Where(a => a.Type.ToLower() == key.ToLower()).ToList(); 
+
+        }
+
     }
 }

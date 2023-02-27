@@ -188,11 +188,11 @@ namespace TMS.Data
             }
             else
             {
-                AccessPermission.AllowMenu = false;
-                AccessPermission.View = false;
-                AccessPermission.Add = false;
-                AccessPermission.Edit = false;
-                AccessPermission.Delete = false;
+                AccessPermission.AllowMenu = true;
+                AccessPermission.View = true;
+                AccessPermission.Add = true;
+                AccessPermission.Edit = true;
+                AccessPermission.Delete = true;
 
             }
             return _roleRights;
