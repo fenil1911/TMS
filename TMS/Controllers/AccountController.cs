@@ -97,7 +97,7 @@ namespace TMS.Controllers
                     });
                     Roles.AddUserToRole(registerModel.UserName, registerModel.Role);
 
-                    return RedirectToAction("Index", "Dashboard");
+                    return RedirectToAction("Index", "Dashboard");  
                 }
 
             }
