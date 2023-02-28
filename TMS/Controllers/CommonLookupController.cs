@@ -41,13 +41,9 @@ namespace TMS.Controllers
         [HttpPost]
         public ActionResult Create(CommonLookupModel model)
         {
-          
+
             commonLookupService.CreateCommonLookup(model);
             return View();
-          
-
-        }
-
-
+        }    
     }
 }

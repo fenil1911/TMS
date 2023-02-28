@@ -74,7 +74,9 @@ namespace TMS.Controllers
                 ViewBag.RoleId = 1;
             RegisterModel registerModel = new RegisterModel();
             return View(registerModel);
-        }
+        }  
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
