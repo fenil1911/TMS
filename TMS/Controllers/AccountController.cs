@@ -75,7 +75,7 @@ namespace TMS.Controllers
         public ActionResult Register()
         {
             GetRolesForCurrentUser();
-            return View();
+            return View( );
         }
 
         private ActionResult GetRolesForCurrentUser()
@@ -90,9 +90,12 @@ namespace TMS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+
+
         [AllowAnonymous]
         public ActionResult Register(RegisterModel registerModel)
         {
+
             if (ModelState.IsValid)
             {
                 bool isUserExists = WebSecurity.UserExists(registerModel.UserName);
