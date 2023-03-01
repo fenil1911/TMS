@@ -24,9 +24,7 @@ namespace TMS.Controllers
                 return RedirectToAction("AccessDenied", "Base");
             }
             List<CommonLookupModel> List = commonLookupService.GetAllCommonLookup();
-            return View(List);
-
-
+            return View(List.ToPagedList(page ?? 1, 3));
         }
         public ActionResult Create()
         {
@@ -41,11 +39,8 @@ namespace TMS.Controllers
         public ActionResult Create(CommonLookupModel model)
         {
             int CreatedBy = SessionHelper.UserId;
-
             commonLookupService.CreateCommonLookup(model, CreatedBy);
             return View();
-
-
         }
         public ActionResult Edit(int Id)
         {
@@ -62,8 +57,6 @@ namespace TMS.Controllers
             try
             {
                 int UpdatedBy = SessionHelper.UserId;
-
-                
                 if (ModelState.IsValid)
                 {
                     CommonLookupModel commonlookup_model = commonLookupService.UpdateCommonLookup(commonlookupmodel, UpdatedBy);
@@ -88,7 +81,6 @@ namespace TMS.Controllers
                 return RedirectToAction("AccessDenied", "Base");
             }
             commonLookupService.DeleteCommonLookup(Id);
-
             return RedirectToAction("Index");
         }
     }

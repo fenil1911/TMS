@@ -38,21 +38,6 @@ namespace TMS.Data
 
 
         }
-
-
-            /*return _db.CommonLookup.Select(x => new CommonLookupModel  
-            
-            {
-                Id = x.Id,
-                Type = x.Type,
-                Code = x.Code,
-                Name = x.Name,
-                DisplayOrder = x.DisplayOrder,
-                IsActive = x.IsActive
-            }).ToList();*/
-
-
-        
         public int CreateCommonLookup(CommonLookupModel commonLookup, int CreatedBy)
         {
             CommonLookup _commonLookup = new CommonLookup()

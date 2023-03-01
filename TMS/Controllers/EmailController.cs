@@ -9,12 +9,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using TMS.Data.Database;
 using TMS.Model;
 
 namespace TMS.Helper
 {
     public class EmailController : Controller
     {
+       
         public ActionResult Index()
         {
             return View();
@@ -64,8 +66,9 @@ namespace TMS.Helper
                 Smtp.UseDefaultCredentials = false;
                 Smtp.Credentials = NetCredential;
                 Smtp.EnableSsl = true;
-                ////Smtp.DeliveryMethod = SmtpDeliveryMethod.Network;                
+                
                 Smtp.Send(message);
+
                 return true;
 
             }

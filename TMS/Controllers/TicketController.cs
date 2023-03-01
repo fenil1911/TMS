@@ -18,7 +18,7 @@ namespace TMS.Controllers
         private readonly CommonLookupService _commonLookupService;
         public TicketController()
         {
-            _ticketService = new TicketService();
+            _ticketService = new TicketService(); 
             _commonLookupService = new CommonLookupService();
         }
 
@@ -50,8 +50,7 @@ namespace TMS.Controllers
                .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
             model.TypeDropdown = _ticketService.GetDropdownBykey2("Task")
                 .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
-            /*model.RoleDropdown = _ticketService.GetDropdownBykey3("Role")
-              .Select(x => new MyDropdown() { id = x.RoleId, name = x.RoleName }).ToList();*/
+           
 
             return PartialView("Create", model);
         }

@@ -11,7 +11,6 @@ namespace TMS.Controllers
 {
     public class RolesController : BaseController
     {
-
         private readonly RoleService _rolesService;
         public RolesController()
         {
@@ -33,8 +32,6 @@ namespace TMS.Controllers
             }
             List<RolesModel> RoleList = _rolesService.GetAllRoles();
             return View(RoleList.ToPagedList(page ?? 1, 6));
-
-
         }
     }
 }

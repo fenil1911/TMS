@@ -1,4 +1,4 @@
-﻿ using TMS.Model;
+﻿using TMS.Model;
 using TMS.Service;
 using PagedList;
 using System;
@@ -89,12 +89,10 @@ namespace TMS.Controllers
             TempData["Message"] = "Data Saved Successfully!!";
             return RedirectToAction("Index");
         }
-
         private void BindDropdown(ref FormModel model)
         {
             BindParentForm(ref model);
         }
-
         public FormModel BindParentForm(ref FormModel model)
         {
             int currentFormId = model.Id;

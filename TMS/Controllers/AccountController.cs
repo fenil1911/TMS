@@ -20,7 +20,6 @@ namespace TMS.Controllers
 
         public TMSEntities _db = new TMSEntities();
         public readonly UsersService _usersService;
-
         public AccountController()
         {
             _usersService = new UsersService();
@@ -41,7 +40,6 @@ namespace TMS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(Model.LoginModel model, string ReturnUrl = "")
         {
-
             if (ModelState.IsValid && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
             {
                 var userID = WebSecurity.GetUserId(model.UserName);
@@ -49,7 +47,6 @@ namespace TMS.Controllers
                 SessionHelper.IsAdmin = true;
                 SessionHelper.UserName = model.UserName;
                 SessionHelper.RoleName = Roles.GetRolesForUser(model.UserName).FirstOrDefault();
-
                 string returnUrl = Request.QueryString["ReturnUrl"];
                 Session["UserName"] = model.UserName.ToString();
                 SessionHelper.UserId = userID;
@@ -68,14 +65,13 @@ namespace TMS.Controllers
             WebSecurity.Logout();
             Session.Abandon();
             return RedirectToAction("Login", "Account");
-
         }
         [HttpGet]
         [Authorize]
         public ActionResult Register()
         {
             GetRolesForCurrentUser();
-            return View( );
+            return View();
         }
 
         private ActionResult GetRolesForCurrentUser()
@@ -83,19 +79,13 @@ namespace TMS.Controllers
             if (Roles.IsUserInRole(WebSecurity.CurrentUserName, "Administrator"))
                 ViewBag.RoleId = 1;
             RegisterModel registerModel = new RegisterModel();
-            
-
             return View(registerModel);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-
-
         [AllowAnonymous]
         public ActionResult Register(RegisterModel registerModel)
         {
-
             if (ModelState.IsValid)
             {
                 bool isUserExists = WebSecurity.UserExists(registerModel.UserName);
@@ -109,14 +99,11 @@ namespace TMS.Controllers
                     {
                         FirstName = registerModel.FirstName,
                         EmailId = registerModel.EmailId,
-                        LastName =  registerModel.LastName,
-                        Password  = Crypto.Hash(registerModel.Password),
-                       
+                        LastName = registerModel.LastName,
+                        Password = Crypto.Hash(registerModel.Password),
                         CreatedOn = DateTime.Now
-              
                     });
                     Roles.AddUserToRole(registerModel.UserName, registerModel.Role);
-
                     return RedirectToAction("Index", "Dashboard");
                 }
 
@@ -139,17 +126,16 @@ namespace TMS.Controllers
                 if (ModelState.IsValid)
                 {
                     var oldpass = Crypto.Hash(model.OldPassword);
-                        var obj = _db.Users.Where(a => a.Password != model.NewPassword && a.Password == oldpass).FirstOrDefault();
+                    var obj = _db.Users.Where(a => a.Password != model.NewPassword && a.Password == oldpass).FirstOrDefault();
                     if (obj != null)
                     {
                         obj.Password = Crypto.Hash(model.NewPassword);
                         _db.Configuration.ValidateOnSaveEnabled = false;
                         _db.SaveChanges();
-                        
                         return Json(true, JsonRequestBehavior.AllowGet);
                     }
                     else
-                    {   //message = "Something invalid";
+                    {
                         return Json(false, JsonRequestBehavior.AllowGet);
                     }
                 }
@@ -160,7 +146,5 @@ namespace TMS.Controllers
                 throw ex;
             }
         }
-
     }
-
 }

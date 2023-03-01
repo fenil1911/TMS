@@ -9,7 +9,7 @@ namespace TMS.Model
 {
     public class LoginModel
     {
-        [Required(ErrorMessage = "Email Id is required.")]
+        [Required(ErrorMessage = "Email Id is required.")] 
         public string UserName { get; set; }
 
         [DataType(DataType.Password)]

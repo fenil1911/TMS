@@ -1,9 +1,12 @@
-﻿@model IEnumerable<TMS.Model.CommonLookupModel>
+﻿@model IPagedList<TMS.Model.CommonLookupModel>
 
 @{
     ViewBag.Title = "Index";
 
 }
+
+@using PagedList.Mvc;
+@using PagedList;
 
 <br />
 <h2 style="margin-top: 65px; margin-bottom: -45px; MARGIN-LEFT: -171px;font-family:'Segoe UI Symbol';font-weight:bold " ">CommonLookup Index</h2>
@@ -70,3 +73,5 @@
     }
 
 </table>
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions { Display = PagedListDisplayMode.IfNeeded, DisplayPageCountAndCurrentLocation = true })
