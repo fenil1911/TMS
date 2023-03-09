@@ -13,6 +13,7 @@ namespace TMS.Service
     {
         private readonly TicketProvider ticketProvider;
         private readonly CommonLookupProvider commonLookupProvider;
+        private readonly UsersProvider usersProvider;
         public TicketService()
         {
             ticketProvider = new TicketProvider();
@@ -27,20 +28,19 @@ namespace TMS.Service
                .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
             data.TypeDropdown = GetDropdownBykey2("Task")
                 .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
-            /* TicketModel category = new TicketModel
-             {
-                 TicketName=data.TicketName,
-                 Id = data.Id,
-                 AssignedTo = data.AssignedTo,
-                 TypeId = data.TypeId,
-                 DescriptionData = data.DescriptionData
-             };*/
+            
+        
             return data;
 
         }
         public TicketModel UpdateTicket(TicketModel model, int UpdatedBy)
         {
             return ticketProvider.UpdateTicket(model,  UpdatedBy);
+        }
+        public List<TicketModel> GetAllTicketsAdmin()
+        {
+            var commonlookup = ticketProvider.GetAllTicketsAdmin();
+            return commonlookup;
         }
         public List<TicketModel> GetAllTickets()
         {
@@ -61,8 +61,11 @@ namespace TMS.Service
         {
             return ticketProvider.CreateAttachment(ticket,CreatedBy);
         }
-        
 
+        public List<MyDropdown> BindEmployee()
+        {
+            return ticketProvider.BindEmployee();
+        }
         public List<CommonLookupModel> GetDropdownBykey(string key)
         {
             return commonLookupProvider.GetAllCommonLookup().Where(a => a.Type.ToLower() == key.ToLower()).ToList();
@@ -79,13 +82,18 @@ namespace TMS.Service
             return commonLookupProvider.GetAllCommonLookup().Where(a => a.Type.ToLower() == key.ToLower()).ToList();
 
         }
+        /*public List<UsersModel> GetDropdownBykey3(string key)
+        {
+            return usersProvider.GetAllUser1().Where(a => a.Type.ToLower() == key.ToLower()).ToList();
+
+        }*/
         /*public int TicketComment(TicketComment ticket)
         {
             return ticketProvider.TicketComment(ticket);
         }*/
-        public int CreateTicketComment(TicketCommentViewModel comment,int CreatedBy)
+        public int CreateTicketComment(TicketCommentViewModel comment,int CreatedBy,string CreatedBy1)
         {
-            return ticketProvider.CreateTicketComment(comment, CreatedBy);
+            return ticketProvider.CreateTicketComment(comment, CreatedBy, CreatedBy1);
         }
         public void DeleteTicket(int Id)
         {

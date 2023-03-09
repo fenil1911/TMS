@@ -12,7 +12,7 @@ namespace TMS.Data.Database
         [Key]
         public int Id { get; set; }
         public string TicketName { get; set; }
-        public string AssignedTo { get; set; }
+        public int AssignedTo { get; set; }
         public string DescriptionData { get; set; }
 
         public int PriorityId { get; set; }

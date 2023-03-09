@@ -26,6 +26,7 @@ namespace TMS.Model
         }
         public class ChangePasswordModel
         {
+            public int UserId { get; set; }
             [Display(Name = "Old Password:")]
             [Required(ErrorMessage = "Old Password is required.")]
             [DataType(DataType.Password)]

@@ -26,7 +26,7 @@ namespace TMS.Data
             var data = (from a in _db.webpages_Roles
                         select new RolesModel
                         {
-                            Id = a.RoleId.Value,
+                            Id = a.RoleId,
                             Name = a.RoleName,
                             RoleCode = a.RoleCode,
                             IsActive = a.IsActive

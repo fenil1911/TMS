@@ -17,22 +17,39 @@ namespace TMS.Data
         }
         public Users GetUserById(int Id)
         {
-            return _db.Users.Where(a => a.UserId == Id).FirstOrDefault();
+            return _db.Users.Where(x => x.UserId == Id).FirstOrDefault();
         }
-        public List<webpages_RolesModel> GetAllCommonLookup()
+        public List<webpages_RolesModel> GetAllUser()
         {
-            var allCommonLookup = (from c in _db.webpages_Roles
-                                   select new webpages_RolesModel
-                                   {
-                                        RoleCode = c.RoleCode,
-                                        RoleName = c.RoleName,
-                                        RoleId = c.RoleId,
-                                        Type = c.Type
-                                       
+            var GetAllUser = (from c in _db.webpages_Roles
+                              select new webpages_RolesModel
+                              {
+                                  RoleCode = c.RoleCode,
+                                  RoleName = c.RoleName,
+                                  RoleId = c.RoleId,
+                                 
 
-                                   }).ToList();
+                              }).ToList();
 
-            return allCommonLookup;
+            return GetAllUser;
+
+
+        }
+        public List<UsersModel> GetAllUser1()
+        {
+            var GetAllUserview = (from c in _db.Users
+                                  select new UsersModel
+                                  {
+                                      UserName = c.UserName,
+                                      Name = c.UserName,
+                                      EmailId = c.EmailId,
+                                      Id = c.UserId
+
+
+
+                                  }).ToList();
+
+            return GetAllUserview;
 
 
         }

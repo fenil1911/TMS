@@ -18,106 +18,151 @@ namespace TMS.Controllers
         }
         public ActionResult Index(int? page)
         {
-            if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.FORMMASTER.ToString(), AccessPermission.IsView))
+            try
             {
-                return RedirectToAction("AccessDenied", "Base");
+
+                if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.FORMMASTER.ToString(), AccessPermission.IsView))
+                {
+                    return RedirectToAction("AccessDenied", "Base");
+                }
+                List<FormModel> FormsList = _formsService.GetAllForms();
+                return View(FormsList.ToPagedList(page ?? 1, 6));
+
             }
-            List<FormModel> FormsList = _formsService.GetAllForms();
-            return View(FormsList.ToPagedList(page ?? 1, 6));
-        }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }}
         [HttpGet]
         public ActionResult Create(int? id)
         {
-            int CreatedBy = SessionHelper.UserId;
-            string actionPermission = "";
-            if (id == null)
-            {
-                actionPermission = AccessPermission.IsAdd;
-            }
-
-            else if ((id ?? 0) > 0)
-            {
-                actionPermission = AccessPermission.IsEdit;
-            }
-
-            if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.FORMMASTER.ToString(), actionPermission))
+            try
             {
 
-            }
-
-            int userId = SessionHelper.UserId;
-            FormModel model = new FormModel();
-            if (id.HasValue)
-            {
-                var formDetail = _formsService.GetFormsById(id.Value, CreatedBy);
-                if (formDetail != null)
+                int CreatedBy = SessionHelper.UserId;
+                string actionPermission = "";
+                if (id == null)
                 {
-                    model.Id = id.Value;
-                    model.Id = formDetail.Id;
-                    model.Name = formDetail.Name;
-                    model.NavigateURL = formDetail.NavigateURL;
-                    model.ParentFormId = formDetail.ParentFormId;
-                    model.FormAccessCode = formDetail.FormAccessCode;
-                    model.DisplayOrder = formDetail.DisplayOrder;
-                    model.IsDisplayMenu = formDetail.IsDisplayMenu;
-                    model.IsActive = formDetail.IsActive;
+                    actionPermission = AccessPermission.IsAdd;
                 }
+
+                else if ((id ?? 0) > 0)
+                {
+                    actionPermission = AccessPermission.IsEdit;
+                }
+
+                if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.FORMMASTER.ToString(), actionPermission))
+                {
+
+                }
+
+                int userId = SessionHelper.UserId;
+                FormModel model = new FormModel();
+                if (id.HasValue)
+                {
+                    var formDetail = _formsService.GetFormsById(id.Value, CreatedBy);
+                    if (formDetail != null)
+                    {
+                        model.Id = id.Value;
+                        model.Id = formDetail.Id;
+                        model.Name = formDetail.Name;
+                        model.NavigateURL = formDetail.NavigateURL;
+                        model.ParentFormId = formDetail.ParentFormId;
+                        model.FormAccessCode = formDetail.FormAccessCode;
+                        model.DisplayOrder = formDetail.DisplayOrder;
+                        model.IsDisplayMenu = formDetail.IsDisplayMenu;
+                        model.IsActive = formDetail.IsActive;
+                    }
+                }
+                BindDropdown(ref model);
+                return View(model);
+
             }
-            BindDropdown(ref model);
-            return View(model);
-        }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }}
 
         [HttpPost]
         public ActionResult Create(FormModel model)
         {
-            string actionPermission = "";
-            if (model.Id == 0)
+            try
             {
-                actionPermission = AccessPermission.IsAdd;
-            }
-            else if (model.Id > 0)
-            {
-                actionPermission = AccessPermission.IsEdit;
-            }
-            int userId = SessionHelper.UserId;
 
-            if (!ModelState.IsValid)
-            {
-                return View(model);
+                string actionPermission = "";
+                if (model.Id == 0)
+                {
+                    actionPermission = AccessPermission.IsAdd;
+                }
+                else if (model.Id > 0)
+                {
+                    actionPermission = AccessPermission.IsEdit;
+                }
+                int userId = SessionHelper.UserId;
+
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                _formsService.SaveUpdateForm(model);
+                TempData["Message"] = "Data Saved Successfully!!";
+                return RedirectToAction("Index");
+
             }
-            _formsService.SaveUpdateForm(model);
-            TempData["Message"] = "Data Saved Successfully!!";
-            return RedirectToAction("Index");
-        }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }}
         private void BindDropdown(ref FormModel model)
         {
             BindParentForm(ref model);
         }
         public FormModel BindParentForm(ref FormModel model)
         {
-            int currentFormId = model.Id;
-            var getparentform = _formsService.GetAllForms().Where(f => f.Id != currentFormId).Select(a => new FormModel { Id = a.Id, Name = a.Name }).OrderBy(a => a.Name);
-            model._ParentFormList.Add(new SelectListItem() { Text = "Select Parent", Value = "" });
-            foreach (var item in getparentform)
+            try
             {
-                model._ParentFormList.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+
+                int currentFormId = model.Id;
+                var getparentform = _formsService.GetAllForms().Where(f => f.Id != currentFormId).Select(a => new FormModel { Id = a.Id, Name = a.Name }).OrderBy(a => a.Name);
+                model._ParentFormList.Add(new SelectListItem() { Text = "Select Parent", Value = "" });
+                foreach (var item in getparentform)
+                {
+                    model._ParentFormList.Add(new SelectListItem() { Text = item.Name, Value = item.Id.ToString() });
+                }
+                return model;
+
             }
-            return model;
-        }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }}
         public JsonResult CheckDuplicateFormAccessCode(string FormAccessCode, int Id)
         {
-            var checkduplicate = _formsService.CheckDuplicateFormAccessCode(FormAccessCode);
-            if (Id > 0)
+            try
             {
-                checkduplicate = checkduplicate.Where(x => x.Id != Id).ToList();
+
+                var checkduplicate = _formsService.CheckDuplicateFormAccessCode(FormAccessCode);
+                if (Id > 0)
+                {
+                    checkduplicate = checkduplicate.Where(x => x.Id != Id).ToList();
+                }
+                if (checkduplicate.Count() > 0)
+                {
+                    return Json("FormAccessCode is already exist.", JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(true, JsonRequestBehavior.AllowGet);
+                }
             }
-            if (checkduplicate.Count() > 0)
+            catch (Exception ex)
             {
-                return Json("FormAccessCode is already exist.", JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                return Json(true, JsonRequestBehavior.AllowGet);
+
+                throw ex;
             }
         }
         public ActionResult Delete(int Id)

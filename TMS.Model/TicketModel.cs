@@ -15,17 +15,20 @@ namespace TMS.Model
         [Display(Name = "Type")]
         public int TypeId { get; set; }
         public string TypeName { get; set; }
+        public string Type { get; set; }
         public string DescriptionData { get; set; }
         public int PriorityId { get; set; }
         public string PriorityName { get; set; }
         public int StatusId { get; set; }
         public string StatusName { get; set; }
-        public string AssignedTo { get; set; }
+        public int AssignedTo { get; set; }
+        public string AssignedToName { get; set; }
         public DateTime CreatedOn { get; set; }
         public string ImageName { get; set; }
         public List<MyDropdown> StatusDropdown { get; set; }
         public List<MyDropdown> PriorityDropdown { get; set; }
         public List<MyDropdown> TypeDropdown { get; set; }
+        public List<MyDropdown> AssignedDropdown { get; set; }
         public DateTime UpdatedOn { get; set; }
         public TicketCommentViewModel TicketComment { get; set; }
     }

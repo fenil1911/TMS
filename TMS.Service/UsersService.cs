@@ -23,8 +23,13 @@ namespace TMS.Service
         }
         public List<webpages_RolesModel> GetDropdownBykey3(string key)
         {
-            return usersProvider.GetAllCommonLookup().Where(a => a.Type.ToLower() == key.ToLower()).ToList(); 
+            return usersProvider.GetAllUser().Where(a => a.Type.ToLower() == key.ToLower()).ToList(); 
 
+        }
+        public List<UsersModel> GetAlluser()
+        {
+            var GetAlluser = usersProvider.GetAllUser1();
+            return GetAlluser;
         }
 
     }

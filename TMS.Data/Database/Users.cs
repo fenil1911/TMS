@@ -18,12 +18,15 @@ namespace TMS.Data.Database
         public string LastName { get; set; }
         public string EmailId { get; set; }
         public string Password { get; set; }
+       
+        public string ConfirmPassword { get; set; }
         public bool IsActive { get; set; }
-        public int IsDeleted { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public DateTime UpdatedOn { get; set; }
+        public bool IsDeleted { get; set; }
+        public Nullable<DateTime> CreatedOn { get; set; }
+        public Nullable<DateTime> UpdatedOn { get; set; }
         public int? CreatedBy { get; set; }
         public int? UpdatedBy { get; set; }
+
         
     
     }

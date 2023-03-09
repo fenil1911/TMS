@@ -10,6 +10,7 @@ using WebMatrix.WebData;
 using TMS.Data;
 using TMS.Helper;
 using TMS.Service;
+using TMS.Model.General;
 using static TMS.Model.AccountModel;
 
 
@@ -17,13 +18,19 @@ namespace TMS.Controllers
 {
     public class AccountController : Controller
     {
+        TMSEntities _db;
 
-        public TMSEntities _db = new TMSEntities();
         public readonly UsersService _usersService;
+        public readonly RoleService _roleService;
+
         public AccountController()
         {
+            _db = new TMSEntities();
             _usersService = new UsersService();
+            _roleService = new RoleService();
         }
+
+
         [AllowAnonymous]
         public ActionResult Login(string ReturnUrl)
         {
@@ -40,19 +47,32 @@ namespace TMS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(Model.LoginModel model, string ReturnUrl = "")
         {
+
+
             if (ModelState.IsValid && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
             {
                 var userID = WebSecurity.GetUserId(model.UserName);
-                SessionHelper.UserId = userID;
-                SessionHelper.IsAdmin = true;
-                SessionHelper.UserName = model.UserName;
-                SessionHelper.RoleName = Roles.GetRolesForUser(model.UserName).FirstOrDefault();
-                string returnUrl = Request.QueryString["ReturnUrl"];
-                Session["UserName"] = model.UserName.ToString();
-                SessionHelper.UserId = userID;
-                var sadmin = SessionHelper.UserId;
-                return RedirectToAction("Index", "DashBoard");
+                if (model.Password == "123")
+                {
+
+                    return RedirectToAction("ChangePassword", "Account", userID);
+                }
+                else
+                {
+                    SessionHelper.UserId = userID;
+                    SessionHelper.IsAdmin = true;
+                    SessionHelper.UserName = model.UserName;
+                    SessionHelper.RoleName = Roles.GetRolesForUser(model.UserName).FirstOrDefault();
+                    string returnUrl = Request.QueryString["ReturnUrl"];
+                    Session["UserName"] = model.UserName.ToString();
+                    SessionHelper.UserId = userID;
+                    var sadmin = SessionHelper.UserId;
+
+
+                    return RedirectToAction("Index", "DashBoard");
+                }
             }
+
             else
             {
                 ModelState.AddModelError(" ", "The User name or password provided is incorrect.");
@@ -78,7 +98,11 @@ namespace TMS.Controllers
         {
             if (Roles.IsUserInRole(WebSecurity.CurrentUserName, "Administrator"))
                 ViewBag.RoleId = 1;
+
             RegisterModel registerModel = new RegisterModel();
+
+            registerModel.RoleDropdown = _roleService.GetAllRoles()
+               .Select(x => new MyDropdown() { Key = x.Name, name = x.Name }).ToList();
             return View(registerModel);
         }
         [HttpPost]
@@ -100,7 +124,7 @@ namespace TMS.Controllers
                         FirstName = registerModel.FirstName,
                         EmailId = registerModel.EmailId,
                         LastName = registerModel.LastName,
-                        Password = Crypto.Hash(registerModel.Password),
+                       
                         CreatedOn = DateTime.Now
                     });
                     Roles.AddUserToRole(registerModel.UserName, registerModel.Role);
@@ -110,41 +134,78 @@ namespace TMS.Controllers
             }
             return View();
         }
-
+        [HttpGet]
         [Authorize]
         public ActionResult ChangePassword()
         {
+            
+
+            return View();
+        }
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangePassword(ChangePasswordModel changePasswordModel)
+        {
+            if (ModelState.IsValid)
+            {
+                bool isPasswordChanged = WebSecurity.ChangePassword(WebSecurity.CurrentUserName, changePasswordModel.OldPassword, changePasswordModel.NewPassword);
+                if (isPasswordChanged)
+                {
+                    return RedirectToAction("Index", "Dashboard");
+                }
+                else
+                {
+                    ModelState.AddModelError("OldPassword", "OldPassword is not corret");
+                }
+            }
+            return View();
+        }
+
+
+
+        /*[Authorize]
+        public ActionResult ChangePassword()
+        {
+
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ChangePassword(ChangePasswordModel model)
         {
-            try
+
+            var currentUserId = SessionHelper.UserId;
+            var message = "";
+            if (ModelState.IsValid)
             {
-                var message = "";
-                if (ModelState.IsValid)
+                var oldpass = Crypto.Hash(model.OldPassword);
+                var obj = (from w in _db.Users
+                           where w.UserId == currentUserId
+                           select w).FirstOrDefault();
+                if (obj.Password == oldpass)
                 {
-                    var oldpass = Crypto.Hash(model.OldPassword);
-                    var obj = _db.Users.Where(a => a.Password != model.NewPassword && a.Password == oldpass).FirstOrDefault();
                     if (obj != null)
                     {
                         obj.Password = Crypto.Hash(model.NewPassword);
                         _db.Configuration.ValidateOnSaveEnabled = false;
                         _db.SaveChanges();
                         return Json(true, JsonRequestBehavior.AllowGet);
+
                     }
                     else
                     {
                         return Json(false, JsonRequestBehavior.AllowGet);
                     }
                 }
-                return View("model");
+
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+            return RedirectToAction("Index", "Dashboard");
+        }*/
+
+
     }
+
+
 }
+

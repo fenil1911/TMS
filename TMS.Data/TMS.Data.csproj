@@ -79,8 +79,10 @@
     <Compile Include="AccountProvider.cs" />
     <Compile Include="BaseProvider.cs" />
     <Compile Include="CommonLookupProvider.cs" />
+    <Compile Include="Database\ActivityLog.cs" />
     <Compile Include="Database\CommonLookup.cs" />
     <Compile Include="Database\EmailHistory.cs" />
+    <Compile Include="Database\ErrorLog_Mst.cs" />
     <Compile Include="Database\FormMst.cs" />
     <Compile Include="Database\FormRoleMapping.cs" />
     <Compile Include="Database\TicketAttachment.cs" />

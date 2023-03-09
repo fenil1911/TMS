@@ -19,38 +19,75 @@ namespace TMS.Controllers
         }
         public ActionResult Index(int? page)
         {
-            if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.COMMONLOOKUP.ToString(), AccessPermission.IsView))
+            try
             {
-                return RedirectToAction("AccessDenied", "Base");
+
+                if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.COMMONLOOKUP.ToString(), AccessPermission.IsView))
+                {
+                    return RedirectToAction("AccessDenied", "Base");
+                }
+
+                List<CommonLookupModel> List = commonLookupService.GetAllCommonLookup();
+                return View(List);
+
             }
-            List<CommonLookupModel> List = commonLookupService.GetAllCommonLookup();
-            return View(List.ToPagedList(page ?? 1, 3));
-        }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }}
         public ActionResult Create()
         {
-            if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.COMMONLOOKUP.ToString(), AccessPermission.IsAdd))
+            try
             {
-                return RedirectToAction("AccessDenied", "Base");
+
+                if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.COMMONLOOKUP.ToString(), AccessPermission.IsAdd))
+                {
+                    return RedirectToAction("AccessDenied", "Base");
+                }
+                CommonLookupModel model = new CommonLookupModel();
+                return PartialView("Create", model);
+
             }
-            CommonLookupModel model = new CommonLookupModel();
-            return PartialView("Create", model);
-        }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            } }
         [HttpPost]
         public ActionResult Create(CommonLookupModel model)
         {
-            int CreatedBy = SessionHelper.UserId;
-            commonLookupService.CreateCommonLookup(model, CreatedBy);
-            return View();
-        }
+            try
+            {
+
+                int CreatedBy = SessionHelper.UserId;
+                commonLookupService.CreateCommonLookup(model, CreatedBy);
+                return View();
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }}
         public ActionResult Edit(int Id)
         {
-            if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.COMMONLOOKUP.ToString(), AccessPermission.IsEdit))
+            try
             {
-                return RedirectToAction("AccessDenied", "Base");
+
+                if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.COMMONLOOKUP.ToString(), AccessPermission.IsEdit))
+                {
+                    return RedirectToAction("AccessDenied", "Base");
+                }
+                CommonLookupModel EditCommonLookup = commonLookupService.GetCommonLookupById(Id);
+                return PartialView("Edit", EditCommonLookup);
+
             }
-            CommonLookupModel EditCommonLookup = commonLookupService.GetCommonLookupById(Id);
-            return PartialView("Edit", EditCommonLookup);
-        }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            } }
         [HttpPost]
         public ActionResult Edit(CommonLookupModel commonlookupmodel)
         {
@@ -76,12 +113,21 @@ namespace TMS.Controllers
         }
         public ActionResult Delete(int Id)
         {
-            if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.COMMONLOOKUP.ToString(), AccessPermission.IsDelete))
+            try
             {
-                return RedirectToAction("AccessDenied", "Base");
+                if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.COMMONLOOKUP.ToString(), AccessPermission.IsDelete))
+                {
+                    return RedirectToAction("AccessDenied", "Base");
+                }
+                commonLookupService.DeleteCommonLookup(Id);
+                return RedirectToAction("Index");
+
             }
-            commonLookupService.DeleteCommonLookup(Id);
-            return RedirectToAction("Index");
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
     }
 }

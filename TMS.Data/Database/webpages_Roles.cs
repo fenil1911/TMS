@@ -12,14 +12,14 @@ namespace TMS.Data.Database
     public class webpages_Roles
     {
         [Key]
-        public int?  RoleId { get; set; }
+        public int  RoleId { get; set; }
 
         
         public string RoleName { get; set; }
         [Required]
-        public bool  IsActive { get; set; }
+        public bool  IsActive { get; set; } 
         public string RoleCode { get; set; }
-        public string Type { get; set; }
+      
         public int? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
         

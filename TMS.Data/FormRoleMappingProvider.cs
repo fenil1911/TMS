@@ -37,7 +37,7 @@ namespace TMS.Data
             catch (Exception ex)
             {
 
-                throw;
+                throw ex;
             }
             
             return rolerights.Id;

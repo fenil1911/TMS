@@ -23,6 +23,8 @@ namespace TMS.Data
                               t.PriorityId equals c1.Id
                               join c2 in _db.CommonLookup on
                               t.TypeId equals c2.Id
+                              /*    join c3 in _db.Users on 
+                                  t.AssignedTo equals c3.UserName*/
                               join a in _db.TicketAttachment
                               on t.Id equals a.TicketId into a
                               from ta in a.DefaultIfEmpty()
@@ -32,6 +34,7 @@ namespace TMS.Data
                                   Id = t.Id,
                                   TicketName = t.TicketName,
                                   AssignedTo = t.AssignedTo,
+                                  /*AssignedToName = c3.UserName,*/
                                   TypeName = c2.Name,
                                   DescriptionData = t.DescriptionData,
                                   StatusName = c.Name,
@@ -56,19 +59,28 @@ namespace TMS.Data
             var alltickets = (from t in _db.Tickets
                               join c in _db.CommonLookup on
                               t.StatusId equals c.Id
+
                               join c1 in _db.CommonLookup on
                               t.PriorityId equals c1.Id
+
                               join c2 in _db.CommonLookup on
                               t.TypeId equals c2.Id
+
+                              join c3 in _db.Users on
+                              t.AssignedTo equals c3.UserId
+
+
                               join a in _db.TicketAttachment
                               on t.Id equals a.TicketId into a
                               from ta in a.DefaultIfEmpty()
-                              where t.IsDeleted != 1
+                              where t.IsDeleted != 1 /*&& t.AssignedTo == SessionHelper.UserId */
+                             
                               select new TicketModel
                               {
                                   Id = t.Id,
                                   TicketName = t.TicketName,
-                                  AssignedTo = t.AssignedTo,
+
+                                  AssignedToName = c3.UserName,
                                   TypeName = c2.Name,
                                   DescriptionData = t.DescriptionData,
                                   StatusName = c.Name,
@@ -76,9 +88,49 @@ namespace TMS.Data
                                   CreatedOn = (DateTime)t.CreatedOn,
                                   ImageName = ta.Filename
                               }).ToList();
+                            
             return alltickets;
         }
-        public int CreateTicketComment(TicketCommentViewModel model, int CreatedBy)
+        public List<TicketModel> GetAllTicketsAdmin()
+        {
+
+
+            var alltickets = (from t in _db.Tickets
+                              join c in _db.CommonLookup on
+                              t.StatusId equals c.Id
+
+                              join c1 in _db.CommonLookup on
+                              t.PriorityId equals c1.Id
+
+                              join c2 in _db.CommonLookup on
+                              t.TypeId equals c2.Id
+
+                              join c3 in _db.Users on
+                              t.AssignedTo equals c3.UserId
+
+
+                              join a in _db.TicketAttachment
+                              on t.Id equals a.TicketId into a
+                              from ta in a.DefaultIfEmpty()
+                              where t.IsDeleted != 1 
+
+                              select new TicketModel
+                              {
+                                  Id = t.Id,
+                                  TicketName = t.TicketName,
+
+                                  AssignedToName = c3.UserName,
+                                  TypeName = c2.Name,
+                                  DescriptionData = t.DescriptionData,
+                                  StatusName = c.Name,
+                                  PriorityName = c1.Name,
+                                  CreatedOn = (DateTime)t.CreatedOn,
+                                  ImageName = ta.Filename
+                              }).ToList();
+
+            return alltickets;
+        }
+        public int CreateTicketComment(TicketCommentViewModel model, int CreatedBy, string CreatedBy1)
         {
             TicketComment obj = new TicketComment()
             {
@@ -86,6 +138,8 @@ namespace TMS.Data
 
                 TicketId = model.TicketId,
                 CreatedBy = CreatedBy,
+                UserName = CreatedBy1,
+
                 CreatedOn = DateTime.Now
             };
             _db.TicketComment.Add(obj);
@@ -135,7 +189,10 @@ namespace TMS.Data
             _db.SaveChanges();
             return model.Id;
         }
-
+        public List<MyDropdown> BindEmployee()
+        {
+            return _db.Users.Where(s => s.IsActive == true).Select(x => new MyDropdown { Key = x.FirstName, id = x.UserId }).ToList();
+        }
         public int CreateAttachment(TicketAttachment model1, int CreatedBy)
         {
             TicketAttachment _ticket = new TicketAttachment()
@@ -168,7 +225,8 @@ namespace TMS.Data
                                  {
                                      Comment = t.Comment,
                                      CreatedOn = t.CreatedOn,
-                                     CreatedBy = t.CreatedBy
+                                     CreatedBy = t.CreatedBy,
+                                     UserName = t.UserName
                                  })
                                  .OrderByDescending(x => x.CreatedOn)
                                  .ToList();

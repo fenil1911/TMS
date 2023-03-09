@@ -147,13 +147,15 @@
             data: { id: '@Model.TicketId' },
             success: function (data) {
                 var items = '';
+               
                 $.each(data, function (i, item) {
                     var rows = "<tr>"
                         + "<td class='prtoducttd'>" + item.Comment + "</td>"
-                        + "<td class='prtoducttd'>" + item.CreatedBy  + "</td>"
+                        + "<td class='prtoducttd'>" + item.UserName+ "</td>"
                         + "<td class='prtoducttd'>" + new Date(parseInt(item.CreatedOn.substr(6))).toDateString("dd-mm-yyyy").toString("    ") + "</td>"
                         + "</tr>";
                     $('#tblTicketComment tbody').append(rows);
+                    debugger;
                 });
             },
             error: function (ex) {

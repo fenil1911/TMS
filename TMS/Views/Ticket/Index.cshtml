@@ -1,132 +1,60 @@
-﻿@model IEnumerable<TMS.Model.TicketModel>
+﻿@using Kendo.Mvc.UI
+@{ Layout = "~/Views/Shared/_Layout.cshtml";
 
-@using PagedList.Mvc;
-@using PagedList;
+    @Scripts.Render("~/bundles/kendo") }
 
-@{
-    ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-
-}
 <br />
 <br />
-<h1 style="font-size: 44px; margin-top: 35px; margin-bottom: -15px; margin-left: -165px; font-family:'Segoe UI Symbol';font-weight:bold ">Tickets</h1>
-@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary primaryCreateNew" })
-<table class="table table-hover table-bordered ticketall  ">
-    <tr class="tickethead">
+<br />
+<br />
+<div class="container">
+    <div class="row">
+
+        @(Html.Kendo().Grid<TMS.Model.TicketModel>()
+             .Name("EmpGrid")
+            .Scrollable(s => s.Height("auto"))
+            //.AutoBind()
+            .Columns(columns =>
+            {
+                columns.Bound(p => p.AssignedToName).Title("AssignedTo");
+
+                columns.Bound(p => p.TicketName).Title("TicketName");
+                columns.Bound(p => p.DescriptionData).Title("DescriptionData");
+                columns.Bound(p => p.TypeName).Title("TypeName");
+                columns.Bound(p => p.PriorityName).Title("Priority");
+                columns.Bound(p => p.StatusName).Title("Status");
+                columns.Bound(p => p.CreatedOn).Title("Created On");
 
 
-        <th>
-            @Html.DisplayNameFor(model => model.Id)
-        </th>
-        <th>
-            @Html.DisplayName("Created On")
-        </th>
-        <th>
-            @Html.DisplayName("Priority")
-        </th>
-
-        <th>
-            @Html.DisplayName("Ticket Name")
-        </th>
-        <th>
-            @Html.DisplayName("Type")
-        </th>
-        @*<th>
-                @Html.DisplayName("Description")
-            </th>
-        *@
-        <th>
-            @Html.DisplayName("Assigned To")
-        </th>
-        <th>
-            @Html.DisplayName("Status")
-        </th>
-        <th>
-            @Html.DisplayName("Attachment")
-        </th>
-        <th>
-            @Html.DisplayName("Action")
-        </th>
-
-    </tr>
-    @foreach (var item in Model)
-    {
-        @*<tr onclick="alert('hello'+@item.Id)">*@
-<tr onclick="location.href='@Url.Action("Comment", "Ticket",new { Id = item.Id })  '">
-
-    @*<a href="@Url.Action("Display", "Ticket",new { Id = item.Id })  ">aaa</a>*@
-    <td>
-        <div class=" tableovertext @item.Id">
-
-            @Html.DisplayFor(modelItem => item.Id)
-        </div>
-    </td>
-    <td>
-        <div class=" tableovertext @item.CreatedOn">
-
-            @item.CreatedOn.ToString("dd/MM/yyyy")
-            @*@item.CreatedOn.ToShortDateString()*@
-            @*@Html.DisplayFor(modelItem => item.CreatedOn.ToShortDateString())*@
-        </div>
-    </td>
-
-    <td>
-        <div class="status tableovertext @item.PriorityName ">
-
-            @Html.DisplayFor(modelItem => item.PriorityName)
-        </div>
-    </td>
-    <td>
-        <div class=" tablewidth tableovertext @item.TicketName">
-            @Html.DisplayFor(modelItem => item.TicketName)
-        </div>
-    </td>
-    <td>
-        <div class=" tableovertext @item.TypeName">
-
-            @Html.DisplayFor(modelItem => item.TypeName)
-        </div>
-    </td>
-    <td>
-
-        <div class=" tablewidthsmall tableovertext @item.AssignedTo">
-            @Html.DisplayFor(modelItem => item.AssignedTo)
-        </div>
-    </td>
-
-    <td>
-        <div class=" tableovertext  statustext @item.StatusName ">
-            @Html.DisplayFor(modelItem => item.StatusName)
-        </div>
-    </td>
-    <td>
-        @if (item.ImageName != null)
-        {
-            <div class="image data tablewidthsmall tableovertext " - toggle="tooltip" data - placement="left" title="Download Ticket Attachment">
-                @Html.ActionLink(item.ImageName, "DownloadFile", new { fileName = item.ImageName.ToString() })
-            </div>}
-    </td>
-
-    <td>
-        <a href="@Url.Action("Comment", "Ticket", new { Id = item.Id })"><img src="~/Content/images/chatt.png" alt="edit" width="18" data-toggle="tooltip" data-placement="left" title="Open Ticket Comment"></a>&nbsp &nbsp
-        <a href="@Url.Action("Comment", "Ticket",new { Id = item.Id })  "><img src="~/Content/images/info.png" alt="edit" width="18" data-toggle="tooltip" data-placement="left" title="Details Ticket"></a>&nbsp &nbsp
-        <a href="@Url.Action("Edit", "Ticket", new { Id = item.Id })"><img src="~/Content/images/edit.png" alt="edit" width="18" data-toggle="tooltip" data-placement="bottom" title="Ticket Edit"></a>&nbsp &nbsp
-
-        <a href="@Url.Action("delete", "Ticket",new { Id = item.Id }) " onclick="return confirm('Are you sure to Delete?')"><img src="~/Content/images/trashh.png" alt="edit" width="19" data-toggle="tooltip" data-placement="left" title="Delete Ticket"></a>&nbsp &nbsp
-@*
-        @if (item.ImageName != null)
-        {
-    <div class="image data tablewidthsmall tableovertext " - toggle="tooltip" data - placement="left" title="Download Ticket Attachment">
-        <img src="~/Content/images/greenattachment.png" alt="edit" width="18" data-toggle="tooltip" data-placement="bottom" title="Ticket Edit">
-        <a href="@Html.ActionLink(item.ImageName, "DownloadFile", new { fileName = item.ImageName })">
-
-    </div>}*@
-
-    </td>
-</tr>
-    }
 
 
-</table>
+            }).HtmlAttributes(new { style = "" })
+            .Scrollable()
+            .Pageable(pageable => pageable
+                .Refresh(true)
+                .PageSizes(true)
+                )
+            .Sortable()
+            .Filterable()
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .PageSize(5)
+                .Read(read => read.Action("GetGridData", "Ticket"))
+            )
+
+          //.DataSource(dataSource => dataSource
+          //.Ajax()
+          //.Read(read => read.Action("GetGridData", "Ticket"))
+          //)
+          )
     </div>
+
+</div>
+
+<script>
+    //$(document).ready(function () {
+    //    $('#EmpGrid').data('kendoGrid').dataSource.read();
+    //    $('#EmpGrid').data('kendoGrid').refresh();
+
+    //});
+</script>

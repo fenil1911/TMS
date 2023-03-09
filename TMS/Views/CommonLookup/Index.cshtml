@@ -1,4 +1,4 @@
-﻿@model IPagedList<TMS.Model.CommonLookupModel>
+﻿@model IEnumerable<TMS.Model.CommonLookupModel>
 
 @{
     ViewBag.Title = "Index";
@@ -73,5 +73,3 @@
     }
 
 </table>
-
-@Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions { Display = PagedListDisplayMode.IfNeeded, DisplayPageCountAndCurrentLocation = true })

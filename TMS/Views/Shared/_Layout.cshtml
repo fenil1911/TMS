@@ -4,32 +4,37 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
+
+
     @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Styles.Render("~/bundles/kendoCss")
+    @Scripts.Render("~/bundles/kendoJs")
+    @Scripts.Render("~/bundles/jqueryval")
 
+    <script src="@Url.Content("~/Content/inc/jquery/jquery-2.1.0.min.js")"></script>
+    
 
-    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    
     <!-- Bootstrap core CSS -->
-    @*<link href="~/Content/bootstrap.min.css" rel="stylesheet" />*@
 
-    <script src="~/Scripts/jquery-3.4.1.js"></script>
+
     <script src="~/Scripts/jquery.validate.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-con  firm/3.3.2/jquery-confirm.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
     <script src="jquery.min.js" type="text/javascript"></script>
-    <script src="jquery.timeago.js" type="text/javascript"></script>
     <meta name="description" content="" />
     <meta name="generator" content="" />
-    <link rel="icon" href="images/favicon.ico" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-    @*<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    *@
+    
     <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
     <link href="~/Content/style.css" rel="stylesheet" />
     <link href="~/Content/bootstrap-chosen.css" rel="stylesheet" />
     <link href="~/Content/toastr.css" rel="stylesheet" />
     <script src="~/Content/bootstrap.bundle.min.js"></script>
-    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    
     <script src="~/Scripts/toastr.js"></script>
 
 </head>
@@ -78,46 +83,41 @@
                                     <a class="nav-link" style="color :#a7a7a7" href="@Url.Action("Index", "Ticket")">Ticket</a>
                                 </li>
                                 </li>
-                                </ul>
+                            </ul>
 
-                                <ul class="navbar-brand navbar-nav navbar-header" style="list-style-type: none ; margin-left:555px ">
-                                    <div class="head_right_col d-flex align-items-center justify-content-end ">
-                                    <li class="navLinkMargin nav-item">
+                            <ul class="navbar-brand navbar-nav navbar-header" style="list-style-type: none ; margin-left:555px ">
+                                <div class="head_right_col d-flex align-items-center justify-content-end ">
 
-                                        <div class="dropdown">
+                                <li class="navLinkMargin nav-item">
 
-                                            <a class="nav-link " style="list-style: none ;color :#a7a7a7">System</a>
-                                            <br />
-                                            <div class="toprightbar d-flex align-items-center justify-content-end">
-                                                @Html.Partial("_LoginPartial")
-                                                @*<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false"> </a>*@
-                                            </div>
-                                            <ul class="dropdown-menu table-hover text-primary bold shadow">
-                                                <li><a class="dropdown-item" href="@Url.Action("ChangePassword","Account")">Change Password</a></li>
-                                                <li><a class="dropdown-item" href="@Url.Action("Logout","Account")">Logout</a></li>
-                                            </ul>
+                                    <div class="dropdown">
+
+                                        <a class="nav-link " style="list-style: none ;color :#a7a7a7">Account</a>
+                                        <br />
+                                        <div class="toprightbar d-flex align-items-center justify-content-end">
+                                            @Html.Partial("_LoginPartial")
+                                            @*<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false"> </a>*@
                                         </div>
-                                    </li>
+                                        <ul class="dropdown-menu table-hover text-primary bold shadow">
+                                            <li><a class="dropdown-item" href="@Url.Action("ChangePassword","Account")">Change Password</a></li>
+                                            <li><a class="dropdown-item" href="@Url.Action("Logout","Account")">Logout</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
                         </div>
                     </div>
-                        </ul>
+                    </ul>
 
-                    </div>
                 </div>
             </div>
-            <div class="container body-content">
-                @RenderBody()
-                <footer>
-
-                </footer>
-            </div>
-            @Scripts.Render("~/bundles/jquery")
-            @Scripts.Render("~/bundles/jqueryval")
-            @Scripts.Render("~/bundles/bootstrap")
-            @RenderSection("scripts", required: false)
-            <script src="~/Scripts/jquery-3.4.1.min.js"></script>
-            <script src="~/Scripts/chosen.jquery.js"></script>
-
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <footer>
+        </footer>
+    </div>
+   
+   
     </div>
     </nav>
     </div>

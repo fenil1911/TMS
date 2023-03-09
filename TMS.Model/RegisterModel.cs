@@ -28,8 +28,10 @@ namespace TMS.Model
         [Compare(otherProperty: "Password", ErrorMessage = "Password doesn't match.")]
         public string ConfirmPassword { get; set; }
 
-        
+        public List<MyDropdown> RoleDropdown { get; set; }
+
         public string Role { get; set; }
+        public int RoleId { get; set; }
         [EmailAddress]
         public string EmailId { get; set; }
 

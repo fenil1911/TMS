@@ -27,8 +27,7 @@ namespace TMS.Controllers
 
         public ActionResult ViewPermission(int Id = 0)
         {
-            try
-            {
+           
                 string role = _roleService.GetRolesById().Name;
                 if (role != "Administrator")
                 {
@@ -43,11 +42,7 @@ namespace TMS.Controllers
                 }
                 List<FormRoleMappingModel> Formrolemapping = FormRoleMapping_Read(model.RoleId);
                 return View(Formrolemapping);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            
         }
  
         public JsonResult UpdatePermission(IEnumerable<FormRoleMappingModel> rolerights)
