@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TMS.Data.Database;
+using Kendo.Mvc;
 
 namespace TMS.Service
 {
@@ -13,7 +14,7 @@ namespace TMS.Service
     {
         private readonly TicketProvider ticketProvider;
         private readonly CommonLookupProvider commonLookupProvider;
-        private readonly UsersProvider usersProvider;
+        
         public TicketService()
         {
             ticketProvider = new TicketProvider();
@@ -28,38 +29,38 @@ namespace TMS.Service
                .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
             data.TypeDropdown = GetDropdownBykey2("Task")
                 .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
-            
-        
+
+
             return data;
 
         }
         public TicketModel UpdateTicket(TicketModel model, int UpdatedBy)
         {
-            return ticketProvider.UpdateTicket(model,  UpdatedBy);
+            return ticketProvider.UpdateTicket(model, UpdatedBy);
         }
-        public List<TicketModel> GetAllTicketsAdmin()
+        public IQueryable<TicketModel> GetAllTicketsAdmin(int pagesize, int page, IList<SortDescriptor> Sorts, string filters)
         {
-            var commonlookup = ticketProvider.GetAllTicketsAdmin();
+            var commonlookup = ticketProvider.GetAllTicketsAdmin(pagesize, page, Sorts, filters);
             return commonlookup;
         }
-        public List<TicketModel> GetAllTickets()
+        public IQueryable<TicketModel> GetAllTickets(int pagesize, int page, IList<SortDescriptor> Sorts, string filters)
         {
-            var commonlookup = ticketProvider.GetAllTickets();
-            return commonlookup;    
+            var commonlookup = ticketProvider.GetAllTickets(pagesize, page, Sorts, filters);
+            return commonlookup;
         }
-        public int CreateTickets(TicketModel ticket,int CreatedBy)
+        public int CreateTickets(TicketModel ticket, int CreatedBy)
         {
             return ticketProvider.CreateTickets(ticket, CreatedBy);
         }
-       
+
 
         public int CreateTicketStatus(TicketStatus ticket, int CreatedBy)
         {
-            return ticketProvider.CreateTicketStatus(ticket ,CreatedBy);
+            return ticketProvider.CreateTicketStatus(ticket, CreatedBy);
         }
         public int CreateAttachment(TicketAttachment ticket, int CreatedBy)
         {
-            return ticketProvider.CreateAttachment(ticket,CreatedBy);
+            return ticketProvider.CreateAttachment(ticket, CreatedBy);
         }
 
         public List<MyDropdown> BindEmployee()
@@ -82,16 +83,8 @@ namespace TMS.Service
             return commonLookupProvider.GetAllCommonLookup().Where(a => a.Type.ToLower() == key.ToLower()).ToList();
 
         }
-        /*public List<UsersModel> GetDropdownBykey3(string key)
-        {
-            return usersProvider.GetAllUser1().Where(a => a.Type.ToLower() == key.ToLower()).ToList();
-
-        }*/
-        /*public int TicketComment(TicketComment ticket)
-        {
-            return ticketProvider.TicketComment(ticket);
-        }*/
-        public int CreateTicketComment(TicketCommentViewModel comment,int CreatedBy,string CreatedBy1)
+        
+        public int CreateTicketComment(TicketCommentViewModel comment, int CreatedBy, string CreatedBy1)
         {
             return ticketProvider.CreateTicketComment(comment, CreatedBy, CreatedBy1);
         }
@@ -104,5 +97,6 @@ namespace TMS.Service
             var GetAllComment = ticketProvider.GetAllComment(Id);
             return GetAllComment;
         }
+     
     }
 }

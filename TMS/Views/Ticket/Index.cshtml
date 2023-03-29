@@ -3,58 +3,55 @@
 
     @Scripts.Render("~/bundles/kendo") }
 
-<br />
-<br />
-<br />
-<br />
+
+<h2 style="margin-top: 65px; margin-bottom: -31px; MARGIN-LEFT: -2px; font-weight: bold ">Tickets</h2>
+
+@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary primaryCreateNew" })
 <div class="container">
     <div class="row">
 
         @(Html.Kendo().Grid<TMS.Model.TicketModel>()
-             .Name("EmpGrid")
+             .Name("Ticket")
             .Scrollable(s => s.Height("auto"))
-            //.AutoBind()
+
+
+
             .Columns(columns =>
             {
-                columns.Bound(p => p.AssignedToName).Title("AssignedTo");
+                columns.Bound(p => p.AssignedToName).Title("Assigned To").Width(150);
 
-                columns.Bound(p => p.TicketName).Title("TicketName");
-                columns.Bound(p => p.DescriptionData).Title("DescriptionData");
-                columns.Bound(p => p.TypeName).Title("TypeName");
-                columns.Bound(p => p.PriorityName).Title("Priority");
-                columns.Bound(p => p.StatusName).Title("Status");
-                columns.Bound(p => p.CreatedOn).Title("Created On");
+                columns.Bound(p => p.TicketName).Title("Ticket Name").Width(150);
+                columns.Bound(p => p.DescriptionData).Title("Description Data").Width(150);
+
+                columns.Bound(p => p.TypeName).Title("Type").Width(120);
+                columns.Bound(p => p.PriorityName).Title("Priority").Width(90);
+                columns.Bound(p => p.StatusName).Title("Status").Width(90);
+
+
+                columns.Bound(p => p.CreatedOn).Title("Created On")  .Format("{0:dd/MM/yyyy}").Width(100);
+                columns.Bound(p => p.Id).ClientTemplate("<a href='" + Url.Action("Comment", "Ticket") + "/#=Id#'>Comment   </a>" +" |"  +
+                    "<a href='" + Url.Action("Edit", "Ticket") + "/#=Id#'>  Edit  </a>" + " |" +
+                     "<a href='" + Url.Action("Delete", "Form") + "/#=Id#' onclick='return confirm(\"Are you sure you want to delete this item?\")'>  Delete </a>").Width(200).Title("Action");
 
 
 
 
             }).HtmlAttributes(new { style = "" })
-            .Scrollable()
-            .Pageable(pageable => pageable
-                .Refresh(true)
-                .PageSizes(true)
-                )
-            .Sortable()
-            .Filterable()
-            .DataSource(dataSource => dataSource
-                .Ajax()
-                .PageSize(5)
-                .Read(read => read.Action("GetGridData", "Ticket"))
-            )
-
-          //.DataSource(dataSource => dataSource
-          //.Ajax()
-          //.Read(read => read.Action("GetGridData", "Ticket"))
-          //)
-          )
+    .Scrollable()
+    .Pageable(pageable => pageable
+         .Refresh(true)
+         .PageSizes(new int[] { 10, 20, 50 })
+         .PreviousNext(true)
+     )
+    .Sortable()
+    .Filterable(filter => filter
+                        .Mode(GridFilterMode.Row)
+                        .Extra(false)
+    )
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(10)
+                .Read(read => read.Action("GetGridData", "Ticket"))))
     </div>
 
 </div>
-
-<script>
-    //$(document).ready(function () {
-    //    $('#EmpGrid').data('kendoGrid').dataSource.read();
-    //    $('#EmpGrid').data('kendoGrid').refresh();
-
-    //});
-</script>

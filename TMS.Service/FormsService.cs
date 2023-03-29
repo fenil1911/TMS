@@ -40,7 +40,7 @@ namespace TMS.Service
                 IsDisplayMenu = data.IsDisplayMenu,
                 ParentFormId = data.ParentFormId,
                 CreatedOn = DateTime.Now,
-                CreatedBy =CreatedBy
+                CreatedBy = CreatedBy
             };
             return form;
         }

@@ -27,8 +27,8 @@ namespace TMS
             if (!WebSecurity.Initialized)
             {
                 WebSecurity.InitializeDatabaseConnection("TMSConnection","Users","UserId","UserName", true   );
-
-             /*   WebSecurity.CreateUserAndAccount("admin", "admin123");
+/*
+                WebSecurity.CreateUserAndAccount("admin", "admin123");
                 Roles.CreateRole("Administrator");
 
                 Roles.CreateRole("Manager");
@@ -38,8 +38,8 @@ namespace TMS
                 Roles.CreateRole("HR");
 
 
-                Roles.AddUserToRole("admin", "Administrator");*/
-
+                Roles.AddUserToRole("admin", "Administrator");
+*/
 
             }
 

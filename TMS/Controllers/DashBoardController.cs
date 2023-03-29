@@ -11,6 +11,9 @@ namespace TMS.Controllers
         // GET: DashBoard
         public ActionResult Index()
         {
+            ViewBag.ViewPermission = "TICKET";
+            ViewBag.ViewPermission = "TMS";
+            
             return View();
         }
     }

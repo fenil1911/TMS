@@ -22,7 +22,7 @@ namespace TMS.Data.Database
         public DbSet<Users> Users { get; set; }
         public DbSet<FormMst> FormMst { get; set; }
         public DbSet<FormRoleMapping> FormRoleMapping { get; set; }
-        public DbSet<EmailHistory> EmailHistory { get; set; }
+       
         public DbSet<Tickets> Tickets { get; set; }
         public DbSet<TicketStatus> TicketStatus { get; set; }
         
@@ -33,7 +33,7 @@ namespace TMS.Data.Database
         public DbSet<webpages_OAuthMembership> webpages_OAuthMembership { get; set; }
         public DbSet<webpages_Roles> webpages_Roles { get; set; }
         public DbSet<webpages_UsersInRoles> webpages_UsersInRoles { get; set; }
-        public DbSet<ErrorLog_Mst> ErrorLog_Msts { get; set; }
+        public DbSet<ErrorLog> errorLogs { get; set; }
         public DbSet<ActivityLog> activityLogs { get; set; }
 
 

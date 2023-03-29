@@ -5,89 +5,93 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
-<br />
-<br />
-<h2>Create</h2>
+
+
+<h2 style="margin-top: 65px; margin-bottom: 30px; MARGIN-LEFT: 13px; font-family: 'Segoe UI Symbol'; font-weight: bold ">Tickets</h2>
+
 
 @using (Html.BeginForm("Create", "Ticket", FormMethod.Post, new { encType = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
-<div class="form-horizontal">
-    <h4>TicketModel</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(model => model.TicketName, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
+    <div class="form-horizontal" style="table-layout">
+
+
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="col-md-4">
+            <label class="form-label">Ticket Name<strong>*</strong></label>
             @Html.EditorFor(model => model.TicketName, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.TicketName, "", new { @class = "text-danger" })
-        </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.TypeId, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Description<strong>*</strong></label>
+            @Html.EditorFor(model => model.DescriptionData, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.DescriptionData, "", new { @class = "text-danger" })
+
+        </div>
+
+
+
+        <div class="col-md-4">
+            <label class="form-label">Type<strong>*</strong></label>
+
             @Html.DropDownListFor(model => model.TypeId,
              new SelectList(Model.TypeDropdown, "Id", "Name", Model.TypeId), "All Type", new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.TypeId, "", new { @class = "text-danger" })
+
         </div>
-    </div>
 
-    
-    <div class="form-group">
-        @Html.LabelFor(model => model.DescriptionData, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.TextAreaFor(model => model.DescriptionData, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.DescriptionData, "", new { @class = "text-danger" })
-        </div>
-    </div>
+        <div class="col-md-4">
+            <label class="form-label">Priority<strong>*</strong></label>
 
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.PriorityId, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
             @Html.DropDownListFor(model => model.PriorityId,
-             new SelectList(Model.PriorityDropdown, "Id", "Name", Model.PriorityId), "Priority", new { @class = "form-control"  })
+             new SelectList(Model.PriorityDropdown, "Id", "Name", Model.PriorityId), "Priority", new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.PriorityId, "", new { @class = "text-danger" })
-        </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.StatusId, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Status<strong>*</strong></label>
+
             @Html.DropDownListFor(model => model.StatusId,
-                new SelectList(Model.StatusDropdown, "Id", "Name", Model.StatusId), "All Status", new { @class = "form-control" })
-            @*@Html.EditorFor(model => model.StatusId, new { htmlAttributes = new { @class = "form-control" } })*@
+             new SelectList(Model.StatusDropdown, "Id", "Name", Model.StatusId), "Priority", new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.StatusId, "", new { @class = "text-danger" })
+
         </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.AssignedTo, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
+
+        <div class="col-md-4">
+            <label class="form-label">Assigned<strong>*</strong></label>
+
             @Html.DropDownListFor(model => model.AssignedTo,
-                new SelectList(Model.AssignedDropdown, "Id", "Name", Model.AssignedTo), "All Status", new { @class = "form-control" })
-
+             new SelectList(Model.AssignedDropdown, "Id", "Name", Model.AssignedTo), "Priority", new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.AssignedTo, "", new { @class = "text-danger" })
+
         </div>
-    </div>
+        <div class="col-md-4">
+            <label class="form-label">Image</label>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.ImageName, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.ValidationMessageFor(model => model.AssignedTo, "", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(model => model.ImageName, "", new { @class = "text-danger" })
             <input type="file" id="imgfile" name="imgfile" class="form-control" multiple="multiple" />
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-primary" />
-        </div>
-    </div>
 
-</div>
+        </div>
+
+
+
+       
+
+
+
+        <div class="col-md-5" style="margin-left: -381px; margin-top: 85px;">
+            <input type="submit" value="Create" class="btn btn-primary" />
+            <div>
+                @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-default" })
+            </div>
+
+        </div>
+
+
+    </div>
 }
 
-<div>
-    @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-default" })
-</div>

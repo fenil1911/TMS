@@ -1,14 +1,17 @@
-﻿/*using System;
+﻿/*using TMS.Data.Database;
+using TMS.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using TMS.Controllers;
 using System.Web.Mvc;
-using TMS.Data.Database;
-using TMS.Model;
 using System.Diagnostics;
+
 
 namespace TMS.Filter
 {
+    [ExceptionHandler]
     public class ExceptionHandlerAttribute : FilterAttribute, IExceptionFilter
     {
         public void OnException(ExceptionContext filterContext)
@@ -20,7 +23,7 @@ namespace TMS.Filter
                 int UpdatedBy = SessionHelper.UserId;
                 string PageURL = HttpContext.Current.Request.Url.AbsoluteUri;
 
-                ErrorLog_Mst logger = new ErrorLog_Mst();
+                ErrorLog logger = new ErrorLog();
                 logger.Message = filterContext.Exception.StackTrace;
                 logger.ActionName = ActionName;
                 logger.ControllerName = ControllerName;
@@ -30,8 +33,7 @@ namespace TMS.Filter
 
 
                 TMSEntities ctx = new TMSEntities();
-
-                ctx.ErrorLog_Msts.Add(logger);
+                ctx.errorLogs.Add(logger);
                 ctx.SaveChanges();
 
                 filterContext.ExceptionHandled = true;

@@ -1,61 +1,58 @@
-﻿@model IEnumerable<TMS.Model.RolesModel>
+﻿@using Kendo.Mvc.UI
+@{ Layout = "~/Views/Shared/_Layout.cshtml";
 
-@{
-    ViewBag.Title = "Index";
-}
-<br />
-<br />
-<h2 style=" margin-top: 36px; margin-bottom: -14px; margin-left: -166px; font-family: 'Segoe UI Symbol'; font-weight: bold; font-size: 42px;">Roles Index</h2>
+    @Scripts.Render("~/bundles/kendo") }
 
 <br />
-<table class="table  ticketall table-bordered  table-hover">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Id)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsActive)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.RoleCode)
-        </th>
-        <th>
-            @Html.DisplayName("Action")
-        </th>
+
+<h2 style="margin-top: 65px; margin-bottom: 3px; MARGIN-LEFT: -2px;font-weight:bold " ">Roles</h2>
+<div class="container">
+    <div class="row">
+
+        @(Html.Kendo().Grid<TMS.Model.RolesModel>()
+             .Name("EmpGrid")
+            .Scrollable(s => s.Height("auto"))
+            //.AutoBind()
+
+            .Columns(columns =>
+            {
+                columns.Bound(p => p.Id).Title("Id").Width(150);
+
+                columns.Bound(p => p.Name).Title("Name").Width(150);
+                columns.Bound(p => p.RoleCode).Title("Role Code").Width(150);
+
+                columns.Bound(p => p.IsActive).Title("Is Active").Width(120);
 
 
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-
-                @if (@item.IsActive)
-                {<div class="img-circle"><img src="~/Content/images/check.png" alt="editok" width="18"></div>}
-                else
-                { <div class=""><img src="~/Content/images/delete.png" alt="edit" width="18"></div>}
-
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RoleCode)
-            </td>
-            <td>
-                <a href="@Url.Action("ViewPermission", "FormRoleMapping", new { Id = item.Id })"><img src="~/Content/images/settings.png" alt="edit" width="18"></a>
-
-            </td>
+                columns.Bound(p => p.Id).ClientTemplate(
+                              "<a href='" + Url.Action("ViewPermission", "FormRoleMapping") + "/#=Id#'>  Permission  </a>").Width(100).Title("Action");
 
 
-        </tr>
-    }
+            }).HtmlAttributes(new { style = "" })
+    .Scrollable()
+    .Pageable(pageable => pageable
+        .Refresh(true)
+        .PageSizes(true)
+        )
+    .Sortable()
+    .Filterable()
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(10)
+        .Read(read => read.Action("GetGridData", "Roles"))
 
-</table>
+
+
+          )
+          )
+    </div>
+
+</div>
+
+<script>
+    //$(document).ready(function () {
+    //    $('#EmpGrid').data('kendoGrid').dataSource.read();
+    //    $('#EmpGrid').data('kendoGrid').refresh();
+
+    //});
+</script>

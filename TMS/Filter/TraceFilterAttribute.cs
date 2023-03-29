@@ -14,10 +14,12 @@ namespace TMS.Filter
     [AttributeUsage(AttributeTargets.All, Inherited = false, AllowMultiple = true)]
     public class TraceFilterAttribute : ActionFilterAttribute, IActionFilter
     {
-
+      
 
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
+
+
             string IPAdd = GetLocalIPAddress();
             var actionDescriptor = filterContext.ActionDescriptor;
             string controllerName = actionDescriptor.ControllerDescriptor.ControllerName;
@@ -27,19 +29,17 @@ namespace TMS.Filter
             var userAgent = HttpContext.Current.Request?.Browser.Browser.ToString();
             string userName = filterContext.HttpContext.User.Identity.Name.ToString();
             DateTime timeStamp = filterContext.HttpContext.Timestamp;
-            int duration = filterContext.HttpContext.Timestamp.Millisecond;
-
+         
             ActivityLog message = new ActivityLog();
             message.ActionName = actionName;
-            
+
             message.ControllerName = controllerName;
             message.CreatedOn = timeStamp;
             message.PageUrl = PageURL;
             message.UserId = UpdatedBy;
             message.IPAddress = IPAdd;
             message.BrowserName = userAgent;
-            message.Duration = duration;
-
+  
             TMSEntities ctx = new TMSEntities();
             ctx.activityLogs.Add(message);
             ctx.SaveChanges();
@@ -61,5 +61,4 @@ namespace TMS.Filter
 
     }
 }
-
 

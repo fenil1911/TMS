@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Kendo.Mvc.UI;
+using Kendo.Mvc.Extensions;
 
 namespace TMS.Controllers
 {
@@ -24,14 +26,41 @@ namespace TMS.Controllers
             }
         }
 
-        public ActionResult Index(int? page)
+        public ActionResult Index([DataSourceRequest] DataSourceRequest request)
         {
-            if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.ROLE.ToString(), AccessPermission.IsView))
+            try
             {
-                return RedirectToAction("AccessDenied", "Base");
+
+              /*  if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.ROLE.ToString(), AccessPermission.IsView))
+                {
+                    return RedirectToAction("AccessDenied", "Base");
+                }*/
+                return View();
             }
-            List<RolesModel> RoleList = _rolesService.GetAllRoles();
-            return View(RoleList.ToPagedList(page ?? 1, 6));
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
+        public ActionResult GetGridData([DataSourceRequest] DataSourceRequest request)
+        {
+            try
+            {
+
+               
+
+                    List<RolesModel> RoleList = _rolesService.GetAllRoles();
+                    DataSourceResult result = RoleList.ToDataSourceResult(request);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+               
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
     }
 }

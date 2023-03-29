@@ -10,6 +10,7 @@ namespace TMS.Service
 {
     public class CommonLookupService
     {
+        private static bool UpdateDatabase = false;
         private readonly CommonLookupProvider commonLookupProvider;
         public CommonLookupService()
         {
@@ -21,7 +22,7 @@ namespace TMS.Service
             CommonLookupModel category = new CommonLookupModel
             {
                 Id = data.Id,
-           
+
                 Type = data.Type,
                 Code = data.Code,
                 Name = data.Name,
@@ -38,9 +39,9 @@ namespace TMS.Service
         }
         public int CreateCommonLookup(CommonLookupModel objcommonLookup, int CreatedBy)
         {
-            return commonLookupProvider.CreateCommonLookup(objcommonLookup,  CreatedBy);
+            return commonLookupProvider.CreateCommonLookup(objcommonLookup, CreatedBy);
         }
-        public CommonLookupModel UpdateCommonLookup(CommonLookupModel model, int UpdatedBy )
+        public CommonLookupModel UpdateCommonLookup(CommonLookupModel model ,int UpdatedBy)
         {
             return commonLookupProvider.UpdateCommonLookup(model, UpdatedBy);
         }
@@ -48,5 +49,11 @@ namespace TMS.Service
         {
             commonLookupProvider.DeleteCommonLookup(Id);
         }
+
+
+     
+
+
+
     }
 }

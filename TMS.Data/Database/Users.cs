@@ -22,10 +22,9 @@ namespace TMS.Data.Database
         public string ConfirmPassword { get; set; }
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
-        public Nullable<DateTime> CreatedOn { get; set; }
-        public Nullable<DateTime> UpdatedOn { get; set; }
-        public int? CreatedBy { get; set; }
-        public int? UpdatedBy { get; set; }
+        public DateTime CreatedOn { get; set; }
+      
+      
 
         
     

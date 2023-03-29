@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kendo.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,10 @@ namespace TMS.Data
         public TicketProvider()
         {
         }
-
+        public Tickets GetTicketsByUpdateId(int Id)
+        {
+            return _db.Tickets.Find(Id);
+        }
         public TicketModel GetTicketsById(int Id)
         {
             var alltickets = (from t in _db.Tickets
@@ -23,8 +27,7 @@ namespace TMS.Data
                               t.PriorityId equals c1.Id
                               join c2 in _db.CommonLookup on
                               t.TypeId equals c2.Id
-                              /*    join c3 in _db.Users on 
-                                  t.AssignedTo equals c3.UserName*/
+                              
                               join a in _db.TicketAttachment
                               on t.Id equals a.TicketId into a
                               from ta in a.DefaultIfEmpty()
@@ -34,7 +37,7 @@ namespace TMS.Data
                                   Id = t.Id,
                                   TicketName = t.TicketName,
                                   AssignedTo = t.AssignedTo,
-                                  /*AssignedToName = c3.UserName,*/
+                                  
                                   TypeName = c2.Name,
                                   DescriptionData = t.DescriptionData,
                                   StatusName = c.Name,
@@ -48,13 +51,11 @@ namespace TMS.Data
                               }).FirstOrDefault();
             return alltickets;
         }
-        public Tickets GetTicketsByUpdateId(int Id)
+      
+       
+        public IQueryable<TicketModel> GetAllTickets(int pagesize, int page, IList<SortDescriptor> Sorts, string filters)
         {
-            return _db.Tickets.Find(Id);
-        }
-        public List<TicketModel> GetAllTickets()
-        {
-
+            //var GetCount = _db.Tickets.Count();
 
             var alltickets = (from t in _db.Tickets
                               join c in _db.CommonLookup on
@@ -73,62 +74,129 @@ namespace TMS.Data
                               join a in _db.TicketAttachment
                               on t.Id equals a.TicketId into a
                               from ta in a.DefaultIfEmpty()
-                              where t.IsDeleted != 1 /*&& t.AssignedTo == SessionHelper.UserId */
-                             
-                              select new TicketModel
-                              {
-                                  Id = t.Id,
-                                  TicketName = t.TicketName,
 
+                              
+                                where (t.IsDeleted != 1 &&
+                                t.AssignedTo == SessionHelper.UserId 
+                                && (filters == null || t.TicketName.Contains(filters) || t.DescriptionData.Contains(filters) ||
+                                  c1.Name.Contains(filters) || c.Name.Contains(filters) || c2.Name.Contains(filters)))
+                               select new TicketModel
+                              {
+                                    Id = t.Id,
+                                  TicketName = t.TicketName,
+                                  AssignedTo = t.AssignedTo,
                                   AssignedToName = c3.UserName,
                                   TypeName = c2.Name,
                                   DescriptionData = t.DescriptionData,
                                   StatusName = c.Name,
                                   PriorityName = c1.Name,
+
                                   CreatedOn = (DateTime)t.CreatedOn,
-                                  ImageName = ta.Filename
-                              }).ToList();
+                                  ImageName = ta.Filename,
+                              }).OrderBy(x => x.Id)
+                                         .Skip((page - 1) * pagesize)
+                                         .Take(pagesize).AsQueryable();
                             
             return alltickets;
+
+
+          
         }
-        public List<TicketModel> GetAllTicketsAdmin()
+        
+        public IQueryable<TicketModel> GetAllTicketsAdmin(int pagesize, int page, IList<SortDescriptor> Sorts, string filters)
         {
+            var GetCount = _db.Tickets.Count();
+            if (Sorts.Any())
+            {
+                var alltickets = (from t in _db.Tickets
+                                  join c in _db.CommonLookup on
+                                  t.StatusId equals c.Id
+
+                                  join c1 in _db.CommonLookup on
+                                  t.PriorityId equals c1.Id
+
+                                  join c2 in _db.CommonLookup on
+                                  t.TypeId equals c2.Id
+
+                                  join c3 in _db.Users on
+                                  t.AssignedTo equals c3.UserId
 
 
-            var alltickets = (from t in _db.Tickets
-                              join c in _db.CommonLookup on
-                              t.StatusId equals c.Id
+                                  join a in _db.TicketAttachment
+                                  on t.Id equals a.TicketId into a
+                                  from ta in a.DefaultIfEmpty()
 
-                              join c1 in _db.CommonLookup on
-                              t.PriorityId equals c1.Id
-
-                              join c2 in _db.CommonLookup on
-                              t.TypeId equals c2.Id
-
-                              join c3 in _db.Users on
-                              t.AssignedTo equals c3.UserId
+                                  where (t.IsDeleted != 1 &&  
+                                  
+                                  filters != null && t.TicketName.Contains(filters) || t.DescriptionData.Contains(filters) ||
+                                  c1.Name.Contains(filters) || c.Name.Contains(filters) || c3.UserName.Contains(filters) || c2.Name.Contains(filters)
 
 
-                              join a in _db.TicketAttachment
-                              on t.Id equals a.TicketId into a
-                              from ta in a.DefaultIfEmpty()
-                              where t.IsDeleted != 1 
 
-                              select new TicketModel
-                              {
-                                  Id = t.Id,
-                                  TicketName = t.TicketName,
+                                     )
+                                  select new TicketModel
+                                  {
+                                      Id = t.Id,
+                                      TicketName = t.TicketName,
 
-                                  AssignedToName = c3.UserName,
-                                  TypeName = c2.Name,
-                                  DescriptionData = t.DescriptionData,
-                                  StatusName = c.Name,
-                                  PriorityName = c1.Name,
-                                  CreatedOn = (DateTime)t.CreatedOn,
-                                  ImageName = ta.Filename
-                              }).ToList();
+                                      AssignedToName = c3.UserName,
+                                      TypeName = c2.Name,
+                                      DescriptionData = t.DescriptionData,
+                                      StatusName = c.Name,
+                                      PriorityName = c1.Name,
+                                      CreatedOn = (DateTime)t.CreatedOn,
+                                      ImageName = ta.Filename,
+                                      count = GetCount
+                                  }).AsQueryable();
 
-            return alltickets;
+                return alltickets;
+            }
+            else
+            {
+                var alltickets = (from t in _db.Tickets
+                                  join c in _db.CommonLookup on
+                                  t.StatusId equals c.Id
+
+                                  join c1 in _db.CommonLookup on
+                                  t.PriorityId equals c1.Id
+
+                                  join c2 in _db.CommonLookup on
+                                  t.TypeId equals c2.Id
+
+                                  join c3 in _db.Users on
+                                  t.AssignedTo equals c3.UserId
+
+
+                                  join a in _db.TicketAttachment
+                                  on t.Id equals a.TicketId into a
+                                  from ta in a.DefaultIfEmpty()
+
+                                  where (t.IsDeleted != 1 && filters != null && t.TicketName.Contains(filters) || t.DescriptionData.Contains(filters) ||
+                                  c1.Name.Contains(filters) || c.Name.Contains(filters) || c3.UserName.Contains(filters) || c2.Name.Contains(filters)
+
+
+
+                                     )
+                                  select new TicketModel
+                                  {
+                                      Id = t.Id,
+                                      TicketName = t.TicketName,
+
+                                      AssignedToName = c3.UserName,
+                                      TypeName = c2.Name,
+                                      DescriptionData = t.DescriptionData,
+                                      StatusName = c.Name,
+                                      PriorityName = c1.Name,
+                                      CreatedOn = (DateTime)t.CreatedOn,
+                                      ImageName = ta.Filename,
+                                      count = GetCount
+                                  }).OrderBy(x => x.Id)
+                                      .Skip((page - 1) * pagesize)
+                                      .Take(pagesize).AsQueryable();
+
+                return alltickets;
+
+            }
         }
         public int CreateTicketComment(TicketCommentViewModel model, int CreatedBy, string CreatedBy1)
         {

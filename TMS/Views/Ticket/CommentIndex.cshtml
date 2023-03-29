@@ -1,5 +1,14 @@
 ﻿@model IEnumerable<TMS.Model.TicketCommentViewModel>
 
+<script src="~/Scripts/timeago/jquery.timeago.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function () {
+        jQuery("time.timeago").timeago();
+    });
+</script>
+
+
+
 <table class="tablecomment table-bordered">
     <tr>
         <th>
@@ -25,6 +34,7 @@
                 @Html.DisplayFor(modelItem => item.CreatedOn)
             </td>
             <td>
+           
                 @Html.DisplayFor(modelItem => item.CreatedBy)
             </td>
         </tr>

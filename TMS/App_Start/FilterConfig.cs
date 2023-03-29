@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using TMS.Filter;
 
+
 namespace TMS
 {
     public class FilterConfig
@@ -9,9 +10,9 @@ namespace TMS
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new AuthorizeAttribute());
-           /* filters.Add(new HandleErrorAttribute());*/
-           // filters.Add(new ExceptionHandlerAttribute());
-            filters.Add(new TraceFilterAttribute());
+/*           filters.Add(new ExceptionHandlerAttribute());
+*/            filters.Add(new TraceFilterAttribute());
+            /*filters.Add(new PermissionFilter());*/
 
         }
     }

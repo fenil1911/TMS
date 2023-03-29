@@ -16,10 +16,8 @@ namespace TMS.Data.Database
 
         
         public string RoleName { get; set; }
-        [Required]
-        public bool  IsActive { get; set; } 
         public string RoleCode { get; set; }
-      
+        public bool IsActive { get; set; }
         public int? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
         

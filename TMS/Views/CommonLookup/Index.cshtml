@@ -1,75 +1,86 @@
-﻿@model IEnumerable<TMS.Model.CommonLookupModel>
+﻿@using Kendo.Mvc.UI
+@{ Layout = "~/Views/Shared/_Layout.cshtml";
 
-@{
-    ViewBag.Title = "Index";
-
-}
-
-@using PagedList.Mvc;
-@using PagedList;
+    @Scripts.Render("~/bundles/kendo") }
 
 <br />
-<h2 style="margin-top: 65px; margin-bottom: -45px; MARGIN-LEFT: -171px;font-family:'Segoe UI Symbol';font-weight:bold " ">CommonLookup Index</h2>
 
-<p style="margin-top: 42px; margin-bottom: -43px; }">
-    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary primaryCreateNew" })
-</p>
+<h2 style="margin-top: 65px; margin-bottom: 3px; MARGIN-LEFT: -49px;font-weight:bold ">Common Lookup</h2>
+
+<div class="container">
+    <div class="row">
+
+        @(Html.Kendo().Grid<TMS.Model.CommonLookupModel>()
+             .Name("EmpGrid")
+            .Scrollable(s => s.Height("auto"))
+            //.AutoBind()
+
+            .Columns(columns =>
+            {
+                columns.Bound(p => p.Id).Title("Id").Width(150);
+
+                columns.Bound(p => p.Name).Title("Name").Width(150);
+                columns.Bound(p => p.Code).Title("Code").Width(150);
+                columns.Bound(p => p.Type).Title("Type").Width(150);
+
+                columns.Bound(p => p.IsActive).Title("Is Active").Width(120);
+
+                columns.Command(command => { command.Edit(); command.Destroy(); }).Width(150).Title("Action");
+
+
+            }).ToolBar(toolbar => toolbar.Create())
+    .Editable(editable => editable.Mode(GridEditMode.PopUp).Window(w => w.Title("Common Lookup")))
+    .Pageable(pageable => pageable
+         .Refresh(true)
+         .PageSizes(new int[] { 10, 20, 50 })
+         .PreviousNext(true)
+     )
+    .Sortable()
+    .Scrollable()
+    .Filterable(filter => filter
+                        .Mode(GridFilterMode.Row)
+                        .Extra(false)
+
+                    )
+    .HtmlAttributes(new { style = "" })
+
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(10)
+         .Events(events => events.Error("error_handler"))
+        .Model(model => model.Id(p => p.Id))
+        .Create(update => update.Action("EditingPopup_Create", "CommonLookup"))
+        .Read(read => read.Action("GetGridData", "CommonLookup"))
+        .Update(update => update.Action("EditingPopup_Update", "CommonLookup"))
+        .Destroy(update => update.Action("EditingPopup_Destroy", "CommonLookup"))
 
 
 
-<br />
-<br />
-<table class="table table-bordered ticketall table-hover">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Type)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Code)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DisplayOrder)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsActive)
-        </th>
-        <th>
-            @Html.DisplayName("Action")
-        </th>
 
-    </tr>
+          )
+          )
+    </div>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Code)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DisplayOrder)
-            </td>
-            <td>
-                @if (@item.IsActive)
-                {<div class="img-circle"><img src="~/Content/images/check.png" alt="editok" width="18"></div>}
-                else
-                { <div class=""><img src="~/Content/images/delete.png" alt="edit" width="18"></div>}
-
-            </td>
-            <td>
-                <a href="@Url.Action("Edit", "CommonLookup", new { Id = item.Id })"><img src="~/Content/images/draww.png" alt="edit" width="18"></a>
-
-                <a href="@Url.Action("delete", "CommonLookup", new { Id = item.Id }) " onclick="return confirm('Are you sure to Delete?')"><img src="~/Content/images/deletee.png" alt="delete" width="18"></a>
-            </td>
-        </tr>
+</div>
+<style>
+    .k-grid {
+        /* set the desired height */
+        width: 110%;
+        margin: -1px -53px;
     }
-
-</table>
+</style>
+<script type="text/javascript">
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    }
+</script>

@@ -1,95 +1,166 @@
-﻿@model  IEnumerable<TMS.Model.FormModel>
-    @using PagedList.Mvc;
-    @using PagedList;
+﻿@using Kendo.Mvc.UI
+@{ Layout = "~/Views/Shared/_Layout.cshtml";
 
-    @{
-        ViewBag.Title = "Index";
-    }
-    <br>
-    <br />
-    <br>
-    <br />
+    @Scripts.Render("~/bundles/kendo") }
 
-    <h2 style="font-size: 44px; margin-top: 35px; margin-bottom: -84px; margin-left: -165px; font-family: 'Segoe UI Symbol'; font-weight: bold ">Form Index</h2>
+<br />
 
+<h2 style="margin-top: 65px; margin-bottom: -32px; MARGIN-LEFT: -2px;  font-weight: bold " ">Form</h2>
 
-    <br />
-    <br />
-    <p>
+@Html.ActionLink("Create New", "Create", "Form", null, new { @class = "btn btn-primary primaryCreateNew" })
+<div class="container">
+    <div class="row">
 
-        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary primaryCreateNew" })
-    </p>
+        @(Html.Kendo().Grid<TMS.Model.FormModel>()
+             .Name("EmpGrid")
+            .Scrollable(s => s.Height("auto"))
+            //.AutoBind()
 
-    <br />
-    <table class="table ticketall table-bordered table-hover">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NavigateURL)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ParentFormId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FormAccessCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DisplayOrder)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsActive)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsDisplayMenu)
-            </th>
-            <th>
-                @Html.DisplayName("Action")
-            </th>
-
-        </tr>
-
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NavigateURL)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ParentFormId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FormAccessCode)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DisplayOrder)
-                </td>
-                <td>
-                    @if (@item.IsActive)
-                    {<div class="img-circle"><img src="~/Content/images/check.png" alt="editok" width="18"></div>}
-                    else
-                    { <div class=""><img src="~/Content/images/delete.png" alt="edit" width="18"></div>}
-
-                </td>
-                <td>
-                    @if (@item.IsActive)
-                    {<div class="img-circle"><img src="~/Content/images/check.png" alt="editok" width="18"></div>}
-                    else
-                    { <div class=""><img src="~/Content/images/delete.png" alt="edit" width="18"></div>}
-                </td>
-
-                <td>
-                    <a href="@Url.Action("Create", "Form", new { Id = item.Id })"><img src="~/Content/images/draww.png" alt="edit" width="21"></a>
-                    <a href="@Url.Action("delete", "Form", new { Id = item.Id }) " onclick="return confirm('Are you sure to Delete?')"><img src="~/Content/images/deletee.png" alt="edit" width="21"></a>
+            .Columns(columns =>
+            {
 
 
-                </td>
-            </tr>
+                columns.Bound(p => p.Name).Title("Name").Width(150);
+                columns.Bound(p => p.NavigateURL).Title("Navigate URL").Width(150);
+                columns.Bound(p => p.FormAccessCode).Title("FormAccess Code").Width(150);
+
+                columns.Bound(p => p.IsActive).Title("Is Active").Width(95);
+                columns.Bound(p => p.ParentFormId).Title("ParentForm Id").Width(120);
+                columns.Bound(p => p.DisplayOrder).Title("Display Order").Width(120);
+                columns.Bound(p => p.IsDisplayMenu).Title("Display Menu").Width(120);
+                columns.Bound(p => p.Id).ClientTemplate(
+                                    "<a href='" + Url.Action("Create", "Form") + "/#=Id#'>  Edit  </a>" + " |" +
+                                 
+
+                                    "<a href='" + Url.Action("Delete", "Form") + "/#=Id#' onclick='return confirm(\"Are you sure you want to delete this item?\")'>  Delete  </a>").Width(130).Title("Action");
+
+
+
+
+            }).HtmlAttributes(new { style = "" })
+    .Scrollable()
+    .Pageable(pageable => pageable
+        .Refresh(true)
+        .PageSizes(true)
+        )
+    .Sortable()
+    .Filterable()
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(10)
+        .Read(read => read.Action("GetGridData", "Form"))
+
+
+
+          )
+          )
+    </div>
+
+</div>
+
+<script>
+    //$(document).ready(function () {
+    //    $('#EmpGrid').data('kendoGrid').dataSource.read();
+    //    $('#EmpGrid').data('kendoGrid').refresh();
+
+    //});
+</script>
+
+@*
+
+    @model  IEnumerable<TMS.Model.FormModel>
+        @using PagedList.Mvc;
+        @using PagedList;
+
+        @{
+            ViewBag.Title = "Index";
         }
+        <br>
+        <br />
+        <br>
+        <br />
 
-    </table>
+        <h2 style="font-size: 44px; margin-top: 35px; margin-bottom: -84px; margin-left: -165px; font-family: 'Segoe UI Symbol'; font-weight: bold ">Form Index</h2>
 
+
+        <br />
+        <br />
+        <p>
+
+            @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary primaryCreateNew" })
+        </p>
+
+        <br />
+        <table class="table ticketall table-bordered table-hover">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NavigateURL)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ParentFormId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FormAccessCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DisplayOrder)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsActive)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsDisplayMenu)
+                </th>
+                <th>
+                    @Html.DisplayName("Action")
+                </th>
+
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NavigateURL)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ParentFormId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FormAccessCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DisplayOrder)
+                    </td>
+                    <td>
+                        @if (@item.IsActive)
+                        {<div class="img-circle"><img src="~/Content/images/check.png" alt="editok" width="18"></div>}
+                        else
+                        { <div class=""><img src="~/Content/images/delete.png" alt="edit" width="18"></div>}
+
+                    </td>
+                    <td>
+                        @if (@item.IsActive)
+                        {<div class="img-circle"><img src="~/Content/images/check.png" alt="editok" width="18"></div>}
+                        else
+                        { <div class=""><img src="~/Content/images/delete.png" alt="edit" width="18"></div>}
+                    </td>
+
+                    <td>
+                        <a href="@Url.Action("Create", "Form", new { Id = item.Id })"><img src="~/Content/images/draww.png" alt="edit" width="21"></a>
+                        <a href="@Url.Action("delete", "Form", new { Id = item.Id }) " onclick="return confirm('Are you sure to Delete?')"><img src="~/Content/images/deletee.png" alt="edit" width="21"></a>
+
+
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+*@

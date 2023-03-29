@@ -9,74 +9,78 @@
 
 <section class="section">
     <div class="container">
-        <h2 class="h2 " style="font-size: 35px; margin-top: 25px; margin-bottom: -40px; margin-left: -164px; color: #484848; font-family: 'Segoe UI Symbol'; font-weight: bold " >Access List</h2>
+        <h2 class="h2 " style="font-size: 35px; margin-top: 25px; margin-bottom: -40px; margin-left: -164px; color: #484848; font-weight: bold " >Access List</h2>
+        <br />
+        <br />
         <label id="alertid" class="bg-success text-white"></label>
         <table class="table ">
-           
-                <div class="table-responsive">
-                    @Html.Hidden("RoleId", Model.FirstOrDefault().RoleId)
 
-                    <table id="RoleRights" class="table ticketall  table-bordered table-hover " style=" margin-left: -166px; width: 128%; max-width: 133%; margin-bottom: 20px;">
-                        <thead>
-                            <tr>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.FormName)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.FullRights)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.AllowMenu)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.AllowView)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.AllowInsert)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.AllowUpdate)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.AllowDelete)
-                                </th>
+            <div class="table-responsive">
+                @Html.Hidden("RoleId", Model.FirstOrDefault().RoleId)
+
+                <table id="RoleRights" class="table ticketall  table-bordered table-hover " style=" margin-left: -166px; width: 128%; max-width: 133%; margin-bottom: 20px;">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.FormName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.FullRights)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.AllowMenu)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.AllowView)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.AllowInsert)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.AllowUpdate)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.AllowDelete)
+                            </th>
+                        </tr>
+                    </thead>
+
+                    @foreach (var item in Model)
+                    {
+                        <tbody>
+                            <tr class="align-middle" id="row_@item.MenuId">
+                                <td>
+                                    @Html.HiddenFor(modelItem => item.MenuId)
+                                    @Html.DisplayFor(modelItem => item.FormName)
+                                </td>
+                                <td>
+                                    <input type="checkbox" class="Selectall" id="FullRights_@item.MenuId" @(item.FullRights == false ? "" : "checked='checked'") onclick="SelectAll(this)" />
+                                </td>
+                                <td>
+                                    <input type="checkbox" value="@item.AllowMenu" @(item.AllowMenu == false ? "" : "checked='checked'") class="Checkbox" onclick="CheckValue(@item.MenuId)" id="allowmenu_@item.MenuId" />
+                                </td>
+                                <td>
+                                    <input type="checkbox" value="@item.AllowView" @(item.AllowView == false ? "" : "checked='checked'") class="Checkbox" onclick="CheckValue(@item.MenuId)" id="View_@item.MenuId" />
+                                </td>
+                                <td>
+                                    <input type="checkbox" value="@item.AllowInsert" @(item.AllowInsert == false ? "" : "checked='checked'") class="Checkbox" onclick="CheckValue(@item.MenuId)" id="Insert_@item.MenuId" />
+                                </td>
+                                <td>
+                                    <input type="checkbox" value="@item.AllowUpdate" @(item.AllowUpdate == false ? "" : "checked='checked'") class="Checkbox" onclick="CheckValue(@item.MenuId)" id="Update_@item.MenuId" />
+                                </td>
+                                <td>
+                                    <input type="checkbox" value="@item.AllowDelete" @(item.AllowDelete == false ? "" : "checked='checked'") class="Checkbox" onclick="CheckValue(@item.MenuId)" id="Delete_@item.MenuId" />
+                                </td>
                             </tr>
-                        </thead>
+                        </tbody>
+                    }
+                </table>
+            </div>
 
-                        @foreach (var item in Model)
-                        {
-                            <tbody>
-                                <tr class="align-middle" id="row_@item.MenuId">
-                                    <td>
-                                        @Html.HiddenFor(modelItem => item.MenuId)
-                                        @Html.DisplayFor(modelItem => item.FormName)
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" class="Selectall" id="FullRights_@item.MenuId" @(item.FullRights == false ? "" : "checked='checked'") onclick="SelectAll(this)" />
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" value="@item.AllowMenu" @(item.AllowMenu == false ? "" : "checked='checked'") class="Checkbox" onclick="CheckValue(@item.MenuId)" id="allowmenu_@item.MenuId" />
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" value="@item.AllowView" @(item.AllowView == false ? "" : "checked='checked'") class="Checkbox" onclick="CheckValue(@item.MenuId)" id="View_@item.MenuId" />
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" value="@item.AllowInsert" @(item.AllowInsert == false ? "" : "checked='checked'") class="Checkbox" onclick="CheckValue(@item.MenuId)" id="Insert_@item.MenuId" />
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" value="@item.AllowUpdate" @(item.AllowUpdate == false ? "" : "checked='checked'") class="Checkbox" onclick="CheckValue(@item.MenuId)" id="Update_@item.MenuId" />
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" value="@item.AllowDelete" @(item.AllowDelete == false ? "" : "checked='checked'") class="Checkbox" onclick="CheckValue(@item.MenuId)" id="Delete_@item.MenuId" />
-                                    </td>
-                                </tr>
-                            </tbody>
-                        }
-                    </table>
-                </div>
-
-                <button class="btn btn-primary btn-md " id="btnAdd" style=" margin-top: -12px; margin-left: -154px;" type="submit">Save</button>
-                <button class="btn btn-danger btn-md " id="btnCancel" style=" margin-top: -12px; margin-left: 0px;"  name="cancel" type="button" value="Cancel">Cancel</button>
+            <button class="btn btn-primary btn-md " id="btnAdd" style=" margin-top: -12px; margin-left: -154px;" type="submit" value="Refresh" name="Command">Save</button>
+            <button class="btn btn-danger btn-md " id="btnCancel" style=" margin-top: -12px; margin-left: 0px;" name="cancel" type="button" value="Cancel">Cancel</button>
+        
+           
 </div>
     </table>
 </section>
@@ -179,6 +183,15 @@
                 $("#alertid").html("Error in update permission.");
                 }
              });
-                return false;
+            return false;
+
+            $(document).ready(function () {
+                $('#RefreshPage').click(function () {
+                    location.reload();
+                });
+            });
         });
 </script>
+<div>
+  
+</div>

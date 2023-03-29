@@ -31,7 +31,7 @@ namespace TMS.Service
                 Id = (int)data.RoleId,
                 Name = data.RoleName,
                 RoleCode = data.RoleCode,
-                IsActive = (bool)data.IsActive
+
             };
             return role;
         }

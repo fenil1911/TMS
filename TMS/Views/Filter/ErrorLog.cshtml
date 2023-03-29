@@ -1,0 +1,72 @@
+﻿@using Kendo.Mvc.UI
+@{ Layout = "~/Views/Shared/_Layout.cshtml";
+
+    @Scripts.Render("~/bundles/kendo") }
+<head>
+
+
+
+
+</head>
+<h2 style="margin-top: 65px; margin-bottom: 3px;font-weight:bold ">Error Log</h2>
+<div class="container">
+
+    <div class="row">
+
+        @(Html.Kendo().Grid<TMS.Model.FilterModel.ErrorLog>()
+             .Name("ErrorLog")
+            .Scrollable(s => s.Height("auto"))
+            .Columns(columns =>
+            {
+                columns.Bound(p => p.Id).Title("Id");
+                columns.Bound(p => p.ControllerName).Title("Controller Name");
+                columns.Bound(p => p.ActionName).Title("Action Name");
+                columns.Bound(p => p.UserName).Title("Updated By");
+                columns.Bound(p => p.UpdatedOn).Title("Created On").Format("{0:dd/MM/yyyy}");
+
+                columns.Bound(p => p.Message)
+     .Title("Error")
+     .ClientTemplate("#=showError(data)#");
+
+
+
+
+            })
+.HtmlAttributes(new { style = "" })
+    .Scrollable()
+    .Pageable(pageable => pageable
+         .Refresh(true)
+         .PageSizes(new int[] { 10, 20, 50 })
+         .PreviousNext(true)
+     )
+    .Sortable()
+    .Filterable(filter => filter
+                        .Mode(GridFilterMode.Row)
+                        .Extra(false)
+                    )
+        .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(10)
+        .Read(read => read.Action("IndexErrorLogGrid", "Filter")
+
+        )  )
+          )
+    </div>
+</div>
+<script>
+function showError(data) {
+    return "<button onclick='openPopup(decodeURIComponent(\"" + encodeURIComponent(data.Message) + "\"))'>Error</button>";
+
+      
+
+    }
+
+    function openPopup(data) {
+        var popup = window.open("", "My Popup", "width=400,height=300");
+       
+        popup.document.write("<p>" + data + "</p>");
+        popup.document.write("</body></html>");
+        popup.document.close();
+    }
+
+</script>

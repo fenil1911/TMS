@@ -21,7 +21,8 @@ namespace TMS.Data.Database
         public string BrowserName { get; set; }
         public int UserId { get; set; }
         public DateTime CreatedOn { get; set; }
-        public int Duration { get; set; }
+       /* public DateTime Duration { get; set; }*/
+
 
 
     }

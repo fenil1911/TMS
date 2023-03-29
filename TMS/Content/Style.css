@@ -1,4 +1,6 @@
-﻿body {
+﻿@import url('https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap');
+
+body {
 }
 
 .navLinkMargin {
@@ -177,15 +179,7 @@ html body {
 }
 
 
-.primaryCreateNew {
-    margin-left: 1163px;
-    margin-bottom: 5px;
-    background: #0268ff;
-    color: white;
-    border-color: #0268ff;
-    border-radius: 10px;
-    margin-top: -2px;
-}
+
 
 /*PRODUCT HISTORY INDEX */
 .ProductHistoryBG {
@@ -592,4 +586,37 @@ gba(22, 22, 23, .8);
     background-color: rgb(53 53 53);
     
     border-color: rgb(53 53 53);
+}
+.primaryCreateNew {
+    margin-left: 1068px;
+    margin-bottom: 5px;
+    background: #0268ff;
+    color: white;
+    border-color: #0268ff;
+    border-radius: 10px;
+    margin-top: -2px;
+}
+.changeColor{
+    color:#0052CC
+}
+
+
+.labelform{
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    margin-top: 10px;
+    font-weight: 700;
+}
+* {
+    font-family: 'Lexend Deca', sans-serif;
+   /*//font-family: 'Segoe UI'*/
+     
+}
+#Ticket tbody tr:hover {
+    background: rgb(0 171 255 / 0.61);
+
+}
+#Ticket tbody tr{
+    background: #ffffff;
 }

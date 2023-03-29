@@ -32,7 +32,7 @@ namespace TMS.Data
                                        Name = c.Name,
                                        Type = c.Type
 
-                                   }).ToList();
+                                   }).OrderByDescending(X => X.Id).ToList();
 
             return allCommonLookup;
 
@@ -49,7 +49,7 @@ namespace TMS.Data
                 DisplayOrder = commonLookup.DisplayOrder,
                 IsActive = commonLookup.IsActive,
                 CreatedOn = DateTime.Now,
-                CreatedBy = CreatedBy,
+               CreatedBy = CreatedBy,
 
 
             };
@@ -59,15 +59,15 @@ namespace TMS.Data
         }
         public CommonLookupModel UpdateCommonLookup(CommonLookupModel model, int UpdatedBy)
         {
-            var objclup = GetCommonLookupById(model.Id);
-            objclup.Type = model.Type;
-            objclup.Name = model.Name;
-            objclup.Code = model.Code;
-            objclup.DisplayOrder = model.DisplayOrder;
-            objclup.IsActive = model.IsActive;
-            objclup.UpdatedOn = DateTime.Now;
-            objclup.UpdatedBy = UpdatedBy;
-            objclup.UpdatedOn = DateTime.Now;
+            var obj = GetCommonLookupById(model.Id);
+            obj.Type = model.Type;
+            obj.Name = model.Name;
+            obj.Code = model.Code;
+            obj.DisplayOrder = model.DisplayOrder;
+            obj.IsActive = model.IsActive;
+            obj.UpdatedOn = DateTime.Now;
+            obj.UpdatedBy = UpdatedBy;
+            obj.UpdatedOn = DateTime.Now;
 
 
             _db.SaveChanges();

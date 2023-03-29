@@ -1,0 +1,71 @@
+﻿@using Kendo.Mvc.UI
+@{ Layout = "~/Views/Shared/_Layout.cshtml";
+
+    @Scripts.Render("~/bundles/kendo") }
+
+
+
+<h2 style="margin-top: 65px; margin-bottom: 3px; MARGIN-LEFT: -49px;font-weight:bold ">Activity Log</h2>
+
+<div class="container">
+    <div class="row">
+
+        @(Html.Kendo().Grid<TMS.Model.FilterModel.ActivityLog>()
+             .Name("EmpGrid")
+            .Scrollable(s => s.Height("auto"))
+            //.AutoBind()
+
+            .Columns(columns =>
+            {
+                columns.Bound(p => p.Id).Title("Id");
+                columns.Bound(p => p.ControllerName).Title("Controller Name");
+                columns.Bound(p => p.ActionName).Title("Action Name");
+                columns.Bound(p => p.BrowserName).Title("Browser Name");
+                columns.Bound(p => p.PageUrl).Title("Page Url");
+                columns.Bound(p => p.IPAddress).Title("IP Address");
+                columns.Bound(p => p.UserName).Title("User");
+
+
+                columns.Bound(p => p.CreatedOn).Title("Created On").Format("{0:dd/MM/yyyy}");
+
+
+
+            }).HtmlAttributes(new { style = "" })
+    .Scrollable()
+   .Pageable(pageable => pageable
+         .Refresh(true)
+         .PageSizes(new int[] { 10, 20, 50 })
+         .PreviousNext(true)
+     )
+    .Sortable()
+    .Filterable(filter => filter
+                        .Mode(GridFilterMode.Row)
+                        .Extra(false)
+
+                    )
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(10)
+        .Read(read => read.Action("IndexActivityGrid", "Filter"))
+
+
+
+          )
+          )
+    </div>
+
+</div>
+<style>
+    .k-grid {
+        /* set the desired height */
+        width: 110%;
+        margin: -1px -53px;
+    }
+</style>
+<script>
+    //$(document).ready(function () {
+    //    $('#EmpGrid').data('kendoGrid').dataSource.read();
+    //    $('#EmpGrid').data('kendoGrid').refresh();
+
+    //});
+</script>

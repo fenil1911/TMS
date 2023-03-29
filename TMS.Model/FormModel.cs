@@ -14,15 +14,17 @@ namespace TMS.Model
         {
             _ParentFormList = new List<SelectListItem>();
         }
-
+       
         public int Id { get; set; }
 
         [Required]
         public string Name { get; set; }
 
+        [Required]
         [Display(Name = "Navigate URL")]
         public string NavigateURL { get; set; }
 
+        [Required]
         [Display(Name = "Parent form")]
         public int? ParentFormId { get; set; }
 
@@ -31,6 +33,7 @@ namespace TMS.Model
         //[Remote("CheckDuplicateFormAccessCode", "Form", HttpMethod = "Post", AdditionalFields = "Id")]
         public string FormAccessCode { get; set; }
 
+        [Required]
         [Display(Name = "Display Order")]
         public int? DisplayOrder { get; set; }
         [Display(Name = "Active")]
@@ -38,13 +41,10 @@ namespace TMS.Model
 
         [Display(Name = "Display Menu")]
         public bool IsDisplayMenu { get; set; }
-
         public int? CreatedBy { get; set; }
-
         public DateTime? CreatedOn { get; set; }
-
         public int? UpdatedBy { get; set; }
-
+       
         public DateTime? UpdatedOn { get; set; }
 
         public List<SelectListItem> _ParentFormList { get; set; }

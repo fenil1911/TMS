@@ -14,77 +14,69 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
+<div class="form-horizontal">
 
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-            </div>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="col-md-4">
+        <label class="form-label"> Name<strong>*</strong></label>
+        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Navigate URL<strong>*</strong></label>
+        @Html.EditorFor(model => model.NavigateURL, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.NavigateURL, "", new { @class = "text-danger" })
+
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Parent Form Id<strong>*</strong></label>
+        @Html.EditorFor(model => model.ParentFormId, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.ParentFormId, "", new { @class = "text-danger" })
+
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Form Access Code<strong>*</strong></label>
+        @Html.EditorFor(model => model.FormAccessCode, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.FormAccessCode, "", new { @class = "text-danger" })
+
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Display Order<strong>*</strong></label>
+        @Html.EditorFor(model => model.DisplayOrder, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.DisplayOrder, "", new { @class = "text-danger" })
+
+    </div>
+    <div class="col-md-5">
+        <label class="form-label labelform ">Is Active</label>
+
+
+        <div class="checkbox" style="margin-top: -32px; margin-left: 96px; ">
+            @Html.EditorFor(model => model.IsActive)
+            @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.NavigateURL, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.NavigateURL, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.NavigateURL, "", new { @class = "text-danger" })
-            </div>
+    </div>
+    <div class="col-md-5" style="margin-left:-350px">
+        <label class="form-label labelform ">Is Display Menu</label>
+
+
+        <div class="checkbox" style="margin-top: -32px; margin-left: 131px; ">
+            @Html.EditorFor(model => model.IsDisplayMenu)
+            @Html.ValidationMessageFor(model => model.IsDisplayMenu, "", new { @class = "text-danger" })
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.ParentFormId, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ParentFormId, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ParentFormId, "", new { @class = "text-danger" })
-            </div>
-        </div>
+    </div>
+   
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.FormAccessCode, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.FormAccessCode, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.FormAccessCode, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.DisplayOrder, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.DisplayOrder, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.DisplayOrder, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.IsActive)
-                    @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.IsDisplayMenu, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.IsDisplayMenu)
-                    @Html.ValidationMessageFor(model => model.IsDisplayMenu, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
+    <div class="col-md-5" style="margin-left: -600px; margin-top: 65px;">
+        <input type="submit" value="Create" class="btn btn-primary" />
+        <div>
+            @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-default" })
         </div>
     </div>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
 </div>
+
+}

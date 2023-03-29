@@ -30,6 +30,8 @@ namespace TMS.Data
                             Name = a.RoleName,
                             RoleCode = a.RoleCode,
                             IsActive = a.IsActive
+                            
+                        
                         }).ToList();
 
             return data;

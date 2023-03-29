@@ -10,12 +10,13 @@ namespace TMS.Model
     public class TicketModel
     {
         public int Id { get; set; }
-        [Required]
+       [Required]
         public string TicketName { get; set; }
-        [Display(Name = "Type")]
+        //[Display(Name = "Type")]
         public int TypeId { get; set; }
         public string TypeName { get; set; }
         public string Type { get; set; }
+        [Required]
         public string DescriptionData { get; set; }
         public int PriorityId { get; set; }
         public string PriorityName { get; set; }
@@ -31,5 +32,6 @@ namespace TMS.Model
         public List<MyDropdown> AssignedDropdown { get; set; }
         public DateTime UpdatedOn { get; set; }
         public TicketCommentViewModel TicketComment { get; set; }
+        public int count { get; set; }
     }
 }

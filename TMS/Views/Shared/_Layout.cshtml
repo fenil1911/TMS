@@ -1,45 +1,42 @@
-﻿<!DOCTYPE html>
+﻿@using TMS.Model
+
+<!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="path/to/your/css/file.css">
+    <script src="~/Content/Script.js"></script>
+</head>
+
+<head>
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
-
-
+    <title>TMS</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
     @Styles.Render("~/bundles/kendoCss")
     @Scripts.Render("~/bundles/kendoJs")
     @Scripts.Render("~/bundles/jqueryval")
-
     <script src="@Url.Content("~/Content/inc/jquery/jquery-2.1.0.min.js")"></script>
-    
-
-    
     <!-- Bootstrap core CSS -->
-
-
+    <link rel="icon" href="~/favicont.ico">
     <script src="~/Scripts/jquery.validate.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-con  firm/3.3.2/jquery-confirm.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
     <script src="jquery.min.js" type="text/javascript"></script>
     <meta name="description" content="" />
     <meta name="generator" content="" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-    
     <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
     <link href="~/Content/style.css" rel="stylesheet" />
     <link href="~/Content/bootstrap-chosen.css" rel="stylesheet" />
     <link href="~/Content/toastr.css" rel="stylesheet" />
     <script src="~/Content/bootstrap.bundle.min.js"></script>
-    
     <script src="~/Scripts/toastr.js"></script>
-
+    <script src="~/Content/Script.js"></script>
 </head>
-
-<body>
+<body style="background-color:white">
     <div class="bg">
         <nav class="navbar navbar navbar-expand-lg">
             <div class="container">
@@ -47,106 +44,158 @@
                     <div class="container">
                         <div class="navbar-header" style="color :#a7a7a7">
 
-                            @Html.ActionLink("TMS", "Index", "DashBoard", new { area = "" }, new { @class = "navbar-brand " })
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                if (User.IsInRole("Administrator"))
+                            <div class="left_menu">
+
+                            </div>
+
+
+                            @* @Html.ActionLink("TMS", "Index", "DashBoard", new { area = "" }, new { @class = "navbar-brand " })
+                                @if (User.Identity.IsAuthenticated)
                                 {
-
-
-                                    <ul class="navbar-brand navbar-nav navbar-header " style="list-style-type: none ">
-                                        <li class="navLinkMargin nav-item">
-
-                                            <div class="dropdown">
-
-                                                <a class="nav-link " style="list-style: none ;color :#a7a7a7">System</a>
-                                                <br />
-
-                                                <ul class="dropdown-menu table-hover text-primary bold shadow">
-                                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Form")">Form</a></li>
-                                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Roles")">Role</a></li>
-                                                    <li><a class="dropdown-item" href="@Url.Action("Index", "CommonLookup")">CommonLookup</a></li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li class="navLinkMargin nav-item">
-                                            <a class="nav-link" style="color :#a7a7a7" href="@Url.Action("Register", "Account")">Register</a>
-                                        </li>
-
-                                    </ul>
-                                }
-                            }
-                            <ul class="navbar-brand navbar-nav navbar-header " style="list-style-type: none ">
-                                <li class="navLinkMargin nav-item">
-
-                                <li class="navLinkMargin nav-item">
-                                    <a class="nav-link" style="color :#a7a7a7" href="@Url.Action("Index", "Ticket")">Ticket</a>
-                                </li>
-                                </li>
-                            </ul>
-
-                            <ul class="navbar-brand navbar-nav navbar-header" style="list-style-type: none ; margin-left:555px ">
-                                <div class="head_right_col d-flex align-items-center justify-content-end ">
-
-                                <li class="navLinkMargin nav-item">
-
-                                    <div class="dropdown">
-
-                                        <a class="nav-link " style="list-style: none ;color :#a7a7a7">Account</a>
-                                        <br />
-                                        <div class="toprightbar d-flex align-items-center justify-content-end">
-                                            @Html.Partial("_LoginPartial")
-                                            @*<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false"> </a>*@
-                                        </div>
-                                        <ul class="dropdown-menu table-hover text-primary bold shadow">
-                                            <li><a class="dropdown-item" href="@Url.Action("ChangePassword","Account")">Change Password</a></li>
-                                            <li><a class="dropdown-item" href="@Url.Action("Logout","Account")">Logout</a></li>
+                                    if (User.IsInRole("Administrator"))
+                                    {
+                                        <ul class="navbar-brand navbar-nav navbar-header " style="list-style-type: none ">
+                                            <li class="navLinkMargin nav-item">
+                                                <div class="dropdown">
+                                                    <a class="nav-link " style="list-style: none ;color :#a7a7a7">System</a>
+                                                    <ul class="dropdown-menu table-hover text-primary bold shadow">
+                                                        <li><a class="dropdown-item" href="@Url.Action("Index", "Roles")">Role</a></li>
+                                                        <li><a class="dropdown-item" href="@Url.Action("Index", "Form")">Form</a></li>
+                                                        <li><a class="dropdown-item" href="@Url.Action("Activity", "Filter")">Activity Log</a></li>
+                                                        <li><a class="dropdown-item" href="@Url.Action("ErrorLog", "Filter")">Error Log</a></li>
+                                                        <li><a class="dropdown-item" href="@Url.Action("Index", "CommonLookup")">Common Lookup</a></li>
+                                                        <li><a class="dropdown-item" href="@Url.Action("Index", "Users")">Users</a></li>
+                                                    </ul>
+                                                </div>
+                                            </li>
                                         </ul>
-                                    </div>
-                                </li>
+                                    }
+                                }
+                                <ul class="navbar-brand navbar-nav navbar-header " style="list-style-type: none ">
+                                    <li class="navLinkMargin nav-item">
+                                        <a class="nav-link" style="color :#a7a7a7" href="@Url.Action("Index", "Ticket")">Ticket</a>
+                                    </li>
+                                </ul>
+                                <ul class="navbar-brand navbar-nav navbar-header" style="list-style-type: none ; margin-left:555px ">
+                                    <li class="navLinkMargin nav-item">
+                                        <div class="dropdown">
+                                            <a class="nav-link " style="list-style: none ;color :#a7a7a7">Account</a>
+                                            <ul class="dropdown-menu table-hover text-primary bold shadow">
+                                                <li><a class="dropdown-item" href="@Url.Action("ChangePassword","Account")">Change Password</a></li>
+                                                <li><a class="dropdown-item" href="@Url.Action("Logout","Account")">Logout</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>*@
                         </div>
                     </div>
-                    </ul>
-
                 </div>
             </div>
+        </nav>
     </div>
     <div class="container body-content">
         @RenderBody()
-        <footer>
-        </footer>
-    </div>
-   
-   
-    </div>
-    </nav>
     </div>
 </body>
 </html>
 
+
 <script>
-    $(document).ready(function () {
-        $('.dropdown').hover(
-            function () {
-                $(this).find('ul').css({
-                    "display": "block",
-                    "margin-top": 0
-                });
-            },
-            function () {
-                $(this).find('ul').css({
-                    "display": "none",
-                    "margin-top": 0
-                });
-            }
-        );
-        var message = $('#Messages').text();
-        if (message != '') {
-            toastr.success(message);
+        $(document).ready(function () {
+            BindMenu();
+        });
+        var nowDate = new Date();
+        var todayDate = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), nowDate.getHours(), nowDate.getMinutes(), nowDate.getSeconds(), 0);
+
+
+
+    function BindMenu() {
+        var getRoleName = '@SessionHelper.RoleName'
+            $.ajax({
+                type: 'get',
+                datatype: 'html',
+                data: { rolename: getRoleName },
+                async: true,
+
+                url: '@Url.Action("GetFormByRole", "Menu")',
+
+                success: function (data) {
+
+                    $(".left_menu").html(data);
+
+                    var menucode = $("#HDNMENUCODE").val();
+                    var submenucode = $("#HDNSUBMENUCODE").val();
+                    if (menucode != undefined) {
+                        $("#" + menucode + "").addClass("active");
+                        $("#" + menucode + "").find(".sub_menu").slideDown();
+                        if (submenucode != undefined) {
+                            $("#" + submenucode + "").addClass("active");
+                        }
+                    }
+                }
+            });
         }
-        var emessage = $('#EMessages').text();
-        if (emessage != '') {
-            toastr.error(emessage);
-        }
-    });
+
+
 </script>
+
+<style>
+    
+    .left_menu ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        font-size: 16px;
+        font-weight: normal;
+        @*font-family: 'Segoe UI Historic';*@
+        color:white;
+    }
+
+    .left_menu li {
+        float: left;
+    }
+        
+        .left_menu li a  {
+            display: block;
+            color: white;
+            font-size: 16px;
+           
+            font-weight: 6px;
+            text-align: center;
+            padding: 13px 20px;
+            text-decoration: none;
+          @*  font-family: 'Segoe UI Historic';*@
+        }
+     li a:hover {
+       
+        color: #0aff00;
+        font-weight: 600;
+       
+    }
+      
+        li .sub_menu {
+            display: none;
+            position: absolute;
+            background-color: #808080;
+            min-width: 140px;
+            z-index: 1;
+        }
+
+        li:hover .sub_menu {
+            display: inline-block;
+        }
+
+  
+    .sub_menu a {
+        color: black;
+        padding: 8px 16px;
+        text-decoration: none;
+        display: block;
+        text-align: left;
+    }
+
+       
+        
+  
+</style>

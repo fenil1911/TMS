@@ -76,7 +76,7 @@ namespace TMS.Data
                     roleRightsdata.FullRights = permission.FullRights;
                     roleRightsdata.AllowView = permission.AllowView;
                     roleRightsdata.AllowInsert = permission.AllowInsert;
-                   
+                    roleRightsdata.AllowUpdate = permission.AllowUpdate;
                     roleRightsdata.AllowDelete = permission.AllowDelete;
                 }
                 else
@@ -154,7 +154,7 @@ namespace TMS.Data
                     frm.AllowMenu = RoleRights.AllowMenu;
                     frm.AllowView = RoleRights.AllowView;
                     frm.AllowInsert = RoleRights.AllowInsert;
-                   
+                    frm.AllowUpdate = RoleRights.AllowUpdate;   
                     frm.AllowDelete = RoleRights.AllowDelete;
                     frm.UpdatedBy = UpdatedBy;
                     frm.UpdatedOn = DateTime.UtcNow;

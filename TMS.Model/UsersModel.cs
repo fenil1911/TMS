@@ -9,14 +9,11 @@ namespace TMS.Model
 {
     public class UsersModel
     {
-        public int Id { get; set; }
-       /* public string Type { get; set; }*/
-
         [Required]
         [Display(Name = "User Name")]
         // [Remote("CheckDuplicateUserName", "Users", HttpMethod = "Post", AdditionalFields = "UserId")]
         public string UserName { get; set; }
-       
+
         [Required]
         [RegularExpression(@"^[a-zA-Z ]+$", ErrorMessage = "Only Letters and Spaces are allowed")]
         public string Name { get; set; }
@@ -28,7 +25,6 @@ namespace TMS.Model
         public string EmailId { get; set; }
 
         public string Role { get; set; }
-        public int RoleId { get; set; }
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
         public int UpdatedBy { get; set; }
@@ -44,7 +40,6 @@ namespace TMS.Model
         [DataType(DataType.Password)]
         [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "Confirm password and password do not match")]
         public string ConfirmPassword { get; set; }
-        public List<MyDropdown> RoleDropdown { get; set; }
-
+        public int Id { get; set; }
     }
 }

@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Kendo.Mvc.UI;
+using Kendo.Mvc.Extensions;
 
 namespace TMS.Controllers
 {
@@ -16,8 +18,9 @@ namespace TMS.Controllers
         {
             _formsService = new FormsService();
         }
-        public ActionResult Index(int? page)
+        public ActionResult Index()
         {
+            ViewBag.ViewPermission = "TICKET";
             try
             {
 
@@ -25,15 +28,34 @@ namespace TMS.Controllers
                 {
                     return RedirectToAction("AccessDenied", "Base");
                 }
-                List<FormModel> FormsList = _formsService.GetAllForms();
-                return View(FormsList.ToPagedList(page ?? 1, 6));
+                
+                return View();
 
             }
             catch (Exception ex)
             {
 
                 throw ex;
-            }}
+            }
+        }
+        public ActionResult GetGridData([DataSourceRequest] DataSourceRequest request)
+        {
+            try
+            {
+
+
+
+                List<FormModel> FormsList = _formsService.GetAllForms();
+                DataSourceResult result = FormsList.ToDataSourceResult(request);
+                return Json(result, JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
         [HttpGet]
         public ActionResult Create(int? id)
         {
@@ -83,7 +105,8 @@ namespace TMS.Controllers
             {
 
                 throw ex;
-            }}
+            }
+        }
 
         [HttpPost]
         public ActionResult Create(FormModel model)
@@ -115,7 +138,8 @@ namespace TMS.Controllers
             {
 
                 throw ex;
-            }}
+            }
+        }
         private void BindDropdown(ref FormModel model)
         {
             BindParentForm(ref model);
@@ -139,7 +163,8 @@ namespace TMS.Controllers
             {
 
                 throw ex;
-            }}
+            }
+        }
         public JsonResult CheckDuplicateFormAccessCode(string FormAccessCode, int Id)
         {
             try

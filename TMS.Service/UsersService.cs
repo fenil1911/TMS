@@ -31,6 +31,14 @@ namespace TMS.Service
             var GetAlluser = usersProvider.GetAllUser1();
             return GetAlluser;
         }
+        public Users GetEmailById(string EmailId)
+        {
+            return usersProvider.GetEmailById(EmailId);
+        }
+        public void DeleteUser(int Id)
+        {
+            usersProvider.DeleteUser(Id);
+        }
 
     }
 }

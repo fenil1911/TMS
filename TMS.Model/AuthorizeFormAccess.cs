@@ -17,6 +17,10 @@ namespace TMS.Model
             FORMMASTER = 5,
             ROLE = 6,
             USER = 7,
+            TICKET =8,
+            ERRORLOG =9,
+            ACTIVITYLOG =10,
+            
         }
     }
 }

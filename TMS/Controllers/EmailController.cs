@@ -16,7 +16,7 @@ namespace TMS.Helper
 {
     public class EmailController : Controller
     {
-       
+
         public ActionResult Index()
         {
             return View();
@@ -66,7 +66,7 @@ namespace TMS.Helper
                 Smtp.UseDefaultCredentials = false;
                 Smtp.Credentials = NetCredential;
                 Smtp.EnableSsl = true;
-                
+
                 Smtp.Send(message);
 
                 return true;

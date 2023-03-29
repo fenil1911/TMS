@@ -12,6 +12,7 @@ namespace TMS.Model
         public int UserId { get; set; }
         [Required(ErrorMessage = "Email Id is required.")] 
         public string UserName { get; set; }
+        public string RoleCode { get; set; }
 
         [DataType(DataType.Password)]
         [Required(AllowEmptyStrings = false, ErrorMessage = "Password is required")]
