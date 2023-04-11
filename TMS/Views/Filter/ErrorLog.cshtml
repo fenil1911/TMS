@@ -2,71 +2,98 @@
 @{ Layout = "~/Views/Shared/_Layout.cshtml";
 
     @Scripts.Render("~/bundles/kendo") }
-<head>
+
+<div class="container-fluid">
 
 
+    <h2 style="margin-top: 80px; margin-bottom: 20px;MARGIN-LEFT: 5px; font-weight: bold ">Error Log</h2>
 
-
-</head>
-<h2 style="margin-top: 65px; margin-bottom: 3px;font-weight:bold ">Error Log</h2>
-<div class="container">
-
-    <div class="row">
+    <div class="row; white_box">
 
         @(Html.Kendo().Grid<TMS.Model.FilterModel.ErrorLog>()
              .Name("ErrorLog")
             .Scrollable(s => s.Height("auto"))
             .Columns(columns =>
             {
-                columns.Bound(p => p.Id).Title("Id");
                 columns.Bound(p => p.ControllerName).Title("Controller Name");
                 columns.Bound(p => p.ActionName).Title("Action Name");
                 columns.Bound(p => p.UserName).Title("Updated By");
-                columns.Bound(p => p.UpdatedOn).Title("Created On").Format("{0:dd/MM/yyyy}");
+                columns.Bound(p => p.UpdatedOn).Title("Created On").Format("{0:dd/MM/yyyy}").Filterable(false); ;
 
-                columns.Bound(p => p.Message)
-     .Title("Error")
-     .ClientTemplate("#=showError(data)#");
-
-
-
+                columns.Command(command => command.Custom("View Error").Click("showDetails")).Width(180).Title(  "Error Message" );
 
             })
-.HtmlAttributes(new { style = "" })
-    .Scrollable()
-    .Pageable(pageable => pageable
-         .Refresh(true)
-         .PageSizes(new int[] { 10, 20, 50 })
-         .PreviousNext(true)
-     )
-    .Sortable()
-    .Filterable(filter => filter
-                        .Mode(GridFilterMode.Row)
-                        .Extra(false)
-                    )
-        .DataSource(dataSource => dataSource
-        .Ajax()
-        .PageSize(10)
-        .Read(read => read.Action("IndexErrorLogGrid", "Filter")
-
-        )  )
-          )
+                .HtmlAttributes(new { style = "" })
+                .Scrollable()
+                .Pageable(pageable => pageable
+                .Refresh(true)
+                .PageSizes(new int[] { 10, 20, 50 })
+                .PreviousNext(true))
+                @*.Selectable(selectable => selectable.Mode(GridSelectionMode.Single))*@
+               @* .Events(events => events.Change("onSelectionChange"))*@
+                .Sortable()
+                .Filterable(filter => filter
+                .Mode(GridFilterMode.Row)
+                .Extra(false)
+                )
+                .DataSource(dataSource => dataSource
+                .Ajax()
+                .PageSize(10)
+                .Read(read => read.Action("IndexErrorLogGrid", "Filter")
+                )
+                )
+    )
+        @(Html.Kendo().Window().Name("Details")
+            .Title("Error Message")
+            .Visible(false)
+            .Modal(true)
+            .Draggable(true)
+            .Width(900)
+        )
     </div>
 </div>
-<script>
-function showError(data) {
-    return "<button onclick='openPopup(decodeURIComponent(\"" + encodeURIComponent(data.Message) + "\"))'>Error</button>";
+<script type="text/x-kendo-template" id="template">
+    <div id="details-container">
+        <dl>
+            <dt   style="  font-weight: 400;">  #= Message#</dt>
 
-      
-
-    }
-
-    function openPopup(data) {
-        var popup = window.open("", "My Popup", "width=400,height=300");
-       
-        popup.document.write("<p>" + data + "</p>");
-        popup.document.write("</body></html>");
-        popup.document.close();
-    }
-
+        </dl>
+    </div>
 </script>
+
+<script type="text/javascript">
+    var detailsTemplate;
+
+    $(document).ready(function () {
+        detailsTemplate = kendo.template($("#template").html());
+    });
+
+    function showDetails(e) {
+        e.preventDefault();
+
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var wnd = $("#Details").data("kendoWindow");
+
+        wnd.content(detailsTemplate(dataItem));
+        wnd.center().open();
+    }
+</script>
+
+<style type="text/css">
+    #details-container {
+        padding: 8px;
+    }
+
+        #details-container h2 {
+            margin: 0;
+        }
+
+        #details-container em {
+            color: #8c8c8c;
+        }
+
+        #details-container dt {
+            margin: 0;
+            display: inline;
+        }
+</style>

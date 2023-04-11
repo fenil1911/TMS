@@ -40,12 +40,12 @@ namespace TMS.Service
         }
         public IQueryable<TicketModel> GetAllTicketsAdmin(int pagesize, int page, IList<SortDescriptor> Sorts, string filters)
         {
-            var commonlookup = ticketProvider.GetAllTicketsAdmin(pagesize, page, Sorts, filters);
+            var commonlookup = ticketProvider.GetAllTicketsAdmin(pagesize, page, Sorts, filters).OrderByDescending(x => x.Id);
             return commonlookup;
         }
         public IQueryable<TicketModel> GetAllTickets(int pagesize, int page, IList<SortDescriptor> Sorts, string filters)
         {
-            var commonlookup = ticketProvider.GetAllTickets(pagesize, page, Sorts, filters);
+            var commonlookup = ticketProvider.GetAllTickets(pagesize, page, Sorts, filters).OrderByDescending(x =>x.Id);
             return commonlookup;
         }
         public int CreateTickets(TicketModel ticket, int CreatedBy)
@@ -54,6 +54,17 @@ namespace TMS.Service
         }
 
 
+        public List<TicketModel> GetAllStatus()
+        {
+            var index = ticketProvider.GetAllStatus();
+            return index;
+        }  
+
+        public List<TicketModel> GetAllStatususer()
+        {
+            var index = ticketProvider.GetAllStatususer();
+            return index;
+        }     
         public int CreateTicketStatus(TicketStatus ticket, int CreatedBy)
         {
             return ticketProvider.CreateTicketStatus(ticket, CreatedBy);
@@ -61,6 +72,10 @@ namespace TMS.Service
         public int CreateAttachment(TicketAttachment ticket, int CreatedBy)
         {
             return ticketProvider.CreateAttachment(ticket, CreatedBy);
+        }
+        public void EditAttachment(TicketAttachment ticket, int UpdatedBy)
+        {
+             ticketProvider.EditAttachment(ticket, UpdatedBy);
         }
 
         public List<MyDropdown> BindEmployee()
@@ -97,6 +112,39 @@ namespace TMS.Service
             var GetAllComment = ticketProvider.GetAllComment(Id);
             return GetAllComment;
         }
-     
+        public int TotalHigh()
+        {
+            return ticketProvider.TotalHigh();
+        }
+        public int TotalLow()
+        {
+            return ticketProvider.TotalLow();
+        }
+        public int TotalMedium()
+        {
+            return ticketProvider.TotalMedium();
+        }
+        public int TotalImmediate()
+        {
+            return ticketProvider.TotalImmediate();
+        }
+        public int TotalHighAdmin()
+        {
+            return ticketProvider.TotalHighAdmin();
+        }
+        public int TotalLowAdmin()
+        {
+            return ticketProvider.TotalLowAdmin();
+        }
+        public int TotalMediumAdmin()
+        {
+            return ticketProvider.TotalMediumAdmin();
+        }
+        public int TotalImmediateAdmin()
+        {
+            return ticketProvider.TotalImmediateAdmin();
+        }
+
+
     }
 }

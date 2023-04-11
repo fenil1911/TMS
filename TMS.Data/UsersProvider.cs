@@ -45,7 +45,7 @@ namespace TMS.Data
             var GetAllUserview = (from t1 in _db.Users
                                   join t2 in _db.webpages_UsersInRoles on t1.UserId equals t2.UserId
                                   join t3 in _db.webpages_Roles on t2.RoleId equals t3.RoleId
-                                  where t1.IsDeleted != true    
+                                  where t1.IsDeleted != true && t1.UserName != "admin"  
                                   select new UsersModel
                                   {
                                       UserName = t1.UserName,
@@ -74,6 +74,18 @@ namespace TMS.Data
 
                 _db.SaveChanges();
             }
+        }
+
+
+        public UsersModel UpdateCommonLookup(UsersModel model, int UpdatedBy)
+        {
+            var obj = GetUserById(model.Id);
+            obj.FirstName = model.Name;
+            obj.UserName = model.UserName;
+
+
+            _db.SaveChanges();
+            return model;
         }
     }
 }

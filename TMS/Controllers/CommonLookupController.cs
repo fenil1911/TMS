@@ -85,13 +85,21 @@ namespace TMS.Controllers
         {
             try
             {
+                
                 if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.COMMONLOOKUP.ToString(), AccessPermission.IsAdd))
                 {
                     return RedirectToAction("AccessDenied", "Base");
                 }
-                int CreatedBy = SessionHelper.UserId;
-             //   commonLookupService.CreateCommonLookup(model, CreatedBy);
-                return View();
+                if (ModelState.IsValid)
+                {
+                    int CreatedBy = SessionHelper.UserId;
+                    commonLookupService.CreateCommonLookup(model, CreatedBy);
+                    return View("Index");
+                }
+                else
+                {
+                    return PartialView("Create", model);
+                }
 
             }
             catch (Exception ex)
@@ -132,13 +140,14 @@ namespace TMS.Controllers
                 int UpdatedBy = SessionHelper.UserId;
                 if (ModelState.IsValid)
                 {
-                  //CommonLookupModel commonlookup_model = commonLookupService.UpdateCommonLookup(commonlookupmodel/*, UpdatedBy*/);
+                  CommonLookupModel commonlookup_model = commonLookupService.UpdateCommonLookup(commonlookupmodel, UpdatedBy);
                     TempData["Message"] = "Data Updated Successfully!!";
                     return RedirectToAction("Index");
                 }
                 else
                 {
-                    return View("Index");
+
+                    return PartialView("Edit");
                 }
             }
             catch (Exception ex)

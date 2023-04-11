@@ -85,8 +85,11 @@ namespace TMS.Data
 
         public List<FormModel> GetAllForms()
         {
-            var allForms = (from f in _db.FormMst
+            var allForms = (from f in _db.FormMst 
+                           
+                            
                             where f.IsDeleted == 0
+                            
                             select new FormModel
                             {
                                 Id = f.Id,
@@ -102,8 +105,10 @@ namespace TMS.Data
                                 FormAccessCode = f.FormAccessCode,
                                 IsActive = (bool)f.IsActive,
                                 IsDisplayMenu = f.IsDisplayMenu,
-                                ParentFormId = f.ParentFormId
-                            }).OrderByDescending(x => x.Id).ToList();
+                                ParentFormId =  f.ParentFormId,
+                                
+                                
+                             }).OrderByDescending(x => x.Id).ToList();
 
             return allForms;
         }
@@ -121,7 +126,8 @@ namespace TMS.Data
             {
 
                 FormMst model = _db.FormMst.Find(Id);
-                model.IsDeleted = 1;
+                _db.FormMst.Remove(model);
+               
 
                 _db.SaveChanges();
             }

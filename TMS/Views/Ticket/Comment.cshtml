@@ -31,20 +31,22 @@
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 <div>
                     <div class="form-group">
-                        @*  @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label col-md-2" })*@
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control" } })
+                       
+                        <div class="col-md-5">
+                            
+                            @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control",
+                           placeholder = "Comment" } })
                             @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
                         </div>
                     </div>
 
 
                     <div class="form-group col-md-1">
-                        <div style="float: right; display:inline-block;">
-                            <input class="btn btn-primary " style="margin-top: -1px; margin-left: 694px; margin-right: -42px;" name="submitButton" id="btnSave" value="Save" type="submit">
+                       
+                            <input class="btn btn-primary " style="margin-top: 0px; " name="submitButton" id="btnSave" value="Comment" type="submit">
                             
-                        </div>
-                        <div style="margin-left: 64px;">@Html.ActionLink("Back", "Index", null, new { @class = "btn btn-default" })</div>
+                        <label>&nbsp;</label>
+                        @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-default" })
                     </div>
                 </div>
             </div>
@@ -60,9 +62,7 @@
                 </tr>
             <thead>
                 <tr>
-                    <th style="background-color:#b1b1b133 ; class="productth">Comment</th>
-                    <th style="background-color:#b1b1b133; class="productth">CreatedBy</th>
-                    <th style="background-color:#b1b1b133; class="productth">CreatedOn</th>
+                   
                 </tr>
             </thead> </thead>
 
@@ -94,6 +94,7 @@
                 success: function () {
                     getTicketDetails();
                     getTicketComment();
+                    $("#Comment").val('');
                 },
                 error: function () {
                     alert("Error while inserting data");
@@ -118,13 +119,13 @@
                            + "<th>Ticket Name</th>" +  "<td>" + data.TicketName + "</td>"+ "</tr>"
 
                         +"<tr>"
-                          + "<th>PriorityName </th>" + "<td>" + data.PriorityName + "</td>" + "</tr>"
+                          + "<th>Priority  </th>" + "<td>" + data.PriorityName + "</td>" + "</tr>"
 
                         +"<tr>"
-                          + "<th>StatusName</th>" + "<td>" + data.StatusName + "</td>" + "</tr>"
+                          + "<th>Status </th>" + "<td>" + data.StatusName + "</td>" + "</tr>"
 
                         +"<tr>"
-                         + "<th>AssignedTo </th>" + "<td>" + data.AssignedTo + "</td>" + "</tr>"
+                    + "<th>Assigned To </th>" + "<td>" + data.AssignedTo + "</td>" + "</tr>"
 
                          +"<tr>"
                     + "<th>Type Name</th>" + "<td>" + data.TypeName + "</td>" + "</tr>"
@@ -161,25 +162,29 @@
 
                 $.each(data, function (i, item) {
                     var date = new Date(parseInt(item.CreatedOn.substr(6)));
-                    var dateString = date.toISOString(); // Convert to ISO 8601 format
-                    var timeAgoString = timeago.format(dateString); // Format as time ago string
-                    var timeagoresult = "<td class='prtoducttd'>" + timeAgoString + "</td>";
-
+                    var dateString = date.toISOString();
+                    var timeAgoString = timeago.format(dateString);
                     var rows = "<tr>"
-                        + "<td class='prtoducttd'>" + item.Comment + "</td>"
-                        + "<td class='prtoducttd'>" + item.UserName + "</td>"
-                        + timeagoresult
+                        + "<td class='prtoducttd'>"
 
+                        + "<div class='username-timeago'>"
 
+                        + "<span class='username'>" + item.UserName + "</span>"
+                        + "<span class='timeago'> (" + timeAgoString + ")</span>"
 
+                        + "</div>"
+
+                        + "<div class='commentarea'>" + item.Comment + "</div>"
+
+                        + "</td>"
                         + "</tr>";
                     $('#tblTicketComment tbody').append(rows);
-
                 });
+                
             },
             error: function (ex) {
 
-            }
+            }   
         });
         return false;
     }
@@ -188,3 +193,37 @@
 <div style="margin-left:200px">
 
 </div>
+
+<style>
+    .prtoducttd {
+        width: 540px;
+        padding: 15px 25px;
+        font-size: 16px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .username-timeago {
+        display: flex;
+       // justify-content: space-between;
+        align-items: center;
+    }
+
+    .username {
+        font-size: 16px;
+        color: #8d8741;
+    }
+
+    .timeago {
+        margin-left:5px;
+        font-size: 12px;
+        color: #5f5f5f;
+    }
+
+  .commentarea {
+  word-wrap: break-word;
+  @*max-width: 300px; /* replace with the desired maximum width */*@
+}
+
+</style>
+

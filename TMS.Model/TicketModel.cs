@@ -11,12 +11,13 @@ namespace TMS.Model
     {
         public int Id { get; set; }
        [Required]
+        
         public string TicketName { get; set; }
         //[Display(Name = "Type")]
         public int TypeId { get; set; }
         public string TypeName { get; set; }
         public string Type { get; set; }
-        [Required]
+        
         public string DescriptionData { get; set; }
         public int PriorityId { get; set; }
         public string PriorityName { get; set; }
@@ -24,6 +25,7 @@ namespace TMS.Model
         public string StatusName { get; set; }
         public int AssignedTo { get; set; }
         public string AssignedToName { get; set; }
+        public string CreatedToName { get; set; }
         public DateTime CreatedOn { get; set; }
         public string ImageName { get; set; }
         public List<MyDropdown> StatusDropdown { get; set; }
@@ -33,5 +35,7 @@ namespace TMS.Model
         public DateTime UpdatedOn { get; set; }
         public TicketCommentViewModel TicketComment { get; set; }
         public int count { get; set; }
+       
+
     }
 }

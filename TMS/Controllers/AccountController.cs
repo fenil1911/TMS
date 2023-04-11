@@ -14,6 +14,17 @@ using TMS.Model.General;
 using static TMS.Model.AccountModel;
 
 
+using System.Collections.Generic;
+using System.Threading;
+
+
+using System.Configuration;
+using System.Net.Mail;
+using System.Net;
+
+
+
+
 namespace TMS.Controllers
 {
     public class AccountController : Controller
@@ -64,7 +75,7 @@ namespace TMS.Controllers
                     }
                     else
                     {
-                        
+
                         SessionHelper.UserId = userID;
                         //SessionHelper.RoleCode = Roles.GetRolesForUser(model.RoleCode).FirstOrDefault();
                         SessionHelper.RoleName = rolecodestring;
@@ -141,7 +152,8 @@ namespace TMS.Controllers
                     bool isUserExists = WebSecurity.UserExists(registerModel.UserName);
                     if (isUserExists)
                     {
-                        ModelState.AddModelError("UserName", "");
+                        ModelState.AddModelError("UserName", "The username already exists.");
+
                     }
                     else
                     {
@@ -153,8 +165,8 @@ namespace TMS.Controllers
                             CreatedOn = DateTime.Now,
                             IsActive = registerModel.IsActive,
                             IsDeleted = registerModel.IsDeleted
-                           
-                            
+
+
                         });
                         Roles.AddUserToRole(registerModel.UserName, registerModel.Role);
                         return RedirectToAction("Index", "Dashboard");
@@ -171,9 +183,9 @@ namespace TMS.Controllers
             {
                 throw ex;
             }
-            registerModel.RoleDropdown = _roleService.GetAllRoles()
-                .Select(x => new MyDropdown() { Key = x.Name, name = x.Name }).ToList();
-            return View();
+
+            return View("Register", registerModel);
+
         }
         [HttpGet]
         [Authorize]
@@ -202,13 +214,89 @@ namespace TMS.Controllers
                     }
                 }
             }
+
             catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
             return View();
         }
 
+        [HttpGet]
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult ForgotPassword(string EmailId)
+        {
+            /* string message = "";
+             bool status = false;*/
+
+            var account = _db.Users.Where(email => email.EmailId == EmailId).FirstOrDefault();
+            if (account != null)
+            {
+                string resetCode = Guid.NewGuid().ToString();
+               // SendVerificationLinkEmail(account.EmailId, resetCode, "ResetPassword");
+                //account.ResetPasswordCode = resetCode;
+                //This line I have added here to avoid confirm password not match issue , as we had added a confirm password property 
+                //in our model class in part 1
+                _db.Configuration.ValidateOnSaveEnabled = false;
+                _db.SaveChanges();
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+
+            }
+        }
+        public void SendVerificationLinkEmail(string emailID, string activationCode, string emailFor = "VerifyAccount")
+        {
+            var verifyUrl = "/Account/" + emailFor + "/" + activationCode;
+            var link = Request.Url.AbsoluteUri.Replace(Request.Url.PathAndQuery, verifyUrl);
+
+            var fromEmail = new MailAddress("xyz@gmail.com", "TMS");//change with your gmail id
+            var toEmail = new MailAddress(emailID);
+            var fromEmailPassword = "yourpassword@123"; // Replace with actual password
+
+            string subject = "";
+            string body = "";
+            if (emailFor == "VerifyAccount")
+            {
+                subject = "Your account is successfully created!";
+                body = "<br/><br/>We are excited to tell you that your Dotnet Awesome account is" +
+                    " successfully created. Please click on the below link to verify your account" +
+                    " <br/><br/><a href='" + link + "'>" + link + "</a> ";
+            }
+            else if (emailFor == "ResetPassword")
+            {
+                subject = "Reset Password";
+                body = "Hi,<br/>  <br/>We got request for reset your account password. Please click on the below link to reset your password" +
+                    "<br/><br/><a href=" + link + ">Reset Password link</a>";
+            }
+
+
+            var smtp = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromEmail.Address, fromEmailPassword)
+            };
+
+            using (var message = new MailMessage(fromEmail, toEmail)
+            {
+                Subject = subject,
+                Body = body,
+                IsBodyHtml = true
+            })
+                smtp.Send(message);
+        }
+
     }
-}
+
+    }
 

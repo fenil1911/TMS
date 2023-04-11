@@ -23,11 +23,16 @@ namespace TMS.Data
             var alltickets = (from t in _db.Tickets
                               join c in _db.CommonLookup on
                               t.StatusId equals c.Id
+
                               join c1 in _db.CommonLookup on
                               t.PriorityId equals c1.Id
+
                               join c2 in _db.CommonLookup on
                               t.TypeId equals c2.Id
-                              
+
+                              join c4 in _db.Users on
+                              t.CreatedBy equals c4.UserId
+
                               join a in _db.TicketAttachment
                               on t.Id equals a.TicketId into a
                               from ta in a.DefaultIfEmpty()
@@ -37,7 +42,7 @@ namespace TMS.Data
                                   Id = t.Id,
                                   TicketName = t.TicketName,
                                   AssignedTo = t.AssignedTo,
-                                  
+                                  CreatedToName = c4.UserName,
                                   TypeName = c2.Name,
                                   DescriptionData = t.DescriptionData,
                                   StatusName = c.Name,
@@ -47,99 +52,79 @@ namespace TMS.Data
                                   StatusId = c.Id,
                                   PriorityId = c1.Id,
                                   TypeId = c2.Id,
-
                               }).FirstOrDefault();
             return alltickets;
         }
-      
-       
-        public IQueryable<TicketModel> GetAllTickets(int pagesize, int page, IList<SortDescriptor> Sorts, string filters)
-        {
-            //var GetCount = _db.Tickets.Count();
 
+
+        public IQueryable<TicketModel> GetAllTickets(int pagesize, int page, IList<SortDescriptor> Sorts, string filters)
+        { 
+          /*  var GetCount = _db.Tickets.Count();*/
             var alltickets = (from t in _db.Tickets
                               join c in _db.CommonLookup on
                               t.StatusId equals c.Id
-
                               join c1 in _db.CommonLookup on
                               t.PriorityId equals c1.Id
-
                               join c2 in _db.CommonLookup on
                               t.TypeId equals c2.Id
-
                               join c3 in _db.Users on
                               t.AssignedTo equals c3.UserId
-
-
+                              join c4 in _db.Users on
+                              t.CreatedBy equals c4.UserId
                               join a in _db.TicketAttachment
                               on t.Id equals a.TicketId into a
                               from ta in a.DefaultIfEmpty()
-
-                              
-                                where (t.IsDeleted != 1 &&
-                                t.AssignedTo == SessionHelper.UserId 
-                                && (filters == null || t.TicketName.Contains(filters) || t.DescriptionData.Contains(filters) ||
-                                  c1.Name.Contains(filters) || c.Name.Contains(filters) || c2.Name.Contains(filters)))
-                               select new TicketModel
+                              where (t.IsDeleted != 1 &&
+                              t.AssignedTo == SessionHelper.UserId
+                              && (filters == null || t.TicketName.Contains(filters) || t.DescriptionData.Contains(filters) ||
+                                c1.Name.Contains(filters) || c.Name.Contains(filters) || c2.Name.Contains(filters)))
+                              select new TicketModel
                               {
-                                    Id = t.Id,
+                                  Id = t.Id,
                                   TicketName = t.TicketName,
                                   AssignedTo = t.AssignedTo,
                                   AssignedToName = c3.UserName,
+                                  CreatedToName = c4.UserName,
                                   TypeName = c2.Name,
                                   DescriptionData = t.DescriptionData,
                                   StatusName = c.Name,
                                   PriorityName = c1.Name,
-
                                   CreatedOn = (DateTime)t.CreatedOn,
                                   ImageName = ta.Filename,
-                              }).OrderBy(x => x.Id)
+                              }).OrderByDescending(x => x.CreatedOn)
                                          .Skip((page - 1) * pagesize)
                                          .Take(pagesize).AsQueryable();
-                            
             return alltickets;
-
-
-          
         }
-        
         public IQueryable<TicketModel> GetAllTicketsAdmin(int pagesize, int page, IList<SortDescriptor> Sorts, string filters)
         {
-            var GetCount = _db.Tickets.Count();
-            if (Sorts.Any())
+            var GetCount = _db.Tickets.Count(X => X.IsDeleted != 1);
+                if (Sorts.Any())
             {
-                var alltickets = (from t in _db.Tickets
+                var allticketsadmin = (from t in _db.Tickets
                                   join c in _db.CommonLookup on
                                   t.StatusId equals c.Id
-
                                   join c1 in _db.CommonLookup on
                                   t.PriorityId equals c1.Id
-
                                   join c2 in _db.CommonLookup on
                                   t.TypeId equals c2.Id
-
                                   join c3 in _db.Users on
                                   t.AssignedTo equals c3.UserId
-
-
+                                  join c4 in _db.Users on
+                                  t.CreatedBy equals c4.UserId
                                   join a in _db.TicketAttachment
                                   on t.Id equals a.TicketId into a
                                   from ta in a.DefaultIfEmpty()
-
-                                  where (t.IsDeleted != 1 &&  
-                                  
+                                  where (t.IsDeleted != 1 &&
                                   filters != null && t.TicketName.Contains(filters) || t.DescriptionData.Contains(filters) ||
                                   c1.Name.Contains(filters) || c.Name.Contains(filters) || c3.UserName.Contains(filters) || c2.Name.Contains(filters)
-
-
-
-                                     )
+                                                                       )
                                   select new TicketModel
                                   {
                                       Id = t.Id,
                                       TicketName = t.TicketName,
-
                                       AssignedToName = c3.UserName,
+                                      CreatedToName = c4.UserName,
                                       TypeName = c2.Name,
                                       DescriptionData = t.DescriptionData,
                                       StatusName = c.Name,
@@ -147,42 +132,36 @@ namespace TMS.Data
                                       CreatedOn = (DateTime)t.CreatedOn,
                                       ImageName = ta.Filename,
                                       count = GetCount
-                                  }).AsQueryable();
+                                  }).OrderByDescending(x => x.CreatedOn).AsQueryable();
 
-                return alltickets;
+                return allticketsadmin;
             }
             else
             {
-                var alltickets = (from t in _db.Tickets
+                var allticketsadmin = (from t in _db.Tickets
                                   join c in _db.CommonLookup on
                                   t.StatusId equals c.Id
-
                                   join c1 in _db.CommonLookup on
                                   t.PriorityId equals c1.Id
-
                                   join c2 in _db.CommonLookup on
                                   t.TypeId equals c2.Id
-
                                   join c3 in _db.Users on
                                   t.AssignedTo equals c3.UserId
-
-
+                                  join c4 in _db.Users on
+                              t.CreatedBy equals c4.UserId
                                   join a in _db.TicketAttachment
                                   on t.Id equals a.TicketId into a
                                   from ta in a.DefaultIfEmpty()
-
-                                  where (t.IsDeleted != 1 && filters != null && t.TicketName.Contains(filters) || t.DescriptionData.Contains(filters) ||
-                                  c1.Name.Contains(filters) || c.Name.Contains(filters) || c3.UserName.Contains(filters) || c2.Name.Contains(filters)
-
-
-
-                                     )
+                                  where (t.IsDeleted == 0 &&
+                                    t.TicketName.Contains(filters) || t.DescriptionData.Contains(filters) ||
+                                   c1.Name.Contains(filters) || c.Name.Contains(filters) || c3.UserName.Contains(filters) || c2.Name.Contains(filters)
+                                                                        )
                                   select new TicketModel
                                   {
                                       Id = t.Id,
                                       TicketName = t.TicketName,
-
                                       AssignedToName = c3.UserName,
+                                      CreatedToName = c4.UserName,
                                       TypeName = c2.Name,
                                       DescriptionData = t.DescriptionData,
                                       StatusName = c.Name,
@@ -190,11 +169,11 @@ namespace TMS.Data
                                       CreatedOn = (DateTime)t.CreatedOn,
                                       ImageName = ta.Filename,
                                       count = GetCount
-                                  }).OrderBy(x => x.Id)
+                                  }).OrderByDescending(x => x.CreatedOn)
                                       .Skip((page - 1) * pagesize)
                                       .Take(pagesize).AsQueryable();
 
-                return alltickets;
+                return allticketsadmin;
 
             }
         }
@@ -273,15 +252,47 @@ namespace TMS.Data
             _db.SaveChanges();
             return model1.Id;
         }
+        public void EditAttachment(TicketAttachment model, int UpdatedBy)
+        {
+            var attachmentId = (from fa in _db.TicketAttachment
+                                where fa.TicketId == model.TicketId
+                                select fa.Id).FirstOrDefault();
+
+            if (attachmentId == 0)
+            {
+                TicketAttachment _ticket = new TicketAttachment()
+                {
+                    UpdatedBy = model.UpdatedBy,
+
+                };
+
+                _db.TicketAttachment.Add(model);
+                _db.SaveChanges();
+
+            }
+            else
+            {
+                TicketAttachment attachment = _db.TicketAttachment.Find(attachmentId);
+
+
+                attachment.Filename = model.Filename;
+
+                attachment.UpdatedBy = UpdatedBy;
+                attachment.UpdatedOn = DateTime.Now;
+
+                _db.SaveChanges();
+            }
+           
+        }
+
+
         public void DeleteTicket(int Id)
         {
             var data = GetTicketsByUpdateId(Id);
             if (data != null)
             {
-
                 Tickets model = _db.Tickets.Find(Id);
                 model.IsDeleted = 1;
-
                 _db.SaveChanges();
             }
         }
@@ -300,6 +311,82 @@ namespace TMS.Data
                                  .ToList();
             return GetAllComment;
         }
+
+        public int TotalHigh()
+        {
+            var high =  _db.Tickets.Where(x => x.PriorityId == 11 && x.IsDeleted != 1 && x.AssignedTo == SessionHelper.UserId).Count();
+            return high;
+        }
+        public int TotalLow()
+        {
+            return _db.Tickets.Where(x => x.PriorityId == 12 && x.IsDeleted != 1 && x.AssignedTo == SessionHelper.UserId).Count();
+
+        }
+        public int TotalMedium()
+        {
+            return _db.Tickets.Where(x => x.PriorityId == 13 && x.IsDeleted != 1 && x.AssignedTo == SessionHelper.UserId) .Count();
+
+        }
+        public int TotalImmediate()
+        {
+            return _db.Tickets.Where(x => x.PriorityId == 14 && x.IsDeleted != 1 && x.AssignedTo == SessionHelper.UserId).Count();
+
+        }
+
+        //admin dashboard
+        public int TotalHighAdmin()
+        {
+            var high = _db.Tickets.Where(x => x.PriorityId == 11 && x.IsDeleted != 1 ).Count();
+            return high;
+        }
+        public int TotalLowAdmin()
+        {
+            return _db.Tickets.Where(x => x.PriorityId == 12 && x.IsDeleted != 1 ).Count();
+
+        }
+        public int TotalMediumAdmin()
+        {
+            return _db.Tickets.Where(x => x.PriorityId == 13 && x.IsDeleted != 1 ).Count();
+
+        }
+        public int TotalImmediateAdmin()
+        {
+            return _db.Tickets.Where(x => x.PriorityId == 14 && x.IsDeleted != 1 ).Count();
+
+        }     
+       /* public List<TicketModel> GetAllStatus()
+        {
+            var status = (from t2 in _db.Tickets
+                          join a in _db.CommonLookup
+                          on t2.StatusId equals a.Id into a
+                          from ta in a.DefaultIfEmpty()
+                          select new TicketModel { StatusId = t2.StatusId, StatusName = ta.Name }).ToList();
+            return status;             
+        }*/
+       
+        public List<TicketModel> GetAllStatus()
+        {
+            var statusCounts = (from t in _db.Tickets   
+                                join s in _db.CommonLookup
+                                on t.StatusId equals s.Id
+                                where t.IsDeleted != 1
+                                group s by s.Name into g
+                                select new TicketModel { StatusName = g.Key, count = g.Count() }).ToList();
+            return statusCounts;
+        }
+        public List<TicketModel> GetAllStatususer()
+        {
+            var statusCounts = (from t in _db.Tickets
+                                join s in _db.CommonLookup
+                                on t.StatusId equals s.Id
+                                where (t.AssignedTo == SessionHelper.UserId  && t.IsDeleted != 1) 
+                                group s by s.Name into g
+                                select new TicketModel { StatusName = g.Key, count = g.Count() }).ToList();
+            return statusCounts;
+        }
+
+
+
     }
 
-}
+}              

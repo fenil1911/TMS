@@ -1,15 +1,22 @@
 ﻿@using Kendo.Mvc.UI
+@using TMS.Model
 @{ Layout = "~/Views/Shared/_Layout.cshtml";
 
     @Scripts.Render("~/bundles/kendo") }
+<div class="container-fluid">
+   
 
-<h2 style="margin-top: 65px; margin-bottom: -15px; MARGIN-LEFT: 3px;  font-weight: bold " ">Users</h2>
+    <div class="users-container @if (!TMS.Model.AccessPermission.Add) { <text>no-create-button</text> }" style="margin-top:80px ;margin-bottom:20px">
+        <h2 style="font-weight: bold; @if (!TMS.Model.AccessPermission.Add) { <text>margin-top: 0 ; margin-bottom:20px;</text> }">Users</h2>
+        @if (TMS.Model.AccessPermission.Add)
+        {
+            @Html.ActionLink("Create New", "Register", "Account", null, new { @class = "btn btn-primary primaryCreateNew" })
+        }
+    </div>
+    <div class="">
+        <div class="row  ; white_box">
 
-@Html.ActionLink("Create New", "Register", "Account", null, new { @class = "btn btn-primary primaryCreateNew" })
-<div class="container">
-    <div class="row">
-
-        @(Html.Kendo().Grid<TMS.Model.UsersModel>()
+            @(Html.Kendo().Grid<TMS.Model.UsersModel>()
              .Name("Users")
             .Scrollable(s => s.Height("auto"))
             //.AutoBind()
@@ -21,15 +28,33 @@
                 columns.Bound(p => p.EmailId).Title("Email").Width(190);
                 columns.Bound(p => p.Role).Title("Role").Width(150);
 
+                columns.Bound(p => p.IsActive)
+                       .Title("Active" )
+                       .Width(120)
+                       .ClientTemplate(
+    "# if (IsActive) { #" +
+        "<div class=\"img-circle\" style=\"display: flex; justify-content: center; align-items: center;\"><img src=\"/Content/images/check.png\" alt=\"editok\" width=\"18\"></div>" +
+    "# } else { #" +
+        "<div class=\"\" style=\"display: flex; justify-content: center; align-items: center;\"><img src=\"/Content/images/uncheck.png\" alt=\"edit\" width=\"18\"></div>" +
+    "# } #"
+);
 
-                columns.Bound(p => p.IsActive).Title("Is Active").Width(120);
                 columns.Bound(p => p.CreatedOn).Title("Created On").Format("{0:dd/MM/yyyy}").Width(100);
 
 
+           
+
+
                 columns.Bound(p => p.Id).ClientTemplate(
-                               "<a href='" + Url.Action("Delete", "Users") + "/#=Id#' onclick='return confirm(\"Are you sure you want to delete this item?\")'>  Delete </a>").Width(150).Title("Action");
 
+                    "#if ('" + TMS.Model.AccessPermission.Edit + "'=='True') {#"
+                    + " <a href='" + Url.Action("Edit", "Users") + "/#=Id#'>  Edit  </a>"
+                    + "#}#"
+                    + "#if ('" + TMS.Model.AccessPermission.Delete + "'=='True') {#"
+                    + " | <a href='" + Url.Action("Delete", "Users") + "/#=Id#' onclick='return confirm(\"Are you sure you want to delete this item?\")'>  Delete </a>"
 
+                    + "#}#"
+                    ).Width(200).Title("Action").Filterable(false);
 
             })
     .HtmlAttributes(new { style = "" })
@@ -39,13 +64,13 @@
         .PageSizes(true)
         )
     .Sortable()
-    .Filterable()
+ 
      .DataSource(dataSource => dataSource
         .Ajax()
         .PageSize(10)
                 .Read(read => read.Action("GetGridData", "Users"))))
-        
+
+        </div>
+
     </div>
-
 </div>
-

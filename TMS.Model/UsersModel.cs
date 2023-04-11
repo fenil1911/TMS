@@ -11,7 +11,7 @@ namespace TMS.Model
     {
         [Required]
         [Display(Name = "User Name")]
-        // [Remote("CheckDuplicateUserName", "Users", HttpMethod = "Post", AdditionalFields = "UserId")]
+        [Remote("CheckDuplicateUserName", "Users", HttpMethod = "Post", AdditionalFields = "UserId")]
         public string UserName { get; set; }
 
         [Required]

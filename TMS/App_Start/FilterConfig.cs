@@ -11,8 +11,8 @@ namespace TMS
         {
             filters.Add(new AuthorizeAttribute());
 /*           filters.Add(new ExceptionHandlerAttribute());
-*/            filters.Add(new TraceFilterAttribute());
-            /*filters.Add(new PermissionFilter());*/
+*/           /* filters.Add(new TraceFilterAttribute());*/
+        
 
         }
     }

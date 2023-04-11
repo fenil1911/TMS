@@ -17,9 +17,9 @@ namespace TMS.Service
             usersProvider = new UsersProvider();
         }
 
-        public Users GetUserById(int UserId)
+        public Users GetUserById(int Id)
         {
-            return usersProvider.GetUserById(UserId);
+            return usersProvider.GetUserById(Id);
         }
         public List<webpages_RolesModel> GetDropdownBykey3(string key)
         {
@@ -39,6 +39,9 @@ namespace TMS.Service
         {
             usersProvider.DeleteUser(Id);
         }
-
+        public UsersModel UpdateCommonLookup(UsersModel model, int UpdatedBy)
+        {
+            return usersProvider.UpdateCommonLookup(model, UpdatedBy);
+        }
     }
 }

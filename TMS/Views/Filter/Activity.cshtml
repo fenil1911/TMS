@@ -3,21 +3,21 @@
 
     @Scripts.Render("~/bundles/kendo") }
 
+<div class="container-fluid">
 
 
-<h2 style="margin-top: 65px; margin-bottom: 3px; MARGIN-LEFT: -49px;font-weight:bold ">Activity Log</h2>
+    <h2 style="margin-top: 80px; margin-bottom: 20px;MARGIN-LEFT: 5px; font-weight: bold ">Activity Log</h2>
 
-<div class="container">
-    <div class="row">
+        <div class="row; white_box">
 
-        @(Html.Kendo().Grid<TMS.Model.FilterModel.ActivityLog>()
+            @(Html.Kendo().Grid<TMS.Model.FilterModel.ActivityLog>()
              .Name("EmpGrid")
             .Scrollable(s => s.Height("auto"))
             //.AutoBind()
 
             .Columns(columns =>
             {
-                columns.Bound(p => p.Id).Title("Id");
+
                 columns.Bound(p => p.ControllerName).Title("Controller Name");
                 columns.Bound(p => p.ActionName).Title("Action Name");
                 columns.Bound(p => p.BrowserName).Title("Browser Name");
@@ -26,7 +26,7 @@
                 columns.Bound(p => p.UserName).Title("User");
 
 
-                columns.Bound(p => p.CreatedOn).Title("Created On").Format("{0:dd/MM/yyyy}");
+                columns.Bound(p => p.CreatedOn).Title("Created On").Format("{0:dd/MM/yyyy}").Filterable(false); ;
 
 
 
@@ -52,20 +52,15 @@
 
           )
           )
+        </div>
+
     </div>
+   
+   
+    <script>
+        //$(document).ready(function () {
+        //    $('#EmpGrid').data('kendoGrid').dataSource.read();
+        //    $('#EmpGrid').data('kendoGrid').refresh();
 
-</div>
-<style>
-    .k-grid {
-        /* set the desired height */
-        width: 110%;
-        margin: -1px -53px;
-    }
-</style>
-<script>
-    //$(document).ready(function () {
-    //    $('#EmpGrid').data('kendoGrid').dataSource.read();
-    //    $('#EmpGrid').data('kendoGrid').refresh();
-
-    //});
-</script>
+        //});
+    </script>

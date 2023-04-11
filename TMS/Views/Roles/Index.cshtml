@@ -3,11 +3,13 @@
 
     @Scripts.Render("~/bundles/kendo") }
 
-<br />
 
-<h2 style="margin-top: 65px; margin-bottom: 3px; MARGIN-LEFT: -2px;font-weight:bold " ">Roles</h2>
-<div class="container">
-    <div class="row">
+<div class="container-fluid">
+
+
+    <h2 style="margin-top: 80px; margin-bottom: 20px;MARGIN-LEFT: 5px; font-weight: bold ">Roles</h2>
+
+    <div class="row; white_box">
 
         @(Html.Kendo().Grid<TMS.Model.RolesModel>()
              .Name("EmpGrid")
@@ -16,12 +18,21 @@
 
             .Columns(columns =>
             {
-                columns.Bound(p => p.Id).Title("Id").Width(150);
+
 
                 columns.Bound(p => p.Name).Title("Name").Width(150);
                 columns.Bound(p => p.RoleCode).Title("Role Code").Width(150);
 
-                columns.Bound(p => p.IsActive).Title("Is Active").Width(120);
+                columns.Bound(p => p.IsActive)
+                    .Title("Active")
+                    .Width(120)
+                    .ClientTemplate(
+    "# if (IsActive) { #" +
+        "<div class=\"img-circle\" style=\"display: flex; justify-content: center; align-items: center;\"><img src=\"/Content/images/check.png\" alt=\"editok\" width=\"18\"></div>" +
+    "# } else { #" +
+        "<div class=\"\" style=\"display: flex; justify-content: center; align-items: center;\"><img src=\"/Content/images/uncheck.png\" alt=\"edit\" width=\"18\"></div>" +
+    "# } #"
+);
 
 
                 columns.Bound(p => p.Id).ClientTemplate(
@@ -35,7 +46,7 @@
         .PageSizes(true)
         )
     .Sortable()
-    .Filterable()
+ 
     .DataSource(dataSource => dataSource
         .Ajax()
         .PageSize(10)

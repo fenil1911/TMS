@@ -9,26 +9,26 @@ namespace TMS.Model
 {
     public class CommonLookupModel
     {
-        [ScaffoldColumn(false)]
+       
         public int Id { get; set; }
         [Required]
         [Display(Name="Type")]
+        [RegularExpression("^[A-Za-z]{1,10}$")]
         public string Type { get; set; }
 
-      
-        [RegularExpression(@"[A-Z]{1,50}$", ErrorMessage = "Only uppercase Characters are allowed.")]
+
+        [RegularExpression("^[A-Z]{1,10}$")]
         [Display(Name = "Code")]
         [Required]
         public string Code { get; set; }
 
 
+        [RegularExpression("^[A-Za-z]{1,10}$")]
         [Required(ErrorMessage ="Name is Required")]
         [Display(Name = "Name")]
         public string Name { get; set; }
 
-
-        [Required]
-        
+     
         
         [Display(Name = "DisplayOrder")]
         public int DisplayOrder { get; set; }

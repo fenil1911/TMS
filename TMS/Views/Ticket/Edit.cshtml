@@ -5,87 +5,105 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
-<br />
-<br />
-<h2>Edit</h2>
 
-@using (Html.BeginForm("Edit", "Ticket", FormMethod.Post, new { encType = "multipart/form-data" }))
-{
-    @Html.AntiForgeryToken()
 
-<div class="form-horizontal">
-    <h4>TicketModel</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.Id)
-    <div class="form-group">
-        @Html.LabelFor(model => model.TicketName, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.TicketName, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.TicketName, "", new { @class = "text-danger" })
-        </div>
-    </div>
+<div class="white_box" style="margin-top: 80px;">
+    <div class="container-fluid">
+        @using (Html.BeginForm("Edit", "Ticket", FormMethod.Post, new { encType = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.TypeId, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownListFor(model => model.TypeId,
-             new SelectList(Model.TypeDropdown, "Id", "Name", Model.TypeId), "All Type", new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.TypeId, "", new { @class = "text-danger" })
-        </div>
-    </div>
+            <div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.DescriptionData, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.DescriptionData, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.DescriptionData, "", new { @class = "text-danger" })
-        </div>
-    </div>
+                <h2 style="margin: 0px 5px; font-weight:bold; color:#fe6601">Edit Ticket</h2>
+            </div>
+            <div class="validationMessage" style="background-color: #fff ">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Id)
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label labelform">Ticket Name<strong>*</strong></label>
+                        @Html.EditorFor(model => model.TicketName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.TicketName, "", new { @class = "text-danger" })
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.PriorityId, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownListFor(model => model.PriorityId,
-             new SelectList(Model.PriorityDropdown, "Id", "Name", Model.PriorityId), "Priority", new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.PriorityId, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.StatusId, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownListFor(model => model.StatusId,
-                new SelectList(Model.StatusDropdown, "Id", "Name", Model.StatusId), "All Status", new { @class = "form-control" })
-            @*@Html.EditorFor(model => model.StatusId, new { htmlAttributes = new { @class = "form-control" } })*@
-            @Html.ValidationMessageFor(model => model.StatusId, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.AssignedTo, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownListFor(model => model.AssignedTo,
-                new SelectList(Model.AssignedDropdown, "Id", "Name", Model.AssignedTo), "All Status", new { @class = "form-control" })
+                    </div>
 
-            @Html.ValidationMessageFor(model => model.AssignedTo, "", new { @class = "text-danger" })
-        </div>
-    </div>
+                    <div class="col-md-6">
+                        <label class="form-label labelform">Assigned<strong>*</strong></label>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.ImageName, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.ValidationMessageFor(model => model.ImageName, "", new { @class = "text-danger" })
-            <input type="file" id="imgfile" name="imgfile" class="form-control" />
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-primary" />
-        </div>
-    </div>
+                        @Html.DropDownListFor(model => model.AssignedTo,
+                         new SelectList(Model.AssignedDropdown, "Id", "Name", Model.AssignedTo), "Assigned To", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.AssignedTo, "", new { @class = "text-danger" })
 
-</div>
-}
+                    </div>
 
-<div>
-    @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-default" })
-</div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label labelform">Type<strong>*</strong></label>
+
+                        @Html.DropDownListFor(model => model.TypeId,
+                         new SelectList(Model.TypeDropdown, "Id", "Name", Model.TypeId), "All Type", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.TypeId, "", new { @class = "text-danger" })
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label labelform">Priority<strong>*</strong></label>
+
+                        @Html.DropDownListFor(model => model.PriorityId,
+                         new SelectList(Model.PriorityDropdown, "Id", "Name", Model.PriorityId), "Priority", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.PriorityId, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label labelform">Status<strong>*</strong></label>
+
+                        @Html.DropDownListFor(model => model.StatusId,
+                         new SelectList(Model.StatusDropdown, "Id", "Name", Model.StatusId), "Status", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.StatusId, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label labelform">Image</label>
+
+                        @Html.ValidationMessageFor(model => model.ImageName, "", new { @class = "text-danger" })
+                        <input type="file" id="imgfile" name="imgfile" class="form-control" multiple="multiple" />
+
+                    </div>
+
+                </div>
+                <div class="row">
+
+
+
+                    <div class="col-md-12">
+                        <label class="form-label labelform">Description</label>
+
+                        @Html.TextAreaFor(model => model.DescriptionData, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.DescriptionData, "", new { @class = "text-danger" })
+
+                    </div>
+
+                </div>
+
+
+
+                <br />
+                <div class="row">
+                    <div class="col-md-4" style="">
+                        <label for="">&nbsp;&nbsp;</label>
+                        <div class="input_box">
+                            <button type="submit" class="btn btn-primary btn-md" id="#btnforms" style="margin-top: 0px;">Submit</button>
+                            <a href="@Url.Action("Index", "Tickets")" class="btn btn-danger float-right right btn-md">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        }
+

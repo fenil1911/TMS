@@ -2,8 +2,407 @@
 @{
     ViewBag.Title = "Index";
 }
-<br>
-<br />
-<br>
-<br />
-<h1>DashBoard</h1>
+<html>
+
+
+<head>
+    <script src="~/Content/amchart/amcharts5/themes/Animated.js"></script>
+
+    <script src="~/Content/amchart/amcharts5/xy.js"></script>
+    <script src="~/Content/amchart/amcharts5/percent.js"></script>
+    <script src="~/Content/amchart/amcharts5/index.js"></script>
+
+</head>
+<body>
+    <div class=" container">
+        <div class="row" style="margin-top: 70px;">
+            <div class="col-md-3">
+                <div class="white_box_home  first_1_box clearfix ">
+                    <div class="ds_label" id="Emp_AvgHrs">High</div>
+                    <div class="ds_count1 countpriority text-right" id="Emp_AvgHrs_Count">@ViewBag.TotalHigh</div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="white_box_home first_2_box clearfix ">
+                    <div class="ds_label">Low</div>
+                    <div class="ds_count2 countpriority text-right" id="Emp_Total_WorkedHrs_Count">@ViewBag.TotalLow</div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="white_box_home first_3_box clearfix ">
+                    <div class="ds_label " id="Emp_Total_BreakHrs">Medium</div>
+                    <div class="ds_count3 countpriority text-right" id="Emp_Total_BreakHrs_Count"> @ViewBag.TotalMedium </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="white_box_home first_4_box clearfix ">
+                    <div class="ds_label " id="Emp_TotalHours">Immediate</div>
+                    <div class="ds_count4  countpriority text-right" id="Emp_TotalHours_Count">@ViewBag.TotalImmediate</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <label style="align-items: center; font-size: 18px; color: #3535359c">Status</label>
+            </div>
+            <div class="col-md-6">
+                <label style="align-items: center; font-size: 18px; color: #3535359c ">Priority</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 white_graph">
+                <div id="chartdivbar"></div>
+            </div>
+
+            <div class="col-md-6 white_graph">
+                <div id="chartdiv"></div>
+            </div>
+        </div>
+        <div class="row col" style="margin-top: 18px; margin-bottom: -27px;">
+            <div class="col-md-12">
+                <label style="align-items: center;  font-size: 18px; color: #3535359c">Top 5 Tickets</label>
+            </div>
+        </div>
+        <div class="row ;col ; white_boxdashboard" style=" margin-top: 25px;margin-left:-4px">
+
+            @(Html.Kendo().Grid<TMS.Model.TicketModel>()
+         .Name("Ticket")
+        .Scrollable(s => s.Height("auto"))
+        .Columns(columns =>
+        {
+
+            columns.Bound(p => p.AssignedToName).Title("Assigned To").Width(120);
+            columns.Bound(p => p.CreatedToName).Title("Created By").Width(120);
+            columns.Bound(p => p.TicketName).Title("Ticket Name").Width(120);
+            columns.Bound(p => p.TypeName).Title("Type").Width(110);
+            columns.Bound(p => p.PriorityName).Title("Priority").Width(80);
+            columns.Bound(p => p.StatusName).Title("Status").Width(90);
+            columns.Bound(p => p.ImageName)
+            .Title("Attachment")
+            .ClientTemplate("#if (ImageName != null && ImageName != '') { #" +
+            "<a href='" + Url.Action("DownloadFile", "Ticket", new { fileName = "#=ImageName#" }) + "' target='_blank'>#=ImageName#</a>" +
+            "# } #")
+            .Width(100);
+
+            }).HtmlAttributes(new { style = "width:1090px"
+            })
+
+            .Sortable()
+
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .PageSize(5)
+                        .Read(read => read.Action("GetGridData", "Ticket"))))
+
+        </div>
+    </div>
+</body>
+</html>
+
+<style>
+    #chartdiv {
+        width: 100%;
+        height: 400px;
+        margin-top: 25px
+    }
+</style>
+<style>
+    #chartdivbar {
+        width: 100%;
+        height: 480px;
+    }
+</style>
+<script>
+
+    $('.white_box_home').click(function () {
+        var param = $(this).find('.ds_label').text();
+        if (param === "Low" && @ViewBag.TotalLow == 0 || param === "Medium" && @ViewBag.TotalMedium == 0
+            || param === "Immediate" && @ViewBag.TotalImmediate == 0 || param === "High" && @ViewBag.TotalHigh == 0) {
+            alert("Ticket Is Null");
+            return false;
+        }
+        window.location.href = "/Ticket/Index?Priority=" + param;
+    });
+</script>
+
+<script>
+    am5.ready(function () {
+
+        // Create root element
+        // https://www.amcharts.com/docs/v5/getting-started/#Root_element
+        var root = am5.Root.new("chartdivbar");
+
+
+        var myTheme = am5.Theme.new(root);
+
+        myTheme.rule("Grid", ["base"]).setAll({
+            strokeOpacity: 0.1
+        });
+
+
+        // Set themes
+        // https://www.amcharts.com/docs/v5/concepts/themes/
+        root.setThemes([
+            am5themes_Animated.new(root),
+            myTheme
+        ]);
+
+
+        // Create chart
+        // https://www.amcharts.com/docs/v5/charts/xy-chart/
+        var chart = root.container.children.push(
+            am5xy.XYChart.new(root, {
+                panX: false,
+                panY: false,
+                wheelX: "none",
+                wheelY: "none"
+            })
+        );
+
+
+        // Create axes
+        // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+        var yRenderer = am5xy.AxisRendererY.new(root, { minGridDistance: 30 });
+        yRenderer.grid.template.set("location", 1);
+
+        var yAxis = chart.yAxes.push(
+            am5xy.CategoryAxis.new(root, {
+                maxDeviation: 0,
+                categoryField: "country",
+                renderer: yRenderer
+            })
+        );
+
+        var xAxis = chart.xAxes.push(
+            am5xy.ValueAxis.new(root, {
+                maxDeviation: 0,
+                min: 0,
+                renderer: am5xy.AxisRendererX.new(root, {
+                    visible: true,
+                    strokeOpacity: 0.1
+                })
+            })
+        );
+
+
+        // Create series
+        // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+        var series = chart.series.push(
+            am5xy.ColumnSeries.new(root, {
+                name: "Series 1",
+                xAxis: xAxis,
+                yAxis: yAxis,
+                valueXField: "value",
+                sequencedInterpolation: true,
+                categoryYField: "country"
+            })
+        );
+
+        var columnTemplate = series.columns.template;
+
+        columnTemplate.setAll({
+            draggable: true,
+            cursorOverStyle: "pointer",
+            tooltipText: "drag to rearrange",
+            cornerRadiusBR: 10,
+            cornerRadiusTR: 10,
+            strokeOpacity: 0
+        });
+        columnTemplate.adapters.add("fill", (fill, target) => {
+            return chart.get("colors").getIndex(series.columns.indexOf(target));
+        });
+
+        columnTemplate.adapters.add("stroke", (stroke, target) => {
+            return chart.get("colors").getIndex(series.columns.indexOf(target));
+        });
+
+        columnTemplate.events.on("dragstop", () => {
+            sortCategoryAxis();
+        });
+
+        // Get series item by category
+        function getSeriesItem(category) {
+            for (var i = 0; i < series.dataItems.length; i++) {
+                var dataItem = series.dataItems[i];
+                if (dataItem.get("categoryY") == category) {
+                    return dataItem;
+                }
+            }
+        }
+
+
+        // Axis sorting
+        function sortCategoryAxis() {
+            // Sort by value
+            series.dataItems.sort(function (x, y) {
+                return y.get("graphics").y() - x.get("graphics").y();
+            });
+
+            var easing = am5.ease.out(am5.ease.cubic);
+
+            // Go through each axis item
+            am5.array.each(yAxis.dataItems, function (dataItem) {
+                // get corresponding series item
+                var seriesDataItem = getSeriesItem(dataItem.get("category"));
+
+                if (seriesDataItem) {
+                    // get index of series data item
+                    var index = series.dataItems.indexOf(seriesDataItem);
+
+                    var column = seriesDataItem.get("graphics");
+
+                    // position after sorting
+                    var fy =
+                        yRenderer.positionToCoordinate(yAxis.indexToPosition(index)) -
+                        column.height() / 2;
+
+                    // set index to be the same as series data item index
+                    if (index != dataItem.get("index")) {
+                        dataItem.set("index", index);
+
+                        // current position
+                        var x = column.x();
+                        var y = column.y();
+
+                        column.set("dy", -(fy - y));
+                        column.set("dx", x);
+
+                        column.animate({ key: "dy", to: 0, duration: 600, easing: easing });
+                        column.animate({ key: "dx", to: 0, duration: 600, easing: easing });
+                    } else {
+                        column.animate({ key: "y", to: fy, duration: 600, easing: easing });
+                        column.animate({ key: "x", to: 0, duration: 600, easing: easing });
+                    }
+                }
+            });
+
+            // Sort axis items by index.
+            // This changes the order instantly, but as dx and dy is set and animated,
+            // they keep in the same places and then animate to true positions.
+            yAxis.dataItems.sort(function (x, y) {
+                return x.get("index") - y.get("index");
+            });
+        }
+
+       var status = @Html.Raw(Json.Encode(ViewBag.status));
+
+        var data = [];
+
+
+        for (var i = 0; i < status.length; i++) {
+
+            data.push({
+                "country": status[i].StatusName,
+                "value": status[i].count
+            });
+        }
+
+
+
+        yAxis.data.setAll(data);
+        series.data.setAll(data);
+
+        root._logo.dispose();
+        // Make stuff animate on load
+        // https://www.amcharts.com/docs/v5/concepts/animations/
+        series.appear(1000);
+        chart.appear(1000, 100);
+
+    }); // end am5.ready()
+</script>
+
+<script>
+var totalHigh = @Html.Raw(Json.Encode(ViewBag.TotalHigh));
+    var totalLow = @Html.Raw(Json.Encode(ViewBag.TotalLow));
+    var totalMedium = @Html.Raw(Json.Encode(ViewBag.TotalMedium));
+    var totalImmediate = @Html.Raw(Json.Encode(ViewBag.TotalImmediate));
+    am5.ready(function () {
+
+        // Create root element
+        // https://www.amcharts.com/docs/v5/getting-started/#Root_element
+        var root = am5.Root.new("chartdiv");
+        root._logo.dispose();
+
+        // Set themes
+        // https://www.amcharts.com/docs/v5/concepts/themes/
+        root.setThemes([
+            am5themes_Animated.new(root)
+        ]);
+
+
+        // Create chart
+        // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/
+        var chart = root.container.children.push(am5percent.PieChart.new(root, {
+            layout: root.verticalLayout,
+            innerRadius: am5.percent(50)
+        }));
+
+
+        // Create series
+        // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Series
+        var series = chart.series.push(am5percent.PieSeries.new(root, {
+            valueField: "value",
+            categoryField: "category",
+            alignLabels: false
+        }));
+
+        series.labels.template.setAll({
+            textType: "circular",
+            centerX: 0,
+            centerY: 0
+        });
+
+
+        series.data.setAll([{
+            category: "High",
+            value: totalHigh,
+            
+        }, {
+            category: "Low",
+            value:     totalLow
+        },
+        {
+            category: "Medium",
+            value: totalMedium
+        }, {
+            category: "Immediate",
+            value: totalImmediate
+        }]);
+
+        // Create legend
+        // https://www.amcharts.com/docs/v5/charts/percent-charts/legend-percent-series/
+        var legend = chart.children.push(am5.Legend.new(root, {
+            centerX: am5.percent(50),
+            x: am5.percent(50),
+            marginTop: 15,
+            marginBottom: 15,
+        }));
+
+        legend.data.setAll(series.dataItems);
+
+
+        // Play initial series animation
+        // https://www.amcharts.com/docs/v5/concepts/animations/#Animation_of_series
+        series.appear(1000, 100);
+
+    }); // end am5.ready()
+</script>
+
+
+
+
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $("#Ticket tbody").on("click", "tr", function () {
+            var dataItem = $("#Ticket").data("kendoGrid").dataItem(this);
+            window.location.href = "/Ticket/Comment/" + dataItem.Id;
+        });
+    });
+</script>

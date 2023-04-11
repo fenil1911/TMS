@@ -1,82 +1,150 @@
 ﻿@model TMS.Model.FormModel
+@using TMS.Model
+@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
 
 @{
-    ViewBag.Title = "Create";
+    string formCode = AuthorizeFormAccess.FormAccessCode.FORMMASTER.ToString();
+    if (Model.Id > 0)
+    {
+        ViewBag.Title = "Edit Form";
+    }
+    else
+    {
+        ViewBag.Title = "Add Form";
+    }
 }
-<br>
-<br />
-<br>
-<br />
-
-<h2>Create Form</h2>
-
-@using (Html.BeginForm("Create", "Form"))
-{
-    @Html.AntiForgeryToken()
-
-<div class="form-horizontal">
-
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-    <div class="col-md-4">
-        <label class="form-label"> Name<strong>*</strong></label>
-        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-
-    </div>
-    <div class="col-md-4">
-        <label class="form-label">Navigate URL<strong>*</strong></label>
-        @Html.EditorFor(model => model.NavigateURL, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.NavigateURL, "", new { @class = "text-danger" })
-
-    </div>
-    <div class="col-md-4">
-        <label class="form-label">Parent Form Id<strong>*</strong></label>
-        @Html.EditorFor(model => model.ParentFormId, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.ParentFormId, "", new { @class = "text-danger" })
-
-    </div>
-    <div class="col-md-4">
-        <label class="form-label">Form Access Code<strong>*</strong></label>
-        @Html.EditorFor(model => model.FormAccessCode, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.FormAccessCode, "", new { @class = "text-danger" })
-
-    </div>
-    <div class="col-md-4">
-        <label class="form-label">Display Order<strong>*</strong></label>
-        @Html.EditorFor(model => model.DisplayOrder, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.DisplayOrder, "", new { @class = "text-danger" })
-
-    </div>
-    <div class="col-md-5">
-        <label class="form-label labelform ">Is Active</label>
 
 
-        <div class="checkbox" style="margin-top: -32px; margin-left: 96px; ">
-            @Html.EditorFor(model => model.IsActive)
-            @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+<div class="white_box" style="margin-top: 80px;">
+    <div class="container-fluid">
 
+        @Html.Hidden("hdnFormAccessCode", formCode)
+
+        @using (Html.BeginForm("Create", "Form", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.HiddenFor(m => m.Id)
+
+            <div class="left_title">
+                @if (Model.Id > 0)
+                {
+                    <div>
+
+                        <h2 style="margin: 0px 5px; font-weight:bold; color:#fe6601">Edit Form</h2>
+
+                    </div>
+                }
+                else
+                {
+
+                    <div>
+
+                        <h2 style="margin: 0px 5px; font-weight:bold; color:#fe6601">Create Form</h2>
+                    </div>
+                }
+
+            </div>
+
+
+            <div class="validationMessage" style="background-color: #fff ">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="labelform">Name <strong>*</strong><sup class="span_req"><i class="fa fa-star" aria-hidden="true"></i></sup></label>
+                        <div class="input_box">
+                            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                        </div>
+
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="labelform">Form Access Code<strong>*</strong> <sup class="span_req"><i class="fa fa-star" aria-hidden="true"></i></sup></label>
+                        <div class="input_box">
+                            @if (Model.Id > 0)
+                            {
+                                @Html.TextBoxFor(model => model.FormAccessCode, new { @class = "form-control", @readonly = "readonly" })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(model => model.FormAccessCode, new { @class = "form-control" })
+                            }
+                            @Html.ValidationMessageFor(model => model.FormAccessCode, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="labelform">Navigate URL<strong>*</strong></label>
+                        <div class="input_box">
+                            @Html.TextBoxFor(model => model.NavigateURL, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.NavigateURL, "", new { @class = "text-danger" })
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="labelform">Display Order<strong>*</strong></label>
+                        <div class="input_box">
+                            @Html.TextBoxFor(model => model.DisplayOrder, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.DisplayOrder, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="labelform">Parent Form</label>
+                        <div class="input_box">
+                            @Html.DropDownListFor(model => model.ParentFormId, Model._ParentFormList, new { @class = "form-control", id = "Form" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+
+                        <label class="form-label labelform ">Display Menu</label>
+                        <div class="checkbox" style="margin-top: -22px; margin-left: 120px; ">
+                            @Html.EditorFor(model => model.IsDisplayMenu)
+                            @Html.ValidationMessageFor(model => model.IsDisplayMenu, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label labelform ">Is Active</label>
+                        <div class="checkbox" style="margin-top: -22px; margin-left: 90px; ">
+                            @Html.EditorFor(model => model.IsActive)
+                            @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="button_div">
+                    <div class="form-group">
+                        <label for="">&nbsp;</label>
+                        <div class="input_box">
+                            <button type="submit" class="btn btn-primary btn-md" id="#btnforms" style="margin-top: 0px;">Submit</button>
+                            <a href="@Url.Action("Index", "Form")" class="btn btn-danger float-right right btn-md">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        }
         </div>
-
     </div>
-    <div class="col-md-5" style="margin-left:-350px">
-        <label class="form-label labelform ">Is Display Menu</label>
+
+    <script type="text/javascript">
+        $(function () {
+            $("#Form").chosen();
+        });
+
+    </script>
 
 
-        <div class="checkbox" style="margin-top: -32px; margin-left: 131px; ">
-            @Html.EditorFor(model => model.IsDisplayMenu)
-            @Html.ValidationMessageFor(model => model.IsDisplayMenu, "", new { @class = "text-danger" })
-        </div>
 
-    </div>
-   
-
-    <div class="col-md-5" style="margin-left: -600px; margin-top: 65px;">
-        <input type="submit" value="Create" class="btn btn-primary" />
-        <div>
-            @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-default" })
-        </div>
-    </div>
-</div>
-
-}

@@ -169,7 +169,7 @@ namespace TMS.Data
         {
             int _roleID = (from user in _db.Users
                            join roles in _db.webpages_UsersInRoles on user.UserId equals roles.UserId
-                           where user.EmailId == SessionHelper.EmailId
+                           where user.UserName == SessionHelper.UserName
                            select roles.RoleId).FirstOrDefault();
 
 

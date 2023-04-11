@@ -82,6 +82,54 @@ namespace TMS.Controllers
             }
         }
 
+        public ActionResult Edit(int Id)
+        {
+            try
+            {
+
+                if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.USER.ToString(), AccessPermission.IsEdit))
+                {
+                    return RedirectToAction("AccessDenied", "Base");
+                }
+
+                Users EditCommonLookup = _usersService.GetUserById(Id);
+                return PartialView("Edit", EditCommonLookup);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+        [HttpPost]
+        public ActionResult Edit(UsersModel usersModel)
+        {
+            try
+            {
+                if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.COMMONLOOKUP.ToString(), AccessPermission.IsEdit))
+                {
+                    return RedirectToAction("AccessDenied", "Base");
+                }
+                int UpdatedBy = SessionHelper.UserId;
+                if (ModelState.IsValid)
+                {
+                    UsersModel commonlookup_model = _usersService.UpdateCommonLookup(usersModel, UpdatedBy);
+                    TempData["Message"] = "Data Updated Successfully!!";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+
+                    return PartialView("Edit");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
 
     }
 }

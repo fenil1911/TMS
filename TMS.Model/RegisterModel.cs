@@ -13,15 +13,18 @@ namespace TMS.Model
         [Required]
         public int UserId { get; set; }
         [Required]
+        [RegularExpression("^[A-Za-z]{1,50}$")]
         public string FirstName { get; set; }
+
         [Required]
         [Display(Name = "LastName")]
-        //[Required(ErrorMessage = "LastName is required")]
+        [RegularExpression("^[A-Za-z]{1,50}$")]
+        
         public string LastName { get; set; }
         
         [Required]
         [Display(Name = "UserName")]
-        
+        [RegularExpression("^[A-Za-z]{1,50}$")]
         public string UserName { get; set; }
         [Display(Name = "Password ")]
         [Required(ErrorMessage = "Password is required")]
@@ -29,6 +32,7 @@ namespace TMS.Model
         public string Password { get; set; }
         [Display(Name = "ConfirmPassword ")]
         [Required(ErrorMessage = "ConfirmPassword  is required")]
+        [DataType(DataType.Password)]
         [Compare(otherProperty: "Password", ErrorMessage = "Password doesn't match.")]
         public string ConfirmPassword { get; set; }
         

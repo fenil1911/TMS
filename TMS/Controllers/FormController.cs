@@ -41,34 +41,26 @@ namespace TMS.Controllers
         public ActionResult GetGridData([DataSourceRequest] DataSourceRequest request)
         {
             try
-            {
-
-
-
+           {
                 List<FormModel> FormsList = _formsService.GetAllForms();
                 DataSourceResult result = FormsList.ToDataSourceResult(request);
                 return Json(result, JsonRequestBehavior.AllowGet);
-
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
-        [HttpGet]
+
         public ActionResult Create(int? id)
         {
             try
             {
-
-                int CreatedBy = SessionHelper.UserId;
                 string actionPermission = "";
                 if (id == null)
                 {
                     actionPermission = AccessPermission.IsAdd;
                 }
-
                 else if ((id ?? 0) > 0)
                 {
                     actionPermission = AccessPermission.IsEdit;
@@ -76,14 +68,15 @@ namespace TMS.Controllers
 
                 if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.FORMMASTER.ToString(), actionPermission))
                 {
-
+                    return RedirectToAction("AccessDenied", "Base");
                 }
 
                 int userId = SessionHelper.UserId;
                 FormModel model = new FormModel();
                 if (id.HasValue)
                 {
-                    var formDetail = _formsService.GetFormsById(id.Value, CreatedBy);
+                    int CreatedBy = SessionHelper.UserId;
+                    var formDetail = _formsService.GetFormsById(id.Value ,  CreatedBy);
                     if (formDetail != null)
                     {
                         model.Id = id.Value;
@@ -99,11 +92,9 @@ namespace TMS.Controllers
                 }
                 BindDropdown(ref model);
                 return View(model);
-
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
@@ -123,11 +114,14 @@ namespace TMS.Controllers
                 {
                     actionPermission = AccessPermission.IsEdit;
                 }
+               
+
                 int userId = SessionHelper.UserId;
 
                 if (!ModelState.IsValid)
                 {
-                    return View(model);
+                    BindDropdown(ref model);
+                    return PartialView("Create",model);
                 }
                 _formsService.SaveUpdateForm(model);
                 TempData["Message"] = "Data Saved Successfully!!";
@@ -136,10 +130,10 @@ namespace TMS.Controllers
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
+
         private void BindDropdown(ref FormModel model)
         {
             BindParentForm(ref model);

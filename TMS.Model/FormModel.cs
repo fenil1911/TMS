@@ -16,12 +16,14 @@ namespace TMS.Model
         }
        
         public int Id { get; set; }
-
         [Required]
+        [RegularExpression("^[A-Za-z]{1,10}$")]
         public string Name { get; set; }
 
         [Required]
         [Display(Name = "Navigate URL")]
+        [RegularExpression("^[A-Za-z]{1,10}$")]
+
         public string NavigateURL { get; set; }
 
         [Required]
@@ -30,7 +32,9 @@ namespace TMS.Model
 
         [Required]
         [Display(Name = "Code")]
-        //[Remote("CheckDuplicateFormAccessCode", "Form", HttpMethod = "Post", AdditionalFields = "Id")]
+        [Remote("CheckDuplicateFormAccessCode", "Form", HttpMethod = "Post", AdditionalFields = "Id")]
+        [RegularExpression("^[A-Z]{1,10}$")]
+
         public string FormAccessCode { get; set; }
 
         [Required]
@@ -48,5 +52,6 @@ namespace TMS.Model
         public DateTime? UpdatedOn { get; set; }
 
         public List<SelectListItem> _ParentFormList { get; set; }
+
     }
 }

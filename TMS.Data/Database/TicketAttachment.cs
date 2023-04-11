@@ -17,6 +17,8 @@ namespace TMS.Data.Database
         public string Filename { get; set; }
         public int CreatedBy{ get; set; }
         public DateTime CreatedOn { get; set; }
+        public  Nullable<int> UpdatedBy { get; set; }
+        public Nullable<DateTime> UpdatedOn { get; set; }
 
 
 

@@ -22,7 +22,7 @@ namespace TMS.Controllers
         private readonly CommonLookupService _commonLookupService;
         private readonly UsersService _usersService;
         public TMSEntities _db;
-       
+
 
         public TicketController()
         {
@@ -33,15 +33,14 @@ namespace TMS.Controllers
 
         }
 
-        public ActionResult Index([DataSourceRequest] DataSourceRequest request)
+        public ActionResult Index([DataSourceRequest] DataSourceRequest request, string Priority = "")
         {
             try
             {
-                ViewBag.ViewPermission = "TICKET";
+                TempData["Priority"] = Priority;
                 if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.TICKET.ToString(), AccessPermission.IsView))
                 {
-                    ViewBag.ViewPermission = "TICKET";
-
+                
                     return RedirectToAction("AccessDenied", "Base", new { viewPermission = "ticket" });
                 }
                 return View();
@@ -55,7 +54,7 @@ namespace TMS.Controllers
         {
             try
             {
-                int CreatedBy = SessionHelper.UserId;
+               
                 string filterCondition = "";
                 foreach (IFilterDescriptor filter in request.Filters)
                 {
@@ -63,12 +62,17 @@ namespace TMS.Controllers
                     filterCondition = filterDesc.Value.ToString();
                 }
 
+                if (TempData["Priority"] != null && TempData["Priority"] != "")
+                {
+                    filterCondition = TempData["Priority"].ToString();
+                }
+
                 IQueryable<TicketModel> List;
                 int totalCount = 0;
                 if (SessionHelper.UserId == 1)
                 {
                     List = _ticketService.GetAllTicketsAdmin(request.PageSize, request.Page, request.Sorts, filterCondition);
-                    var GetCount = _db.Tickets.Count();
+                    var GetCount = _db.Tickets.Count(x => x.IsDeleted != 1);
                     //var alltickets = _ticketService.GetAllTicketsAdmin(request.PageSize, request.Page, request.Sorts, filterCondition);
                     totalCount = GetCount;
                 }
@@ -92,7 +96,19 @@ namespace TMS.Controllers
                 throw ex;
             }
         }
+        public JsonResult ClientFiltering_GetProducts()
+        {
+            var northwind = new TMSEntities();
 
+
+            var products = northwind.Tickets.Select(product => new TicketModel
+            {
+                PriorityId = product.PriorityId,
+           
+            });
+
+            return Json(products, JsonRequestBehavior.AllowGet);
+        }
         /*  public ActionResult GetGridData([DataSourceRequest] DataSourceRequest request)
           {
               try
@@ -176,6 +192,9 @@ namespace TMS.Controllers
                     case "CreatedOn":
                         data = data.OrderBy(order => order.CreatedOn).Skip((Page - 1) * PageSize).Take(PageSize);
                         break;
+                    case "CreatedToName":
+                        data = data.OrderBy(order => order.CreatedToName).Skip((Page - 1) * PageSize).Take(PageSize);
+                        break;
                 }
             }
             else
@@ -204,6 +223,9 @@ namespace TMS.Controllers
                     case "CreatedOn":
                         data = data.OrderByDescending(order => order.CreatedOn).Skip((Page - 1) * PageSize).Take(PageSize);
                         break;
+                    case "CreatedToName":
+                        data = data.OrderByDescending(order => order.CreatedToName).Skip((Page - 1) * PageSize).Take(PageSize);
+                        break;
                 }
             }
             return data;
@@ -229,7 +251,7 @@ namespace TMS.Controllers
                 model.AssignedDropdown = _usersService.GetAlluser()
                     .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
 
-                return PartialView("Create", model);
+                return View(model);
             }
             catch (Exception ex)
             {
@@ -271,7 +293,10 @@ namespace TMS.Controllers
                     objEmail.SendMyMail(emailAddress, model.TicketName, model.DescriptionData, imgfile, ticketId);
                     ViewBag.EmployeeList = _ticketService.BindEmployee();
                     _ticketService.CreateTicketStatus(obj, CreatedBy);
-                    _ticketService.CreateAttachment(obj1, CreatedBy);
+                    if (imgfile != null)
+                    {
+                        _ticketService.CreateAttachment(obj1, CreatedBy);
+                    }
                     TempData["Message"] = "Data Updated Successfully!!";
 
                     return RedirectToAction("Index");
@@ -349,37 +374,55 @@ namespace TMS.Controllers
         {
             try
             {
-                if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.TICKET.ToString(), AccessPermission.IsEdit))
+                if (ModelState.IsValid)
                 {
-                    return RedirectToAction("AccessDenied", "Base");
+
+                    int UpdatedBy = SessionHelper.UserId;
+                    var ticketId = _ticketService.UpdateTicket(model, UpdatedBy);
+                    var statusStr = _commonLookupService.GetCommonLookupById(model.StatusId).Name;
+                    if (imgfile != null)
+                    {
+                        model.ImageName = imgfile.FileName + Path.GetExtension(imgfile.FileName);
+                        imgfile.SaveAs(Server.MapPath("//Content//Uploadimage//") + model.ImageName);
+                    }
+                    TicketStatus obj = new TicketStatus()
+                    {
+                        TicketId = ticketId.Id,
+                        NewStatus = statusStr,
+                        CreatedBy = UpdatedBy,
+                        CreatedOn = DateTime.Now
+                    };
+                    TicketAttachment obj1 = new TicketAttachment()
+                    {
+                        TicketId = ticketId.Id,
+                        Filename = model.ImageName,
+                        CreatedOn = DateTime.Now,
+                        CreatedBy = UpdatedBy
+                    };
+
+                    _ticketService.CreateTicketStatus(obj, UpdatedBy);
+                            if (imgfile != null)
+                            {
+                                _ticketService.EditAttachment(obj1, UpdatedBy);
+                            }
+                    TicketService objservice = new TicketService();
+                    TicketModel objmodels = objservice.UpdateTicket(model, UpdatedBy);
+                    return RedirectToAction("Index");
                 }
-                int UpdatedBy = SessionHelper.UserId;
-                var ticketId = _ticketService.UpdateTicket(model, UpdatedBy);
-                var statusStr = _commonLookupService.GetCommonLookupById(model.StatusId).Name;
-                if (imgfile != null)
+                else
                 {
-                    model.ImageName = imgfile.FileName + Path.GetExtension(imgfile.FileName);
-                    imgfile.SaveAs(Server.MapPath("//Content//Uploadimage//") + model.ImageName);
+                    model.StatusDropdown = _ticketService.GetDropdownBykey("Status")
+                        .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
+                    model.PriorityDropdown = _ticketService.GetDropdownBykey1("Priority")
+                       .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
+                    model.TypeDropdown = _ticketService.GetDropdownBykey2("Task")
+                        .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
+
+                    model.AssignedDropdown = _usersService.GetAlluser()
+                        .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
+
+                    return PartialView("Edit", model);
                 }
-                TicketStatus obj = new TicketStatus()
-                {
-                    TicketId = ticketId.Id,
-                    NewStatus = statusStr,
-                    CreatedBy = UpdatedBy,
-                    CreatedOn = DateTime.Now
-                };
-                TicketAttachment obj1 = new TicketAttachment()
-                {
-                    TicketId = ticketId.Id,
-                    Filename = model.ImageName,
-                    CreatedOn = DateTime.Now,
-                    CreatedBy = UpdatedBy
-                };
-                _ticketService.CreateTicketStatus(obj, UpdatedBy);
-                _ticketService.CreateAttachment(obj1, UpdatedBy);
-                TicketService objservice = new TicketService();
-                TicketModel objmodels = objservice.UpdateTicket(model, UpdatedBy);
-                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
