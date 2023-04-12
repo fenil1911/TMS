@@ -57,6 +57,7 @@ namespace TMS.Model
 
             [Required]
             public string ResetCode { get; set; }
+            public string ReturnToken { get; set; }
         }
         public class ForgotPasswordModel
         {

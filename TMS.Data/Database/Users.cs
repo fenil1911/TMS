@@ -20,10 +20,11 @@ namespace TMS.Data.Database
         public string Password { get; set; }
        
         public string ConfirmPassword { get; set; }
+        public string ResetPasswordCode { get; set; }
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime CreatedOn { get; set; }
-        public string ResetPasswordCode { get; set; }
+        //public string ResetPasswordCode { get; set; }
 
 
 

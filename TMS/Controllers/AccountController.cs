@@ -21,9 +21,7 @@ using System.Threading;
 using System.Configuration;
 using System.Net.Mail;
 using System.Net;
-
-
-
+using System.Data.Entity;
 
 namespace TMS.Controllers
 {
@@ -32,14 +30,17 @@ namespace TMS.Controllers
         TMSEntities _db;
         public readonly UsersService _usersService;
         public readonly RoleService _roleService;
+
+
         public AccountController()
         {
             _db = new TMSEntities();
             _usersService = new UsersService();
             _roleService = new RoleService();
+
         }
         [AllowAnonymous]
-        public ActionResult Login(string ReturnUrl)
+        public ActionResult Login(string ReturnUrl = "")
         {
             Model.LoginModel model = new Model.LoginModel();
             if (SessionHelper.UserId > 0)
@@ -206,6 +207,8 @@ namespace TMS.Controllers
                     bool isPasswordChanged = WebSecurity.ChangePassword(WebSecurity.CurrentUserName, changePasswordModel.OldPassword, changePasswordModel.NewPassword);
                     if (isPasswordChanged)
                     {
+                        WebSecurity.Logout();
+                        Session.Abandon();
                         return RedirectToAction("Login", "Account");
                     }
                     else
@@ -222,26 +225,38 @@ namespace TMS.Controllers
             return View();
         }
 
-        [HttpGet]
+
+
+
+        [AllowAnonymous]
         public ActionResult ForgotPassword()
         {
             return View();
         }
         [HttpPost]
+        [AllowAnonymous]
         public ActionResult ForgotPassword(string EmailId)
         {
-            /* string message = "";
-             bool status = false;*/
+            string message = "";
+            bool status = false;
 
-            var account = _db.Users.Where(email => email.EmailId == EmailId).FirstOrDefault();
+            var userexist = _usersService.GetEmailById(EmailId);
+            var email = userexist.EmailId;
+            var account = email;
             if (account != null)
             {
+                // create a new user with resetCode as the password
                 string resetCode = Guid.NewGuid().ToString();
-               // SendVerificationLinkEmail(account.EmailId, resetCode, "ResetPassword");
-                //account.ResetPasswordCode = resetCode;
-                //This line I have added here to avoid confirm password not match issue , as we had added a confirm password property 
-                //in our model class in part 1
-                _db.Configuration.ValidateOnSaveEnabled = false;
+
+                // generate a password reset token for the user
+                
+                string token = WebSecurity.GeneratePasswordResetToken(userexist.UserName);
+
+                /*string resetCode = Guid.NewGuid().ToString();
+                string token = WebSecurity.GeneratePasswordResetToken();*/
+                SendVerificationLinkEmail(account, token, "ResetPassword");
+                userexist.ResetPasswordCode = token;
+                _db.Entry(userexist).State = EntityState.Modified;
                 _db.SaveChanges();
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
@@ -256,9 +271,9 @@ namespace TMS.Controllers
             var verifyUrl = "/Account/" + emailFor + "/" + activationCode;
             var link = Request.Url.AbsoluteUri.Replace(Request.Url.PathAndQuery, verifyUrl);
 
-            var fromEmail = new MailAddress("xyz@gmail.com", "TMS");//change with your gmail id
+            var fromEmail = new MailAddress("fenil.aakashinfo@gmail.com", "TMS");//change with your gmail id
             var toEmail = new MailAddress(emailID);
-            var fromEmailPassword = "yourpassword@123"; // Replace with actual password
+            var fromEmailPassword = "xzsytfjppkjaihqx"; // Replace with actual password
 
             string subject = "";
             string body = "";
@@ -295,8 +310,58 @@ namespace TMS.Controllers
             })
                 smtp.Send(message);
         }
+         [AllowAnonymous]
+        public ActionResult ResetPassword(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return HttpNotFound();
+            }
+            var userexist = _usersService.GetroleById(id);
+            var rolecode = userexist.ResetPasswordCode;
+            var user = _db.Users.Where(a => a.ResetPasswordCode == id).FirstOrDefault();
+            if (rolecode != null)
+            {
+                ResetPasswordModel model = new ResetPasswordModel();
+                model.ResetCode = id;
+                return View(model);
+            }
+            else
+            {
+                return HttpNotFound();
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+      
+        public ActionResult ResetPassword(ResetPasswordModel model)
+        {
+            var message = "";
+            if (ModelState.IsValid)
+            {
+                var user = _db.Users.Where(a => a.ResetPasswordCode == model.ResetCode).FirstOrDefault();
+                if (user != null)
+                {
+                    bool isPasswordChanged = WebSecurity.ResetPassword(model.ResetCode, model.NewPassword);
+                    if (isPasswordChanged)
+                    {
+                        return RedirectToAction ("Login");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid reset code.");
+                }
+            }
+            return Redirect("http://localhost:49832/");
+            return View(model);
+        }
+
+      
 
     }
 
-    }
+}
 

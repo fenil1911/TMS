@@ -35,6 +35,7 @@ namespace TMS.Data.Database
         public DbSet<webpages_UsersInRoles> webpages_UsersInRoles { get; set; }
         public DbSet<ErrorLog> errorLogs { get; set; }
         public DbSet<ActivityLog> activityLogs { get; set; }
+       
 
 
 

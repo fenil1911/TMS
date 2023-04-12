@@ -37,7 +37,19 @@ namespace TMS.Data
         }
         public Users GetEmailById(string EmailId)
         {
-            return _db.Users.Where(e => e.EmailId == EmailId).FirstOrDefault();
+            
+            
+
+             var email= _db.Users.Where(e => e.EmailId == EmailId).FirstOrDefault();
+            return email;
+        }
+        public Users GetroleById(string id)
+        {
+
+
+
+            var email = _db.Users.Where(e => e.ResetPasswordCode == id).FirstOrDefault();
+            return email;
         }
         public List<UsersModel> GetAllUser1()
         {
@@ -82,10 +94,12 @@ namespace TMS.Data
             var obj = GetUserById(model.Id);
             obj.FirstName = model.Name;
             obj.UserName = model.UserName;
-
+                   
 
             _db.SaveChanges();
             return model;
         }
+
+
     }
 }

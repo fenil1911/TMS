@@ -22,13 +22,17 @@
         <section class="login-section">
 
             <div class="login-from box-shadow">
+                @if (!String.IsNullOrWhiteSpace(ViewBag.Error))
+                {
+                    <label class="bg-error text-white alertmsg">@ViewBag.Error</label>
+                }
                 <br> <br />
                 <div class="login-from shadow-lg p-3 mb-5  rounded  box-shadow" style="margin: 0 auto; max-width: 400px; border-radius: 15px; background-color: white; padding: 20px; box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;">
                     @*  <center><h1 style="color:cadetblue; font:bolder 50px timesnewroman;">TMS</h1></center>*@
                     <div class="login-logo mb-4 text-center">
                         <a href=""><img src="~/Content/images/tms.png" width="200"></a>
                     </div>
-                    <center><h2 style="font-family:'Segoe UI' ;font-weight:bold ; color:#212121" >Sign In</h2></center>
+                    <center><h2 style="font-family:'Segoe UI' ;font-weight:bold ; color:#212121">Sign In</h2></center>
                     <form method="post">
                         <div class="form-group">
                             <label class="label-title">User Name<strong style="color:red ;font-weight:bold ; font-size:larger">*</strong></label>

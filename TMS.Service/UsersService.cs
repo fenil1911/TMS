@@ -33,7 +33,15 @@ namespace TMS.Service
         }
         public Users GetEmailById(string EmailId)
         {
-            return usersProvider.GetEmailById(EmailId);
+          
+        var email = usersProvider.GetEmailById(EmailId);
+            return email;
+        }  
+        public Users GetroleById(string id)
+        {
+          
+        var email = usersProvider.GetroleById(id);
+            return email;
         }
         public void DeleteUser(int Id)
         {
