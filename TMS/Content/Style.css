@@ -9,15 +9,13 @@ body {
 
 
 
-.user_img {
+/*.user_img {
     width: 30px !important;
     height: 30px !important;
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     border-radius: 50%;
     overflow: hidden;
-
-
     display: inline-block;
     vertical-align: middle;
     background: #feff00;
@@ -46,10 +44,10 @@ html body {
     left: auto;
     right: 0;
     margin-top: 6px;
-}
+}*/
 
 /* Table */
-.table > :not(:first-child) {
+/*.table > :not(:first-child) {
     border-top: 2px solid #dee2e6;
 }
 
@@ -70,11 +68,11 @@ html body {
         width: 100%;
         height: 100%;
         object-fit: cover;
-    }
+    }*/
 
 
 /* header */
-.header {
+/*.header {
     background: #ffffff;
     position: sticky;
     top: 0px;
@@ -132,24 +130,9 @@ html body {
     border-right: .3em solid transparent;
     border-bottom: 0;
     border-left: .3em solid transparent;
-}
+}*/
 
-/*Login*/
-.login-section {
-    background-color: black;
-    min-height: 100vh;
-    padding: 30px;
-}
 
-.login-from {
-    margin: 50px auto;
-    max-width: 450px;
-    width: 100%;
-    padding: 30px;
-    background: #fff;
-    box-shadow: 0 0 20px rgba(0,0,0,0.05);
-    border-radius: 10px;
-}
 
 .form-group {
     margin-bottom: 15px;
@@ -179,11 +162,11 @@ html body {
 
 
 /*PRODUCT HISTORY INDEX */
-.ProductHistoryBG {
+/*.ProductHistoryBG {
     background-color: #F3F1F5;
-}
+}*/
 /*LOGIN PARTIAL*/
-textarea.form-control {
+/*textarea.form-control {
     height: 75px;
     width: 838px;
 }
@@ -199,7 +182,7 @@ textarea.form-control {
 strong {
     color: red;
     font-size: 15px;
-}
+}*/
 
 .user_img {
     width: 30px !important;
@@ -210,7 +193,7 @@ strong {
     overflow: hidden;
     display: inline-block;
     vertical-align: middle;
-    background: #8d8741;
+    background: #23ff00;
     color: #ffffff;
     display: flex;
     align-items: center;
@@ -219,11 +202,11 @@ strong {
     font-weight: 500;
 }
 
-#chart_container {
+/*#chart_container {
     width: 400px;
-    height: 400px;
+    height: 400px;*/
     /*border: 1px solid #ddd;*/
-    padding: 10px;
+    /*padding: 10px;
     border-radius: 4px;
 }
 
@@ -232,9 +215,9 @@ le >
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-}
+}*/
 
-.chartMenu {
+/*.chartMenu {
     width: 100vw;
     height: 40px;
     background: #1A1A1A;
@@ -264,7 +247,7 @@ le >
     padding: 28px;
     margin: auto;
     margin-left: auto;
-}
+}*/
 /*--------------Ticket--------------------*/
 
 /*
@@ -279,9 +262,9 @@ padding-left: 159px;
 padding-right: 13px;
 margin-left: 48px;
 }*/
-.mb-0 {
+/*.mb-0 {
     margin-top: 20px;
-}
+}*/
 
 .accessDenied {
     display: block;
@@ -295,7 +278,7 @@ margin-left: 48px;
     font-size: 25px;
     border-radius: 15px;
 }
-
+/*
 #test {
     color: black;
     text-decoration: none;
@@ -352,16 +335,16 @@ h3 {
     content: "\f156";
     padding: 3px;
 }
-
+*/
 .graph-cursor {
     cursor: pointer;
 }
 
-.login-section {
+/*.login-section {
     background-color: white;
     min-height: 100vh;
     padding: 30px;
-}
+}*/
 
 
 .status {
@@ -468,7 +451,6 @@ h3 {
 
 .ticketall {
     background: #f5f5f7;
-   
     font-weight: bold;
     font-size: 15px;
     color: black;
@@ -477,7 +459,6 @@ h3 {
 
 .tickethead {
     background: #b1b1b133;
-    
     font-weight: bold;
     font-size: 15px;
     color: black;
@@ -507,7 +488,8 @@ h3 {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.tablewidthsmall{
+
+.tablewidthsmall {
     width: 135px;
     /* word-break: break-all;*/
     overflow: hidden;
@@ -555,6 +537,7 @@ h3 {
     text-align: center;
     line-height: 15px;
 }
+
 .tablecomment {
     width: 100%;
     max-width: 100%;
@@ -562,10 +545,11 @@ h3 {
     margin-left: 0px;
 }
 
-.formbutton{
+.formbutton {
     margin-top: -22px;
     margin-left: -154px;
 }
+
 .h4form {
     margin-top: 24px;
     margin-bottom: -35px;
@@ -578,24 +562,25 @@ h3 {
     max-width: 133%;
     margin-bottom: 20px;
 }
+
 .navbar-inversetms {
     background-color: rgb(53 53 53);
-    
     border-color: rgb(53 53 53);
 }
+
 .navbar.scrolled {
     background-color: rgb(35 35 35);
 }
 
 .primaryCreateNew {
     margin-left: 1019px;
-
     background: #0268ff;
     color: white;
     border-color: #0268ff;
     border-radius: 10px;
     margin-top: -2px;
 }
+
 .primaryallticket {
     margin-left: 924px;
     background: #353535;
@@ -604,61 +589,52 @@ h3 {
     border-radius: 10px;
     margin-top: -56px;
 }
-.changeColor{
-    color:#0052CC
+
+.changeColor {
+    color: #0052CC
 }
 
 
-.labelform{
+.labelform {
     display: inline-block;
     max-width: 100%;
     margin-bottom: 3px;
     margin-top: 25px;
     font-weight: 700;
 }
+
 * {
     font-family: 'Lexend Deca', sans-serif;
-    font-size:14px;
-    color:#1b1b1b
-   /*//font-family: 'Segoe UI'*/
-     
+    font-size: 14px;
+    /*color:#1b1b1b*/
+    /*//font-family: 'Segoe UI'*/
 }
+
 #Ticket tbody tr:hover {
     background: #e9e9e9;
     color: #1c1c1c;
     font-weight: bolder;
     cursor: pointer;
 }
+
 #EmpGrid tbody tr:hover {
     background: #e9e9e9;
     color: #1c1c1c;
     font-weight: bolder;
-    
 }
+
 * tbody tr {
     background: #f5f5f7;
 }
 
-.form-group{
-
-    width :1000px;
+.form-group {
+    width: 1000px;
 }
 
-/*.validationMessage {
-    position: relative;
-    font-weight:12px;
-    color:red;
-}
 
-    .validationMessage .field-validation-error {
-        position: absolute;
-        color:red;
-        top: 100%;
-       
-    }*/
 
-.check-box{
-    margin-top:9px;
+.check-box {
+    margin-top: 9px;
 }
 
 .h1, .h2, .h3, h1, h2, h3 {
@@ -673,19 +649,33 @@ h3 {
     max-width: 1060px;
     width: 1060px;
 }
+
 .white_box {
     display: block;
     background: #fff;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-    border-radius:10px;
+    border-radius: 10px;
     padding: 20px;
     margin-bottom: 20px;
     overflow: visible;
 }
 
 
-.userInfoDiv { position: absolute; right: 0; top: 40px; background: #fff; width: 100%; padding: 12px 15px; border-radius: 4px; box-shadow: 0 0 11px 1px rgb(16 2 24 / 21%); display:none; }
-.userName:hover .userInfoDiv { display:block;}
+.userInfoDiv {
+    position: absolute;
+    right: 0;
+    top: 40px;
+    background: #fff;
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 4px;
+    box-shadow: 0 0 11px 1px rgb(16 2 24 / 21%);
+    display: none;
+}
+
+.userName:hover .userInfoDiv {
+    display: block;
+}
 
 /***********|| Prefix Class Name ||*************/
 .justify-content-right, .justify-content-center, .justify-content-left, .align-center, .align-bottom,
@@ -735,19 +725,19 @@ h3 {
 /************** Header **************/
 
 
-           .menuDiv ul li a {
-                margin: 0;
-                padding: 0;
-                font-weight: 400;
-                font-size: 16px;
-                line-height: 1;
-                color: #FFFFFF;
-                display: block;
-            }
+.menuDiv ul li a {
+    margin: 0;
+    padding: 0;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1;
+    color: #FFFFFF;
+    display: block;
+}
 
-            .menuDiv ul li:hover a, .menuDiv ul li.active a {
-                color: #a9cfff;
-            }
+.menuDiv ul li:hover a, .menuDiv ul li.active a {
+    color: #a9cfff;
+}
 
 .userInfo {
     margin: 0;
@@ -780,13 +770,13 @@ h3 {
     border-radius: 4px;
     box-shadow: 0 0 11px 1px rgb(16 2 24 / 21%);
     opacity: 0;
-   
 }
-   .userInfo:hover .userName:hover + .userInfoDiv,
-.userInfoDiv:hover {
-    opacity: 1;
-    pointer-events: auto;
-}
+
+    .userInfo:hover .userName:hover + .userInfoDiv,
+    .userInfoDiv:hover {
+        opacity: 1;
+        pointer-events: auto;
+    }
 
     .userInfoDiv a {
         display: block;
@@ -798,7 +788,7 @@ h3 {
 
         .userInfoDiv a:checked {
             color: #26cd00;
-            font-weight:bolder;
+            font-weight: bolder;
         }
 
     .userInfoDiv:after {
@@ -837,7 +827,7 @@ h3 {
     padding: 20px;
     margin-bottom: 20px;
     overflow: visible;
-    width  :1133px;
+    width: 1133px;
 }
 /************** END Header **************/
 .white_box_home {
@@ -852,58 +842,70 @@ h3 {
     height: 130px;
     cursor: pointer;
 }
+
 .first_1_box {
     background: rgb(255 116 77 / 0.75);
 }
+
 .first_2_box {
     background: rgb(146 201 27 / 0.75);
 }
+
 .first_3_box {
     background: rgb(255 194 34 / 0.75);
 }
+
 .first_4_box {
     background: rgba(67, 196, 255, 0.75);
 }
 
 .ds_label {
-    color:  #FFF;
+    color: #FFF;
     font-weight: bolder;
     font-size: 22px;
 }
+
 .ds_count1 {
     font-size: 54px;
     color: #db0000;
     font-weight: bold;
     font-family: 'Century Gothic';
 }
+
 .ds_count2 {
     font-size: 54px;
     color: #3C5700;
     font-weight: bold;
     font-family: 'Century Gothic';
 }
+
 .ds_count3 {
     font-size: 54px;
     color: #906800;
     font-family: 'Century Gothic';
     font-weight: bold;
 }
+
 .ds_count4 {
     font-size: 54px;
     color: #003F5CBF;
-    font-family:'Century Gothic';
+    font-family: 'Century Gothic';
     font-weight: bold;
 }
+
 .k-filtercell > span {
     padding-right: 0;
 }
+
 .k-filter-row .k-dropdown-operator {
     right: 0 !important;
 }
+
 .dropdownpriority {
     margin-top: -97px;
     margin-left: 917px;
 }
+
 .white_graph {
     display: block;
     background: rgb(255 255 255);
@@ -916,6 +918,7 @@ h3 {
     height: 480px;
     margin-left: 13px;
 }
+
 .loginpage {
     margin: 0 auto;
     max-width: 400px;
@@ -924,21 +927,31 @@ h3 {
     padding: 20px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
 }
+
 textarea.form-control {
     width: 100%;
 }
+
+th [role="listbox"] {
+    visibility: hidden;
+}
+
 .text-danger {
     color: red;
-    font-size: 12px;
     text-align: left;
-   
 }
-.validationMessage .field-validation-error {
-    position: absolute;
-    top: 100%;
-   
-}
-.text-danger field-validation-error {
+
+.field-validation-error {
     color: red;
-    font-size: 12px;
+    font-size: small;
 }
+
+.validationMessage {
+    position: relative;
+    font-weight: 8px;
+}
+
+    .validationMessage .field-validation-error {
+        position: absolute;
+        top: 100%;
+    }

@@ -13,7 +13,7 @@ namespace TMS.Model
         public int Id { get; set; }
         [Required]
         [Display(Name="Type")]
-        [RegularExpression("^[A-Za-z]{1,10}$")]
+      
         public string Type { get; set; }
 
 
@@ -23,7 +23,7 @@ namespace TMS.Model
         public string Code { get; set; }
 
 
-        [RegularExpression("^[A-Za-z]{1,10}$")]
+       
         [Required(ErrorMessage ="Name is Required")]
         [Display(Name = "Name")]
         public string Name { get; set; }

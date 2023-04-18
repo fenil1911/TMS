@@ -18,7 +18,11 @@ namespace TMS.Data.Database
         public string UserName { get; set; }
         public int CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
-        
+         public Nullable< int> UpdatedBy { get; set; }
+        public Nullable<DateTime> UpdatedOn { get; set; }
+
+        public bool IsDeleted { get; set; }
+
 
     }
 }

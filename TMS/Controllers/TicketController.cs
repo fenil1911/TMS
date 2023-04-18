@@ -465,59 +465,8 @@ namespace TMS.Controllers
                 throw ex;
             }
         }
-        public ActionResult Comment(int Id)
-        {
-            try
-            {
-                TicketCommentViewModel model = new TicketCommentViewModel();
-                model.TicketId = Id;
-                return View(model);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-        public JsonResult getTicketComment(int id)
-        {
-            try
-            {
-                List<TicketCommentViewModel> List = _ticketService.GetAllComment(id);
-                return Json(List, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-        [HttpPost]
-        public JsonResult Comment(TicketCommentViewModel model)
-        {
-            try
-            {
-                int CreatedBy = SessionHelper.UserId;
-                string CreatedBy1 = SessionHelper.UserName;
-                _ticketService.CreateTicketComment(model, CreatedBy, CreatedBy1);
-                string message = "SUCCESS";
-                return Json(new { model = message, JsonRequestBehavior.AllowGet });
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-        public JsonResult postTicketComment(int id)
-        {
-            try
-            {
-                List<TicketCommentViewModel> tickets = new List<TicketCommentViewModel>();
-                return Json(tickets, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        
+        
         public ActionResult Delete(int Id)
         {
             try
@@ -550,6 +499,148 @@ namespace TMS.Controllers
                 throw ex;
             }
         }
+
+
+      //------------------Comment--------------------------------
+
+        public ActionResult Comment(TicketComment modeledit , int Id)
+        {
+            try
+            {
+                ViewBag.UserName = SessionHelper.UserName;
+                
+
+                TicketCommentViewModel model = new TicketCommentViewModel();
+                model.TicketId = Id;
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }        
+        
+    
+
+
+
+
+
+
+        public JsonResult postTicketComment(int id)
+        {
+            try
+            {
+                List<TicketCommentViewModel> tickets = new List<TicketCommentViewModel>();
+                return Json(tickets, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+
+        //---------------------Comment---------------------------------
+
+        public JsonResult getTicketComment(int id)
+        {
+            try
+            {
+                List<TicketCommentViewModel> List = _ticketService.GetAllComment(id);
+                return Json(List, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        [HttpPost]
+        public JsonResult Comment(TicketCommentViewModel model)
+        {
+            try
+            {
+                int CreatedBy = SessionHelper.UserId;
+                string CreatedBy1 = SessionHelper.UserName;
+                int UpdatedBy = CreatedBy;
+                string UpdatedBy1 = CreatedBy1;
+                if (model.Id == 0)
+                {
+                    _ticketService.CreateTicketComment(model, CreatedBy, CreatedBy1);
+                    
+                }
+                else{
+                    _ticketService.UpdatedTicketComment(model, UpdatedBy, UpdatedBy1);
+                    
+
+                }
+                string message = "SUCCESS";
+                return Json(new { model = message, JsonRequestBehavior.AllowGet });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+
+        //============================Edit Comment========================================
+
+
+        public JsonResult GetTicketEditComment(int id)
+        {
+            try
+            {
+                TicketCommentViewModel comment = _ticketService.GetCommentById(id);
+                if (comment != null)
+                {
+                    return Json(new { success = true, comment }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Comment not found" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public JsonResult CommentEdit(TicketCommentViewModel model)
+        {
+            try
+            {
+                int CreatedBy = SessionHelper.UserId;
+                string CreatedBy1 = SessionHelper.UserName;
+                _ticketService.CreateTicketComment(model, CreatedBy, CreatedBy1);
+                return Json(new { success = true, message = "Comment added successfully" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+
+
+
+
+        //----------------------Delete-------------------------------
+
+       
+        [HttpPost]
+        public JsonResult DeleteComment(int Id)
+        {
+            _ticketService.DeleteComment(Id);
+            return Json(new { success = true });
+        }
+
 
     }
 }

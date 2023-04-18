@@ -9,21 +9,22 @@ namespace TMS.Model
 {
     public class UsersModel
     {
-        [Required]
-        [Display(Name = "User Name")]
-        [Remote("CheckDuplicateUserName", "Users", HttpMethod = "Post", AdditionalFields = "UserId")]
+
+        public int UserId{ get; set; }
+        public int Id{ get; set; }
+
         public string UserName { get; set; }
 
-        [Required]
-        [RegularExpression(@"^[a-zA-Z ]+$", ErrorMessage = "Only Letters and Spaces are allowed")]
         public string Name { get; set; }
+        [Required]
+        public string FirstName { get; set; }
+        [Required]
+        public string LastName { get; set; }
+                  
 
-
-        [Required(AllowEmptyStrings = false, ErrorMessage = "EmailId Required.")]
-        [DataType(DataType.EmailAddress)]
-        //[Remote("CheckDuplicateUserEmail", "Users", HttpMethod = "Post", AdditionalFields = "UserId")]
+       
         public string EmailId { get; set; }
-
+        [Required]
         public string Role { get; set; }
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
@@ -32,14 +33,12 @@ namespace TMS.Model
         public int CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Password is required")]
-        [DataType(DataType.Password)]
+     
         public string Password { get; set; }
 
-        [Display(Name = "Confirm Password")]
-        [DataType(DataType.Password)]
-        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "Confirm password and password do not match")]
+       
         public string ConfirmPassword { get; set; }
-        public int Id { get; set; }
+        
+        public List<MyDropdown> RoleDropdown { get; set; }
     }
 }

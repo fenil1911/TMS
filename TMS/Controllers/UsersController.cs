@@ -8,6 +8,8 @@ using System.Web.Mvc;
 using TMS.Data.Database;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using WebMatrix.WebData;
+using System.Web.Security;
 
 namespace TMS.Controllers
 {
@@ -81,55 +83,53 @@ namespace TMS.Controllers
                 throw ex;
             }
         }
-
         public ActionResult Edit(int Id)
         {
-            try
-            {
+           
+                UsersModel usersModel = _usersService.GetUserById(Id);
 
-                if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.USER.ToString(), AccessPermission.IsEdit))
-                {
-                    return RedirectToAction("AccessDenied", "Base");
-                }
+            usersModel.RoleDropdown = _rolesService.GetAllRoles()
+                .Select(x => new MyDropdown() { Key = x.Name, name = x.Name }).ToList();
 
-                Users EditCommonLookup = _usersService.GetUserById(Id);
-                return PartialView("Edit", EditCommonLookup);
-
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
+            return View(usersModel);
         }
         [HttpPost]
-        public ActionResult Edit(UsersModel usersModel)
+        public ActionResult Edit(UsersModel registerModel)
         {
             try
             {
-                if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.COMMONLOOKUP.ToString(), AccessPermission.IsEdit))
-                {
-                    return RedirectToAction("AccessDenied", "Base");
-                }
-                int UpdatedBy = SessionHelper.UserId;
                 if (ModelState.IsValid)
                 {
-                    UsersModel commonlookup_model = _usersService.UpdateCommonLookup(usersModel, UpdatedBy);
-                    TempData["Message"] = "Data Updated Successfully!!";
-                    return RedirectToAction("Index");
-                }
-                else
-                {
+                    var registerModel1 = _usersService.UpdateUserProfile(registerModel);
+                    var roles = Roles.GetRolesForUser(registerModel.UserName);
 
-                    return PartialView("Edit");
+                    foreach (var role in roles)
+                    {
+                        Roles.RemoveUserFromRole(registerModel.UserName, role);
+                    }
+
+                    Roles.AddUserToRole(registerModel.UserName, registerModel.Role);
                 }
+                else{
+
+                    
+
+                    return RedirectToAction("Edit");
+                }
+
+
+
             }
             catch (Exception ex)
             {
                 throw ex;
             }
 
+            return RedirectToAction("Index");
+
         }
+
+
 
     }
 }

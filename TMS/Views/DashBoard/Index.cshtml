@@ -1,4 +1,4 @@
-﻿
+﻿     @using TMS.Model;
 @{
     ViewBag.Title = "Index";
 }
@@ -66,6 +66,7 @@
                 <label style="align-items: center;  font-size: 18px; color: #3535359c">Top 5 Tickets</label>
             </div>
         </div>
+        
         <div class="row ;col ; white_boxdashboard" style=" margin-top: 25px;margin-left:-4px">
 
             @(Html.Kendo().Grid<TMS.Model.TicketModel>()
@@ -74,12 +75,15 @@
         .Columns(columns =>
         {
 
-            columns.Bound(p => p.AssignedToName).Title("Assigned To").Width(120);
-            columns.Bound(p => p.CreatedToName).Title("Created By").Width(120);
             columns.Bound(p => p.TicketName).Title("Ticket Name").Width(120);
             columns.Bound(p => p.TypeName).Title("Type").Width(110);
             columns.Bound(p => p.PriorityName).Title("Priority").Width(80);
             columns.Bound(p => p.StatusName).Title("Status").Width(90);
+         
+            columns.Bound(p => p.AssignedToName).Title("Assigned To").Width(120);
+           
+
+            columns.Bound(p => p.CreatedToName).Title("Created By").Width(120);
             columns.Bound(p => p.ImageName)
             .Title("Attachment")
             .ClientTemplate("#if (ImageName != null && ImageName != '') { #" +
@@ -87,8 +91,8 @@
             "# } #")
             .Width(100);
 
-            }).HtmlAttributes(new { style = "width:1090px"
-            })
+        }).HtmlAttributes(new { style = "width:1090px"
+        })
 
             .Sortable()
 

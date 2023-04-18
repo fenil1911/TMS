@@ -11,9 +11,7 @@ using TMS.Data;
 using TMS.Helper;
 using TMS.Service;
 using TMS.Model.General;
-using static TMS.Model.AccountModel;
-
-
+using static TMS.Model.AccountModel;    
 using System.Collections.Generic;
 using System.Threading;
 
@@ -39,9 +37,14 @@ namespace TMS.Controllers
             _roleService = new RoleService();
 
         }
+
         [AllowAnonymous]
-        public ActionResult Login(string ReturnUrl = "")
+        public ActionResult Login(string ReturnUrl = null)
         {
+            ViewData["ReturnUrl"] = ReturnUrl;
+
+            // Check for password reset success message
+            var passwordResetSuccess = TempData["PasswordResetSuccess"];
             Model.LoginModel model = new Model.LoginModel();
             if (SessionHelper.UserId > 0)
             {
@@ -72,7 +75,7 @@ namespace TMS.Controllers
                     if (model.Password == "123")
                     {
 
-                        return RedirectToAction("ChangePassword", "Account", userID);
+                        return RedirectToAction("ChangePassword", "Account");
                     }
                     else
                     {
@@ -106,6 +109,8 @@ namespace TMS.Controllers
                 throw ex;
             }
         }
+        
+        [AllowAnonymous]
         public ActionResult Logout()
         {
             try
@@ -153,7 +158,9 @@ namespace TMS.Controllers
                     bool isUserExists = WebSecurity.UserExists(registerModel.UserName);
                     if (isUserExists)
                     {
-                        ModelState.AddModelError("UserName", "The username already exists.");
+                        TempData["AlertMessage"] = "The username already exists.";
+                        TempData["AlertType"] = "alert-danger";
+                        return RedirectToAction("Register");
 
                     }
                     else
@@ -166,7 +173,6 @@ namespace TMS.Controllers
                             CreatedOn = DateTime.Now,
                             IsActive = registerModel.IsActive,
                             IsDeleted = registerModel.IsDeleted
-
 
                         });
                         Roles.AddUserToRole(registerModel.UserName, registerModel.Role);
@@ -224,9 +230,6 @@ namespace TMS.Controllers
             }
             return View();
         }
-
-
-
 
         [AllowAnonymous]
         public ActionResult ForgotPassword()
@@ -333,9 +336,8 @@ namespace TMS.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        
         [AllowAnonymous]
-      
         public ActionResult ResetPassword(ResetPasswordModel model)
         {
             var message = "";
@@ -345,21 +347,31 @@ namespace TMS.Controllers
                 if (user != null)
                 {
                     bool isPasswordChanged = WebSecurity.ResetPassword(model.ResetCode, model.NewPassword);
+
                     if (isPasswordChanged)
                     {
-                        return RedirectToAction ("Login");
+                        TempData["PasswordResetSuccess"] = "Your password has been successfully reset. Please log in with your new password.";
+                        return Json(new { success = true, redirectUrl = Url.Action("Logout", "Account") });
+                    }
+                    else
+                    {
+                        message = "Failed to reset password.";
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Invalid reset code.");
+                    message = "Invalid reset code.";
                 }
             }
-            return Redirect("http://localhost:49832/");
-            return View(model);
+            else
+            {
+                message = "Invalid input data.";
+            }
+
+            return Json(new { success = false, message = message });
         }
 
-      
+   
 
     }
 

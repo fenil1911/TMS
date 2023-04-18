@@ -17,9 +17,19 @@ namespace TMS.Service
             usersProvider = new UsersProvider();
         }
 
-        public Users GetUserById(int Id)
+        public UsersModel GetUserById(int Id)
         {
-            return usersProvider.GetUserById(Id);
+            var data = usersProvider.GetUserById(Id);
+            UsersModel category = new UsersModel
+            {
+                FirstName = data.FirstName,
+                LastName = data.LastName,
+                IsActive = data.IsActive  ,
+                UserName = data.UserName ,
+                UserId = data.UserId   ,
+                EmailId = data.EmailId
+            };
+            return category;
         }
         public List<webpages_RolesModel> GetDropdownBykey3(string key)
         {
@@ -47,9 +57,29 @@ namespace TMS.Service
         {
             usersProvider.DeleteUser(Id);
         }
-        public UsersModel UpdateCommonLookup(UsersModel model, int UpdatedBy)
+       
+
+        public Users GetUserProfileById()
         {
-            return usersProvider.UpdateCommonLookup(model, UpdatedBy);
+            var userid = SessionHelper.UserId;
+            var data = usersProvider.GetUserById(userid);
+
+            var username = SessionHelper.UserName;
+            Users userProfileModel = new Users()
+            {
+
+                FirstName = data.FirstName,
+                LastName = data.LastName,
+                IsActive = data.IsActive
+                
+            };
+            return userProfileModel;
+
         }
+        public UsersModel UpdateUserProfile(UsersModel userProfileModel)
+        {
+            return usersProvider.UpdateUserProfile(userProfileModel);
+        }
+      
     }
 }

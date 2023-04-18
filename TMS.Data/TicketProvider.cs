@@ -17,6 +17,10 @@ namespace TMS.Data
         public Tickets GetTicketsByUpdateId(int Id)
         {
             return _db.Tickets.Find(Id);
+        }  
+        public TicketComment GetTicketsCommentUpdated(int Id)
+        {
+            return _db.TicketComment.Find(Id);
         }
         public TicketModel GetTicketsById(int Id)
         {
@@ -177,6 +181,8 @@ namespace TMS.Data
 
             }
         }
+        
+        
         public int CreateTicketComment(TicketCommentViewModel model, int CreatedBy, string CreatedBy1)
         {
             TicketComment obj = new TicketComment()
@@ -192,6 +198,18 @@ namespace TMS.Data
             _db.TicketComment.Add(obj);
             _db.SaveChanges();
             return obj.Id;
+        }                             
+        public TicketCommentViewModel UpdatedTicketComment(TicketCommentViewModel model, int UpdatedBy, string UpdatedBy1)
+        {
+            var obj = GetTicketsCommentUpdated(model.Id);
+                  obj.Comment = model.Comment;
+            obj.Id = model.Id;
+
+            obj.UpdatedBy = UpdatedBy;
+            obj.UserName = UpdatedBy1;
+
+            _db.SaveChanges();
+            return model;
         }
         public int CreateTickets(TicketModel ticket, int CreatedBy)
         {
@@ -299,19 +317,20 @@ namespace TMS.Data
         public List<TicketCommentViewModel> GetAllComment(int Id)
         {
             var GetAllComment = (from t in _db.TicketComment
-                                 where t.TicketId == Id
+                                 where t.TicketId == Id    && t.IsDeleted != true
                                  select new TicketCommentViewModel
                                  {
+                                     Id = t.Id,    
                                      Comment = t.Comment,
                                      CreatedOn = t.CreatedOn,
                                      CreatedBy = t.CreatedBy,
                                      UserName = t.UserName
-                                 })
-                                 .OrderByDescending(x => x.CreatedOn)
+                                 }).OrderByDescending( x => x.CreatedOn)
+                                 
                                  .ToList();
             return GetAllComment;
         }
-
+ 
         public int TotalHigh()
         {
             var high =  _db.Tickets.Where(x => x.PriorityId == 11 && x.IsDeleted != 1 && x.AssignedTo == SessionHelper.UserId).Count();
@@ -354,16 +373,7 @@ namespace TMS.Data
             return _db.Tickets.Where(x => x.PriorityId == 14 && x.IsDeleted != 1 ).Count();
 
         }     
-       /* public List<TicketModel> GetAllStatus()
-        {
-            var status = (from t2 in _db.Tickets
-                          join a in _db.CommonLookup
-                          on t2.StatusId equals a.Id into a
-                          from ta in a.DefaultIfEmpty()
-                          select new TicketModel { StatusId = t2.StatusId, StatusName = ta.Name }).ToList();
-            return status;             
-        }*/
-       
+    
         public List<TicketModel> GetAllStatus()
         {
             var statusCounts = (from t in _db.Tickets   
@@ -385,8 +395,43 @@ namespace TMS.Data
             return statusCounts;
         }
 
+        public void CreateComment(TicketComment comment)
+        {
+            _db.TicketComment.Add(comment);
+            _db.SaveChanges();
+        }
 
+        public TicketComment GetCommentById(int id)
+        {
+            return _db.TicketComment.FirstOrDefault(x => x.Id == id);
+        }
 
+        public void UpdateComment(TicketCommentViewModel comment, int UpdatedBy, string UpdatedBy1)
+        {
+            var existingComment = _db.TicketComment.FirstOrDefault(x => x.Id == comment.Id);
+            if (existingComment != null)
+            {
+                existingComment.Comment = comment.Comment;
+                existingComment.CreatedBy = comment.CreatedBy;
+                existingComment.CreatedOn = comment.CreatedOn;
+                existingComment.UserName = comment.UserName;
+                existingComment.UpdatedBy = UpdatedBy;
+                _db.SaveChanges();
+            }
+        }
+
+        public void DeleteComment(int Id)
+        {
+            var data = GetAllComment(Id);
+            if (data != null)
+            {
+
+                TicketComment model = _db.TicketComment.Find(Id);
+                model.IsDeleted  = true;
+
+                _db.SaveChanges();
+            }
+        }
     }
 
 }              

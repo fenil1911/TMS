@@ -17,12 +17,12 @@ namespace TMS.Model
        
         public int Id { get; set; }
         [Required]
-        [RegularExpression("^[A-Za-z]{1,10}$")]
+       
         public string Name { get; set; }
 
         [Required]
         [Display(Name = "Navigate URL")]
-        [RegularExpression("^[A-Za-z]{1,10}$")]
+        
 
         public string NavigateURL { get; set; }
 

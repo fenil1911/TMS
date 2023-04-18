@@ -10,9 +10,9 @@ namespace TMS
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new AuthorizeAttribute());
-/*           filters.Add(new ExceptionHandlerAttribute());
-*/           /* filters.Add(new TraceFilterAttribute());*/
-        
+            /*filters.Add(new ExceptionHandlerAttribute());*/
+          /*  filters.Add(new TraceFilterAttribute());*/
+
 
         }
     }

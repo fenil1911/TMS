@@ -28,7 +28,8 @@
                     </div>
                     <div class="col-md-6">
                         <label class="form-label labelform">Code<strong>*</strong></label>
-                        @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.TextBoxFor(model => model.Code, new { @class = "form-control", @readonly = "readonly" })
+                       @* @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control" } })*@
                         @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
                     </div>
                 </div>

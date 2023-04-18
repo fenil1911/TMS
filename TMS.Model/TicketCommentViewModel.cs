@@ -12,6 +12,7 @@ namespace TMS.Model
         public int Id { get; set; }
         public int TicketId { get; set; }
         [Required(ErrorMessage = "Comment is required")]
+        
         public string Comment { get; set; }
         public string UserName { get; set; }
         public int CreatedBy { get; set; }

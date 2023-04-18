@@ -13,18 +13,16 @@ namespace TMS.Model
         [Required]
         public int UserId { get; set; }
         [Required]
-        [RegularExpression("^[A-Za-z]{1,50}$")]
+       
         public string FirstName { get; set; }
 
         [Required]
         [Display(Name = "LastName")]
-        [RegularExpression("^[A-Za-z]{1,50}$")]
         
         public string LastName { get; set; }
         
         [Required]
         [Display(Name = "UserName")]
-        [RegularExpression("^[A-Za-z]{1,50}$")]
         public string UserName { get; set; }
         [Display(Name = "Password ")]
         [Required(ErrorMessage = "Password is required")]

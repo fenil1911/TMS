@@ -17,8 +17,44 @@ namespace TMS.Data
         }
         public Users GetUserById(int Id)
         {
-            return _db.Users.Where(x => x.UserId == Id).FirstOrDefault();
+            return _db.Users.Find(Id);
+
         }
+
+        public UsersModel UpdateUserProfile(UsersModel model)
+        {
+            var obj = GetUserById(model.Id);
+            obj.FirstName = model.FirstName;
+            obj.LastName = model.LastName;
+            obj.IsActive = model.IsActive;
+            
+
+
+            _db.SaveChanges();
+            return model;
+        }
+       /* public Users UpdateUserProfile(RegisterModel userProfileModel)
+        {
+            var userid = SessionHelper.UserId;
+            var v = _db.Users.Where(a => a.UserId == userid).FirstOrDefault();
+            if (v != null)
+            {
+                string startupPath = System.IO.Directory.GetCurrentDirectory();
+
+                string startupPath1 = Environment.CurrentDirectory;
+
+                Users obj = _db.Users.FirstOrDefault(x => x.UserId == v.UserId);
+                
+                obj.FirstName = userProfileModel.FirstName;
+                obj.LastName = userProfileModel.LastName;
+                obj.IsActive = userProfileModel.IsActive;
+                   
+                _db.SaveChanges();
+            }
+
+            return userProfileModel;
+        }*/
+    
         public List<webpages_RolesModel> GetAllUser()
         {
             var GetAllUser = (from c in _db.webpages_Roles
@@ -89,16 +125,7 @@ namespace TMS.Data
         }
 
 
-        public UsersModel UpdateCommonLookup(UsersModel model, int UpdatedBy)
-        {
-            var obj = GetUserById(model.Id);
-            obj.FirstName = model.Name;
-            obj.UserName = model.UserName;
-                   
-
-            _db.SaveChanges();
-            return model;
-        }
+       
 
 
     }

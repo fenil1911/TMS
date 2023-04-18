@@ -1,5 +1,5 @@
 ﻿@using Kendo.Mvc.UI
-
+@using TMS.Model
 @{ Layout = "~/Views/Shared/_Layout.cshtml";
 
     @Scripts.Render("~/bundles/kendo")}
@@ -7,99 +7,116 @@
 
 
 <div class="container-fluid">
-
-
     <div class="users-container @if (!TMS.Model.AccessPermission.Add) { <text>no-create-button</text> }" style="margin-top:80px ;margin-bottom:64px">
         <h2 style="font-weight: bold; @if (!TMS.Model.AccessPermission.Add) { <text>margin-top: 0 ; margin-bottom:20px;</text> }">Tickets</h2>
+        <div style="margin-bottom: -40px; margin-left: 835px;" id="priority-dropdown"></div>
+
         @if (TMS.Model.AccessPermission.Add)
         {
-            @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary primaryCreateNew" })
 
-            @*@Html.ActionLink("All Ticket", "Index", null, new { @class = "btn btn-primary primaryallticket" })*@
+            @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary primaryCreateNew" })
+        }
+    </div>
+    <div class="row  ; white_box " style="margin-top: -40px;">
+        @if (SessionHelper.UserId == 1)
+        {
+            @(Html.Kendo().Grid<TMS.Model.TicketModel>()
+                 .Name("Ticket")
+                .Scrollable(s => s.Height("auto"))
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.TicketName).Title("Ticket Name").Width(120);
+                    columns.Bound(p => p.TypeName).Title("Type").Width(110);
+                    columns.Bound(p => p.PriorityName).Title("Priority").Width(100);
+                    columns.Bound(p => p.StatusName).Title("Status").Width(90);
+                    columns.Bound(p => p.AssignedToName).Title("Assigned To").Width(120);
+                    columns.Bound(p => p.CreatedToName).Title("Created By").Width(120);
+                    columns.Bound(p => p.ImageName)
+                    .Title("Attachment")
+                    .ClientTemplate("#if (ImageName != null && ImageName != '') { #" +
+                    "<a href='" + Url.Action("DownloadFile", "Ticket", new { fileName = "#=ImageName#" }) + "' target='_blank'>#=ImageName#</a>" +
+                    "# } #")
+                    .Width(150).Filterable(false); ;
+                    columns.Bound(p => p.CreatedOn).Title("Created On").Format("{0:dd/MM/yyyy}").Width(100).Filterable(false); ;
+                    columns.Bound(p => p.Id).ClientTemplate(
+                    "<a href='" + Url.Action("Comment", "Ticket") + "/#=Id#'>Details   </a>"
+                    + "#if ('" + TMS.Model.AccessPermission.Edit + "'=='True') {#"
+                    + " | <a href='" + Url.Action("Edit", "Ticket") + "/#=Id#'>  Edit  </a>"
+                    + "#}#"
+                    + "#if ('" + TMS.Model.AccessPermission.Delete + "'=='True') {#"
+                    + " | <a href='" + Url.Action("Delete", "Ticket") + "/#=Id#' onclick='return confirm(\"Are you sure you want to delete this item?\")'>  Delete </a>"
+                    + "#}#"
+                    ).Width(160).Title("Action").Filterable(false);
+                }).HtmlAttributes(new
+                {
+                    style = ""
+                })
+                    .Scrollable()
+                    .Pageable(pageable => pageable
+                    .Refresh(true)
+                    .PageSizes(new int[] { 10, 20, 50 })
+                    .PreviousNext(true)
+                    )
+                    .Sortable()
+                    .Filterable(filter => filter
+                    .Mode(GridFilterMode.Row)
+                    .Extra(false)
+                    )
+                    .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .PageSize(10)
+                    .Read(read => read.Action("GetGridData", "Ticket"))))
+        }
+        else
+        {
+            @(Html.Kendo().Grid<TMS.Model.TicketModel>()
+                 .Name("Ticket")
+                .Scrollable(s => s.Height("auto"))
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.TicketName).Title("Ticket Name").Width(120);
+                    columns.Bound(p => p.TypeName).Title("Type").Width(110);
+                    columns.Bound(p => p.PriorityName).Title("Priority").Width(100);
+                    columns.Bound(p => p.StatusName).Title("Status").Width(90);
+                 
+                    columns.Bound(p => p.CreatedToName).Title("Created By").Width(120);
+                    columns.Bound(p => p.ImageName)
+                    .Title("Attachment")
+                    .ClientTemplate("#if (ImageName != null && ImageName != '') { #" +
+                    "<a href='" + Url.Action("DownloadFile", "Ticket", new { fileName = "#=ImageName#" }) + "' target='_blank'>#=ImageName#</a>" +
+                    "# } #")
+                    .Width(150).Filterable(false); ;
+                    columns.Bound(p => p.CreatedOn).Title("Created On").Format("{0:dd/MM/yyyy}").Width(100).Filterable(false); ;
+                    columns.Bound(p => p.Id).ClientTemplate(
+                    "<a href='" + Url.Action("Comment", "Ticket") + "/#=Id#'>Details   </a>"
+                    + "#if ('" + TMS.Model.AccessPermission.Edit + "'=='True') {#"
+                    + " | <a href='" + Url.Action("Edit", "Ticket") + "/#=Id#'>  Edit  </a>"
+                    + "#}#"
+                    + "#if ('" + TMS.Model.AccessPermission.Delete + "'=='True') {#"
+                    + " | <a href='" + Url.Action("Delete", "Ticket") + "/#=Id#' onclick='return confirm(\"Are you sure you want to delete this item?\")'>  Delete </a>"
+                    + "#}#"
+                    ).Width(160).Title("Action").Filterable(false);
+                }).HtmlAttributes(new
+                {
+                    style = ""
+                })
+                    .Scrollable()
+                    .Pageable(pageable => pageable
+                    .Refresh(true)
+                    .PageSizes(new int[] { 10, 20, 50 })
+                    .PreviousNext(true)
+                    )
+                    .Sortable()
+                    .Filterable(filter => filter
+                    .Mode(GridFilterMode.Row)
+                    .Extra(false)
+                    )
+                    .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .PageSize(10)
+                    .Read(read => read.Action("GetGridData", "Ticket"))))
 
         }
-
-    </div>
-    <div class="btn-group dropdown dropdownpriority">
-        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true">
-            Priority <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-            <li><a href="http://localhost:49832/Ticket/Index" onclick="changeButtonName(this)">All Tickets</a></li>
-            <li><a href="http://localhost:49832/Ticket/Index?Priority=High" onclick="changeButtonName(this)">High</a></li>
-            <li><a href="http://localhost:49832/Ticket/Index?Priority=Low" onclick="changeButtonName(this)">Low</a></li>
-            <li><a href="http://localhost:49832/Ticket/Index?Priority=Medium" onclick="changeButtonName(this)">Medium</a></li>
-            <li><a href="http://localhost:49832/Ticket/Index?Priority=Immediate" onclick="changeButtonName(this)">Immediate</a></li>
-        </ul>
-    </div>
-
-
-  @*  <div class="btn-group dropdown dropdownpriority">
-        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true">
-            Priority <span class="caret"></span>
-        </button>
-
-        <ul class="dropdown-menu">
-            <li><a href="http://localhost:49832/Ticket/Index" onclick="changeButtonName(this)">All Tickets</a></li>
-            <li><a href="http://localhost:49832/Ticket/Index?Priority=High" onclick="changeButtonName(this)">High</a></li>
-            <li><a href="http://localhost:49832/Ticket/Index?Priority=Low" onclick="changeButtonName(this)">Low</a></li>
-            <li><a href="http://localhost:49832/Ticket/Index?Priority=Medium" onclick="changeButtonName(this)">Medium</a></li>
-            <li><a href="http://localhost:49832/Ticket/Index?Priority=Immediate" onclick="changeButtonName(this)">Immediate</a></li>
-        </ul>
-
-    </div>*@
-
-    <div class="row  ; white_box " style="margin-top: -40px;">
-
-        @(Html.Kendo().Grid<TMS.Model.TicketModel>()
-         .Name("Ticket")
-        .Scrollable(s => s.Height("auto"))
-
-        .Columns(columns =>
-        {
-
-            columns.Bound(p => p.AssignedToName).Title("Assigned To").Width(120);
-            columns.Bound(p => p.CreatedToName).Title("Created By").Width(120);
-            columns.Bound(p => p.TicketName).Title("Ticket Name").Width(120);
-            columns.Bound(p => p.TypeName).Title("Type").Width(110);
-            columns.Bound(p => p.PriorityName).Title("Priority").Width(100);
-            columns.Bound(p => p.StatusName).Title("Status").Width(90);
-            columns.Bound(p => p.ImageName)
-            .Title("Attachment")
-            .ClientTemplate("#if (ImageName != null && ImageName != '') { #" +
-            "<a href='" + Url.Action("DownloadFile", "Ticket", new { fileName = "#=ImageName#" }) + "' target='_blank'>#=ImageName#</a>" +
-            "# } #")
-            .Width(150).Filterable(false); ;
-            columns.Bound(p => p.CreatedOn).Title("Created On").Format("{0:dd/MM/yyyy}").Width(100).Filterable(false); ;
-            columns.Bound(p => p.Id).ClientTemplate(
-            "<a href='" + Url.Action("Comment", "Ticket") + "/#=Id#'>Details   </a>"
-            + "#if ('" + TMS.Model.AccessPermission.Edit + "'=='True') {#"
-            + " | <a href='" + Url.Action("Edit", "Ticket") + "/#=Id#'>  Edit  </a>"
-            + "#}#"
-            + "#if ('" + TMS.Model.AccessPermission.Delete + "'=='True') {#"
-            + " | <a href='" + Url.Action("Delete", "Ticket") + "/#=Id#' onclick='return confirm(\"Are you sure you want to delete this item?\")'>  Delete </a>"
-            + "#}#"
-            ).Width(160).Title("Action").Filterable(false);
-
-
-        }).HtmlAttributes(new { style = ""
-        })
-            .Scrollable()
-            .Pageable(pageable => pageable
-                 .Refresh(true)
-                 .PageSizes(new int[] { 10, 20, 50 })
-                 .PreviousNext(true)
-             )
-            .Sortable()
-            .Filterable(filter => filter
-                                .Mode(GridFilterMode.Row)
-                                .Extra(false)
-            )
-            .DataSource(dataSource => dataSource
-                .Ajax()
-                .PageSize(10)
-                        .Read(read => read.Action("GetGridData", "Ticket"))))
-
     </div>
 </div>
 
@@ -112,26 +129,36 @@
         });
     });
 </script>
-<script>
 
-    var dropdownButton = document.querySelector('.dropdown-toggle');
-       dropdownButton.addEventListener('click', function () {
-           var dropdownMenu = document.querySelector('.dropdown-menu');
-        dropdownMenu.classList.toggle('show');
-          
+
+
+
+<script>
+    $(function () {
+        // Initialize the Kendo DropDownList
+        $("#priority-dropdown").kendoDropDownList({
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: {
+                data: [
+                    { text: "Low", value: "Low" },
+                    { text: "Medium", value: "Medium" },
+                    { text: "High", value: "High" },
+                    { text: "Immediate", value: "Immediate" }
+                ]
+            },
+            optionLabel: "Select priority",
+            change: function (e) {
+                var value = this.value();
+                if (value) {
+                    // Update the Kendo Grid's filter with the selected priority value
+                    var grid = $("#Ticket").data("kendoGrid");
+                    grid.dataSource.filter({ field: "PriorityName", operator: "eq", value: value });
+                    // Change the dropdown button name
+                    this.text(value);
+                }
+            }
+        });
     });
-
-
 </script>
-<script>
-    function changeButtonName(element) {
-        var dropdown = element.closest(".dropdownpriority").querySelector(".dropdown-toggle");
-        var url = new URL(element.href);
-        var priority = url.searchParams.get("Priority");
-        dropdown.innerHTML = priority + ' <span class="caret"></span>';
-    }
 
-
-
-
-   </script>

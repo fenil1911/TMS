@@ -102,6 +102,10 @@ namespace TMS.Service
         public int CreateTicketComment(TicketCommentViewModel comment, int CreatedBy, string CreatedBy1)
         {
             return ticketProvider.CreateTicketComment(comment, CreatedBy, CreatedBy1);
+        }                             
+        public TicketCommentViewModel UpdatedTicketComment(TicketCommentViewModel comment, int UpdatedBy, string UpdatedBy1)
+        {
+            return ticketProvider.UpdatedTicketComment(comment, UpdatedBy, UpdatedBy1);
         }
         public void DeleteTicket(int Id)
         {
@@ -111,7 +115,8 @@ namespace TMS.Service
         {
             var GetAllComment = ticketProvider.GetAllComment(Id);
             return GetAllComment;
-        }
+        } 
+       
         public int TotalHigh()
         {
             return ticketProvider.TotalHigh();
@@ -144,6 +149,59 @@ namespace TMS.Service
         {
             return ticketProvider.TotalImmediateAdmin();
         }
+        public void CreateComment(TicketCommentViewModel model)
+        {
+            var comment = new TicketComment
+            {
+                TicketId = model.TicketId,
+                Comment = model.Comment,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = DateTime.Now,
+                UserName = model.UserName
+            };
+            ticketProvider.CreateComment(comment);
+        }
+
+        public TicketCommentViewModel GetCommentById(int id)
+        {
+            var comment = ticketProvider.GetCommentById(id);
+            if (comment != null)
+            {
+                var model = new TicketCommentViewModel
+                {
+                    Id = comment.Id,
+                    TicketId = comment.TicketId,
+                    Comment = comment.Comment,
+                    CreatedBy = comment.CreatedBy,
+                    CreatedOn = comment.CreatedOn,
+                    UserName = comment.UserName
+                };
+                return model;
+            }
+            return null;
+        }
+
+    /*    public void UpdateComment(TicketCommentViewModel model)
+        {
+            var comment = new TicketComment
+            {
+                Id = model.Id,
+                TicketId = model.TicketId,
+                Comment = model.Comment,
+                CreatedBy = model.CreatedBy,
+                CreatedOn = model.CreatedOn,
+                UserName = model.UserName
+            };
+            ticketProvider.UpdateComment(comment);
+        }*/
+
+
+
+        public void DeleteComment(int Id)
+        {
+            ticketProvider.DeleteComment(Id);
+        }
+
 
 
     }

@@ -161,6 +161,9 @@ namespace TMS.Controllers
                         break;
                     case "UserName":
                         data = data.OrderBy(order => order.Id).Skip((Page - 1) * PageSize).Take(PageSize);
+                        break; 
+                        case "CreatedOn":
+                        data = data.OrderBy(order => order.Id).Skip((Page - 1) * PageSize).Take(PageSize);
                         break;
                 }
             }
@@ -188,6 +191,9 @@ namespace TMS.Controllers
                         data = data.OrderByDescending(order => order.Id).Skip((Page - 1) * PageSize).Take(PageSize);
                         break;
                     case "UserName":
+                        data = data.OrderByDescending(order => order.Id).Skip((Page - 1) * PageSize).Take(PageSize);
+                        break;  
+                    case "CreatedOn":
                         data = data.OrderByDescending(order => order.Id).Skip((Page - 1) * PageSize).Take(PageSize);
                         break;
                 }

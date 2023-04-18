@@ -22,6 +22,10 @@
         <section class="login-section">
 
             <div class="login-from box-shadow">
+                @if (!string.IsNullOrEmpty(ViewBag.PasswordResetSuccess))
+                {
+                    <div class="alert alert-success">@ViewBag.PasswordResetSuccess</div>
+                }
                 @if (!String.IsNullOrWhiteSpace(ViewBag.Error))
                 {
                     <label class="bg-error text-white alertmsg">@ViewBag.Error</label>
@@ -47,12 +51,11 @@
                             @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
 
                         </div>
-                        @Html.ActionLink("Forgot Password", "ForgotPassword", "Account")
-
                         <div class="form-group">
                             @Html.CheckBoxFor(model => model.RememberMe)
                             &nbsp;@Html.LabelFor(model => model.RememberMe, htmlAttributes: new { @class = "control-label" })
                             @Html.ValidationMessageFor(model => model.RememberMe, "", new { @class = "text-danger" })
+                            <a style="margin-left:31%">@Html.ActionLink("Forgot Password?", "ForgotPassword", "Account")</a>
                         </div>
                         <div class="mt-4">
                             <button class="w-100 center-block  btn-lg  btn-primary " id="btnlogin" type="submit" style="width: 350px;border-width:0px; border-radius:15px;height: 50px; background-color: #4b91f1 " ;>Sign In</button>

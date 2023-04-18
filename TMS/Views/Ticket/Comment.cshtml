@@ -1,18 +1,28 @@
 ﻿@model TMS.Model.TicketCommentViewModel
 
+ 
 @{
+    ViewBag.Title = "";
+}
+@if (Model.Id > 0)
+{
+    ViewBag.Title = "CommentEdit";
+}
+else
+{
     ViewBag.Title = "Comment";
 }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/timeago.js/4.0.2/timeago.min.js"></script>
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 
 <div>
     <div class="col-md-6">
         @*@Html.Action("TicketDetails", new { TicketId = Model.TicketId })*@
         <br /><br /><br /><br /><br /><br />
-        <table id="tblTicketDetails" class="table ticketall table-bordered  table-responsive table-hover">
+        <table id="tblTicketDetails" class="table ticketall table-bordered  table-responsive table-hover" style=" margin-left: -127px; margin-top: 7px;">
             <thead>
                 <tr>
-                    <th style="background-color: #b1b1b133; color: black; font-size:18px" colspan=2><center>Ticket Details</center></th>
+                    <th style="background-color: rgb(177 177 177 / 0.40); color: black; font-size:18px" colspan=2><center>Ticket Details</center></th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -20,31 +30,38 @@
 
     </div>
     <div class="col-md-6">
-       
+
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
-
+            @Html.HiddenFor(m => m.Id)
             <div class="form-horizontal">
                 <h4 style="font-size: 40px; font-weight: bold; margin-top: 60px; margin-bottom: -16px; ">Comment</h4>
                 <hr />
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 <div>
                     <div class="form-group">
-                       
+
                         <div class="col-md-5">
-                            
-                            @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control",
-                           placeholder = "Comment" } })
+                            @Html.HiddenFor(m => m.Id)
+                            @Html.EditorFor(model => model.Comment, new
+                       {
+                           htmlAttributes = new
+                           {
+                               @class = "form-control Comment",
+                               placeholder = "Comment",
+                               id = "Comment"
+                           }
+                       })
                             @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
                         </div>
                     </div>
 
 
                     <div class="form-group col-md-1">
-                       
-                            <input class="btn btn-primary " style="margin-top: 0px; " name="submitButton" id="btnSave" value="Comment" type="submit">
-                            
+
+                        <input class="btn btn-primary " style="margin-top: 0px; " name="submitButton" id="btnSave" value="Comment" type="submit">
+
                         <label>&nbsp;</label>
                         @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-default" })
                     </div>
@@ -58,13 +75,12 @@
         <table id="tblTicketComment" class="tablecomment table-bordered ticketall table-responsive table-hover">
             <thead>
                 <tr>
-                    <th style="background-color: #b1b1b133; color: black; font-size:18px" colspan=3><center>Comments</center></th>
+                    <th style="background-color: rgb(177 177 177 / 0.40); color: black; font-size: 18px" colspan=2><center>Comments</center></th>
                 </tr>
             <thead>
                 <tr>
-                   
                 </tr>
-            </thead> </thead>
+            </thead></thead>
 
             <tbody></tbody>
         </table>
@@ -73,156 +89,222 @@
 </div>
 <script>
 
-    $(document).ready(function () {
-        getTicketDetails();
-        getTicketComment();
-    });
+            $(document).ready(function () {
+                getTicketDetails();
+                getTicketComment();
+                $("#Id").val(0);
+            });
+
 
     $(function () {
-        $("#btnSave").click(function () {
-            //alert("");
+
+            $("#btnSave").click(function () {
+
             var model = {};
-            model.Comment = $("#Comment").val();
+                model.Comment = $("#Comment").val();
+                model.Id = $("#Id").val();
             model.TicketId = '@Model.TicketId';
 
             $.ajax({
-                type: "POST",
-                url: '@Url.Action("Comment")',
-                data: '{ model : ' + JSON.stringify(model) + '}',
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-                success: function () {
-                    getTicketDetails();
-                    getTicketComment();
-                    $("#Comment").val('');
-                },
-                error: function () {
-                    alert("Error while inserting data");
-                }
+            type: "POST",
+            url: '@Url.Action("Comment")',
+            data: '{ model : ' + JSON.stringify(model) + '}',
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function () {
+                $("#Id").val(0);
+            getTicketComment();
+            $("#Comment").val('');
+            },
+            error: function () {
+            alert("Error while inserting data");
+            }
             });
             return false;
-        });
-    });
+            });
+            });
 
 
-
-    function getTicketDetails() {
-        $("#tblTicketDetails tbody tr").remove();
-        $.ajax({
+            //-------------------------Ticket Details---------------------  -------------
+      function getTicketDetails() {
+            $("#tblTicketDetails tbody tr").remove();
+            $.ajax({
             type: 'GET',
             url: '@Url.Action("getTicketDetails")',
             dataType: 'json',
             data: { id: '@Model.TicketId' },
             success: function (data) {
-                var record =
-                        "<tr>"
-                           + "<th>Ticket Name</th>" +  "<td>" + data.TicketName + "</td>"+ "</tr>"
+            var record =
+            "<tr>"
+            + "<th>Ticket Name</th>" +  "<td>" + data.TicketName + "</td>"+ "</tr>"
 
-                        +"<tr>"
-                          + "<th>Priority  </th>" + "<td>" + data.PriorityName + "</td>" + "</tr>"
+            +"<tr>"
+            + "<th>Priority  </th>" + "<td>" + data.PriorityName + "</td>" + "</tr>"
 
-                        +"<tr>"
-                          + "<th>Status </th>" + "<td>" + data.StatusName + "</td>" + "</tr>"
+            +"<tr>"
+            + "<th>Status </th>" + "<td>" + data.StatusName + "</td>" + "</tr>"
 
-                        +"<tr>"
-                    + "<th>Assigned To </th>" + "<td>" + data.AssignedTo + "</td>" + "</tr>"
+            +"<tr>"
+            + "<th>Assigned To </th>" + "<td>" + data.AssignedTo + "</td>" + "</tr>"
 
-                         +"<tr>"
-                    + "<th>Type Name</th>" + "<td>" + data.TypeName + "</td>" + "</tr>"
-
-
-
-                      + "<tr>"
-                       + "<th>Description Data</th>" + "<td>" + data.DescriptionData + "</td>" + "</tr>"
-
-                    + "<tr>"
-                    
+            +"<tr>"
+            + "<th>Type Name</th>" + "<td>" + data.TypeName + "</td>" + "</tr>"
 
 
-                    ;
 
-                $('#tblTicketDetails tbody').append(record);
+            + "<tr>"
+            + "<th>Description Data</th>" + "<td>" + data.DescriptionData + "</td>" + "</tr>"
+
+            + "<tr>"
+
+
+
+            ;
+
+            $('#tblTicketDetails tbody').append(record);
             },
             error: function (ex) {
 
             }
-        });
-        return false;
-    }
+            });
+            return false;
+      }
 
-    function getTicketComment() {
-        $("#tblTicketComment tbody tr").remove();
-        $.ajax({
+            //-------------------------Ticket Comment----------------------------------
+      function getTicketComment() {
+            $("#tblTicketComment tbody tr").remove();
+            $.ajax({
             type: 'GET',
             url: '@Url.Action("getTicketComment")',
             dataType: 'json',
-            data: { id: '@Model.TicketId' },
-            success: function (data) {
-                var items = '';
-
-                $.each(data, function (i, item) {
-                    var date = new Date(parseInt(item.CreatedOn.substr(6)));
-                    var dateString = date.toISOString();
-                    var timeAgoString = timeago.format(dateString);
-                    var rows = "<tr>"
-                        + "<td class='prtoducttd'>"
-
-                        + "<div class='username-timeago'>"
-
-                        + "<span class='username'>" + item.UserName + "</span>"
-                        + "<span class='timeago'> (" + timeAgoString + ")</span>"
-
-                        + "</div>"
-
-                        + "<div class='commentarea'>" + item.Comment + "</div>"
-
-                        + "</td>"
-                        + "</tr>";
-                    $('#tblTicketComment tbody').append(rows);
-                });
+                data: { id: '@Model.TicketId' },
                 
+            success: function (data) {
+
+            var items = '';
+
+            $.each(data, function (i, item) {
+            var date = new Date(parseInt(item.CreatedOn.substr(6)));
+            var dateString = date.toISOString();
+            var timeAgoString = timeago.format(dateString);
+
+
+            var rows = "<tr>"
+            + "<td class='prtoducttd'>"
+            + "<div class='username-timeago'>"
+            + "<span class='username'>" + item.UserName + "</span>"
+                    + "<span class='timeago'> (" + timeAgoString + ")</span>"
+
+                
+                + (item.UserName == '@ViewBag.UserName'    ?  "<a href='javascript:void(0);' style='margin-inline-start: auto;' class='edit-comment far fa-edit'  data-id=' " + item.Id + "'></a>"
+                        + "<a href='javascript:void(0);' style='margin-left:10px' class='delete-comment far fa-trash-alt' ;' data-id='" + item.Id + "'></a>"        : ''                               )
+               
+                    + "</div>"
+                + "<div class='commentarea'>" + item.Comment + "</div>"
+                + "</td>"
+                + "</tr>";
+            $('#tblTicketComment tbody').append(rows);
+            });
+
+            // Attach click event to delete links
+            $('.delete-comment').click(function (e) {
+            e.preventDefault();
+            var commentId = $(this).data('id');
+            deleteComment(commentId);
+            });
+
+
+
+                $('.edit-comment').click(function (e) {
+                    e.preventDefault();
+                    var commentId = $(this).data('id');
+                    editComment(commentId);
+                });
             },
             error: function (ex) {
+            }
+            });
+            return false;
+      }
 
-            }   
-        });
-        return false;
+            //-------------------------Delete----------------------------------
+      function deleteComment(Id) {
+            $.ajax({
+            type: 'POST',
+            url: '@Url.Action("DeleteComment")',
+            dataType: 'json',
+            data: { id: Id },
+            success: function (data) {
+            getTicketComment();
+            },
+            error: function (ex) {
+            alert("Error while deleting comment");
+            }
+            });
     }
+
+    function editComment(Id) {
+        $.ajax({
+
+            type: 'Get',
+            url: '@Url.Action("GetTicketEditComment")',
+            dataType: 'json',
+            data: { id: Id },
+
+            success: function (data) {
+                if (data.success) {
+                    var editString = JSON.stringify(data.comment);
+                    var editObject = JSON.parse(editString);
+                    $("#Comment").val(editObject.Comment);
+                    $("#Id").val(Id);
+                    @*$("#Comment").val(edit2);*@
+
+                } else {
+                    alert(data.message);
+                }
+            },
+            error: function (ex) {
+                alert("Error while Editing comment");
+            }
+        });
+      }
+
+
 </script>
+
 
 <div style="margin-left:200px">
 
 </div>
-
 <style>
-    .prtoducttd {
-        width: 540px;
-        padding: 15px 25px;
-        font-size: 16px;
-        display: flex;
-        flex-direction: column;
-    }
+.prtoducttd {
+width: 540px;
+padding: 15px 25px;
+font-size: 16px;
+display: flex;
+flex-direction: column;
+}
 
-    .username-timeago {
-        display: flex;
-       // justify-content: space-between;
-        align-items: center;
-    }
+.username-timeago {
+display: flex;
+// justify-content: space-between;
+align-items: center;
+}
 
-    .username {
-        font-size: 16px;
-        color: #8d8741;
-    }
+.username {
+font-size: 16px;
+color: #8d8741;
+}
 
-    .timeago {
-        margin-left:5px;
-        font-size: 12px;
-        color: #5f5f5f;
-    }
+.timeago {
+margin-left:5px;
+font-size: 12px;
+color: #5f5f5f;
+}
 
-  .commentarea {
-  word-wrap: break-word;
-  @*max-width: 300px; /* replace with the desired maximum width */*@
+.commentarea {
+word-wrap: break-word;
+@*max-width: 300px; /* replace with the desired maximum width */*@
 }
 
 </style>
