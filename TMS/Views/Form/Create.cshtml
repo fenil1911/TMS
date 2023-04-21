@@ -53,7 +53,7 @@
             <div class="validationMessage" style="background-color: #fff ">
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="labelform">Name <strong>*</strong><sup class="span_req"><i class="fa fa-star" aria-hidden="true"></i></sup></label>
+                        <label class="labelform">Name <strong style="color:red " >*</strong><sup class="span_req"><i class="fa fa-star" aria-hidden="true"></i></sup></label>
                         <div class="input_box">
                             @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
@@ -63,7 +63,7 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label class="labelform">Form Access Code<strong>*</strong> <sup class="span_req"><i class="fa fa-star" aria-hidden="true"></i></sup></label>
+                        <label class="labelform">Form Access Code<strong style="color:red " >*</strong> <sup class="span_req"><i class="fa fa-star" aria-hidden="true"></i></sup></label>
                         <div class="input_box">
                             @if (Model.Id > 0)
                             {
@@ -80,7 +80,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="labelform">Navigate URL<strong>*</strong></label>
+                        <label class="labelform">Navigate URL<strong style="color:red " >*</strong></label>
                         <div class="input_box">
                             @Html.TextBoxFor(model => model.NavigateURL, new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.NavigateURL, "", new { @class = "text-danger text-red" })
@@ -89,7 +89,7 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label class="labelform">Display Order<strong>*</strong></label>
+                        <label class="labelform">Display Order<strong style="color:red " >*</strong></label>
                         <div class="input_box">
                             @Html.TextBoxFor(model => model.DisplayOrder, new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.DisplayOrder, "", new { @class = "text-danger" })
@@ -107,7 +107,7 @@
                     <div class="col-md-6">
 
                         <label class="form-label labelform ">Display Menu</label>
-                        <div class="checkbox" style="margin-top: -22px; margin-left: 120px; ">
+                        <div class="checkbox" style=" margin-top: -3px; margin-left: 21px; ">
                             @Html.EditorFor(model => model.IsDisplayMenu)
                             @Html.ValidationMessageFor(model => model.IsDisplayMenu, "", new { @class = "text-danger" })
                         </div>
@@ -117,7 +117,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label class="form-label labelform ">Is Active</label>
-                        <div class="checkbox" style="margin-top: -22px; margin-left: 90px; ">
+                        <div class="checkbox" style=" margin-top: -6px; margin-left: 21px; ">
+
                             @Html.EditorFor(model => model.IsActive)
                             @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
                         </div>

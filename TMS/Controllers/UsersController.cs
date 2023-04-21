@@ -85,8 +85,11 @@ namespace TMS.Controllers
         }
         public ActionResult Edit(int Id)
         {
-           
-                UsersModel usersModel = _usersService.GetUserById(Id);
+            if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.USER.ToString(), AccessPermission.IsEdit))
+            {
+                return RedirectToAction("AccessDenied", "Base");
+            }
+            UsersModel usersModel = _usersService.GetUserById(Id);
 
             usersModel.RoleDropdown = _rolesService.GetAllRoles()
                 .Select(x => new MyDropdown() { Key = x.Name, name = x.Name }).ToList();
@@ -98,6 +101,10 @@ namespace TMS.Controllers
         {
             try
             {
+                if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.USER.ToString(), AccessPermission.IsEdit))
+                {
+                    return RedirectToAction("AccessDenied", "Base");
+                }
                 if (ModelState.IsValid)
                 {
                     var registerModel1 = _usersService.UpdateUserProfile(registerModel);
@@ -110,9 +117,10 @@ namespace TMS.Controllers
 
                     Roles.AddUserToRole(registerModel.UserName, registerModel.Role);
                 }
-                else{
+                else
+                {
 
-                    
+
 
                     return RedirectToAction("Edit");
                 }
@@ -128,8 +136,6 @@ namespace TMS.Controllers
             return RedirectToAction("Index");
 
         }
-
-
 
     }
 }

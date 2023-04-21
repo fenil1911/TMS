@@ -67,9 +67,6 @@ namespace TMS.Controllers
                     return RedirectToAction("AccessDenied", "Base");
                 }
 
-
-
-
                 CommonLookupModel model = new CommonLookupModel();
                 return PartialView("Create", model);
 

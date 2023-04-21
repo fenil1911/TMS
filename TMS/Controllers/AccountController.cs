@@ -11,7 +11,7 @@ using TMS.Data;
 using TMS.Helper;
 using TMS.Service;
 using TMS.Model.General;
-using static TMS.Model.AccountModel;    
+using static TMS.Model.AccountModel;
 using System.Collections.Generic;
 using System.Threading;
 
@@ -39,20 +39,15 @@ namespace TMS.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Login(string ReturnUrl = null)
+        public ActionResult Login(string ReturnUrl, string resetMessage)
         {
-            ViewData["ReturnUrl"] = ReturnUrl;
+            ViewBag.ChangePasswordSuccess = resetMessage;
 
-            // Check for password reset success message
-            var passwordResetSuccess = TempData["PasswordResetSuccess"];
-            Model.LoginModel model = new Model.LoginModel();
-            if (SessionHelper.UserId > 0)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            ViewBag.ReturnUrl = ReturnUrl;
-            return View(model);
+            
+            return View();
         }
+
+
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -60,26 +55,20 @@ namespace TMS.Controllers
         {
             try
             {
+
+
                 if (ModelState.IsValid && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
                 {
                     var userID = WebSecurity.GetUserId(model.UserName);
                     var rolecode = Roles.GetRolesForUser(model.UserName);
                     var rolecodestring = rolecode[0];
                     //var roleId = Roles.GetUsersInRole(rolecode).ToString();
-
-
-
-
-
-
                     if (model.Password == "123")
                     {
-
                         return RedirectToAction("ChangePassword", "Account");
                     }
                     else
                     {
-
                         SessionHelper.UserId = userID;
                         //SessionHelper.RoleCode = Roles.GetRolesForUser(model.RoleCode).FirstOrDefault();
                         SessionHelper.RoleName = rolecodestring;
@@ -91,7 +80,7 @@ namespace TMS.Controllers
                         SessionHelper.UserId = userID;
                         var sadmin = SessionHelper.UserId;
                         var user = SessionHelper.UserId;
-
+                        TempData["ChangePassword"] = "Change Password successfully!";
                         return RedirectToAction("Index", "DashBoard");
                     }
                 }
@@ -109,7 +98,7 @@ namespace TMS.Controllers
                 throw ex;
             }
         }
-        
+
         [AllowAnonymous]
         public ActionResult Logout()
         {
@@ -156,28 +145,19 @@ namespace TMS.Controllers
                 if (ModelState.IsValid)
                 {
                     bool isUserExists = WebSecurity.UserExists(registerModel.UserName);
-                    if (isUserExists)
+                    WebSecurity.CreateUserAndAccount(registerModel.UserName, registerModel.Password, new
                     {
-                        TempData["AlertMessage"] = "The username already exists.";
-                        TempData["AlertType"] = "alert-danger";
-                        return RedirectToAction("Register");
+                        FirstName = registerModel.FirstName,
+                        EmailId = registerModel.EmailId,
+                        LastName = registerModel.LastName,
+                        CreatedOn = DateTime.Now,
+                        IsActive = registerModel.IsActive,
+                        IsDeleted = registerModel.IsDeleted
 
-                    }
-                    else
-                    {
-                        WebSecurity.CreateUserAndAccount(registerModel.UserName, registerModel.Password, new
-                        {
-                            FirstName = registerModel.FirstName,
-                            EmailId = registerModel.EmailId,
-                            LastName = registerModel.LastName,
-                            CreatedOn = DateTime.Now,
-                            IsActive = registerModel.IsActive,
-                            IsDeleted = registerModel.IsDeleted
+                    });
+                    Roles.AddUserToRole(registerModel.UserName, registerModel.Role);
+                    return RedirectToAction("Index", "Users");
 
-                        });
-                        Roles.AddUserToRole(registerModel.UserName, registerModel.Role);
-                        return RedirectToAction("Index", "Dashboard");
-                    }
                 }
                 else
                 {
@@ -215,7 +195,8 @@ namespace TMS.Controllers
                     {
                         WebSecurity.Logout();
                         Session.Abandon();
-                        return RedirectToAction("Login", "Account");
+                        TempData["ChangePasswordSuccess"] = "Change Password successfully!";
+                        return RedirectToAction("Login", new { resetMessage = TempData["ChangePasswordSuccess"] });
                     }
                     else
                     {
@@ -252,7 +233,7 @@ namespace TMS.Controllers
                 string resetCode = Guid.NewGuid().ToString();
 
                 // generate a password reset token for the user
-                
+
                 string token = WebSecurity.GeneratePasswordResetToken(userexist.UserName);
 
                 /*string resetCode = Guid.NewGuid().ToString();
@@ -313,30 +294,40 @@ namespace TMS.Controllers
             })
                 smtp.Send(message);
         }
-         [AllowAnonymous]
+        [AllowAnonymous]
         public ActionResult ResetPassword(string id)
         {
+
+
             if (string.IsNullOrWhiteSpace(id))
             {
                 return HttpNotFound();
             }
             var userexist = _usersService.GetroleById(id);
-            var rolecode = userexist.ResetPasswordCode;
-            var user = _db.Users.Where(a => a.ResetPasswordCode == id).FirstOrDefault();
-            if (rolecode != null)
+            if (userexist == null)
             {
-                ResetPasswordModel model = new ResetPasswordModel();
-                model.ResetCode = id;
-                return View(model);
+                TempData["expired"] = "Your password reset link has expired";
+                return RedirectToAction("ForgotPassword");
             }
             else
             {
-                return HttpNotFound();
+                var rolecode = userexist.ResetPasswordCode;
+                var user = _db.Users.Where(a => a.ResetPasswordCode == id).FirstOrDefault();
+                if (rolecode != null)
+                {
+                    ResetPasswordModel model = new ResetPasswordModel();
+                    model.ResetCode = id;
+                    return View(model);
+                }
+                else
+                {
+                    return HttpNotFound();
+                }
             }
         }
 
         [HttpPost]
-        
+
         [AllowAnonymous]
         public ActionResult ResetPassword(ResetPasswordModel model)
         {
@@ -350,8 +341,12 @@ namespace TMS.Controllers
 
                     if (isPasswordChanged)
                     {
-                        TempData["PasswordResetSuccess"] = "Your password has been successfully reset. Please log in with your new password.";
-                        return Json(new { success = true, redirectUrl = Url.Action("Logout", "Account") });
+                        string reset = "Your password has been reset successfully";
+                        return Json(new
+                        {
+                            success = true,
+                            redirectUrl = Url.Action("Login", "Account", new { resetMessage = reset })
+                        });
                     }
                     else
                     {
@@ -371,7 +366,10 @@ namespace TMS.Controllers
             return Json(new { success = false, message = message });
         }
 
-   
+        public JsonResult IsUsernameExist(string UserName)
+        {
+            return Json(!_db.Users.Any(x => x.UserName == UserName), JsonRequestBehavior.AllowGet);
+        }
 
     }
 

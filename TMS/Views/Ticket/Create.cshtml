@@ -23,14 +23,14 @@
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="form-label labelform">Ticket Name<strong>*</strong></label>
+                        <label class="form-label labelform">Ticket Name<strong style="color:red " >*</strong></label>
                         @Html.EditorFor(model => model.TicketName, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.TicketName, "", new { @class = "text-danger" })
 
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label labelform">Assigned<strong>*</strong></label>
+                        <label class="form-label labelform">Assigned<strong style="color:red " >*</strong></label>
 
                         @Html.DropDownListFor(model => model.AssignedTo,
                          new SelectList(Model.AssignedDropdown, "Id", "Name", Model.AssignedTo), "Assigned To", new { @class = "form-control" })
@@ -42,7 +42,7 @@
 
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="form-label labelform">Type<strong>*</strong></label>
+                        <label class="form-label labelform">Type<strong style="color:red " >*</strong></label>
 
                         @Html.DropDownListFor(model => model.TypeId,
                          new SelectList(Model.TypeDropdown, "Id", "Name", Model.TypeId), "All Type", new { @class = "form-control" })
@@ -51,7 +51,7 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label labelform">Priority<strong>*</strong></label>
+                        <label class="form-label labelform">Priority<strong style="color:red " >*</strong></label>
 
                         @Html.DropDownListFor(model => model.PriorityId,
                          new SelectList(Model.PriorityDropdown, "Id", "Name", Model.PriorityId), "Priority", new { @class = "form-control" })
@@ -61,7 +61,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="form-label labelform">Status<strong>*</strong></label>
+                        <label class="form-label labelform">Status<strong style="color:red " >*</strong></label>
 
                         @Html.DropDownListFor(model => model.StatusId,
                          new SelectList(Model.StatusDropdown, "Id", "Name", Model.StatusId), "Status", new { @class = "form-control" })
@@ -98,7 +98,7 @@
                         <label for="">&nbsp;&nbsp;</label>
                         <div class="input_box">
                             <button type="submit" class="btn btn-primary btn-md" id="#btnforms" style="margin-top: 0px;">Submit</button>
-                            <a href="@Url.Action("Index", "Tickets")" class="btn btn-danger float-right right btn-md">Cancel</a>
+                            <a href="@Url.Action("Index", "Ticket")" class="btn btn-danger float-right right btn-md">Cancel</a>
                         </div>
                     </div>
                 </div>

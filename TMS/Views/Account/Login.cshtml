@@ -19,55 +19,75 @@
         @Html.AntiForgeryToken()
 
         <br /><br />
-        <section class="login-section">
+              <section class="login-section">
 
-            <div class="login-from box-shadow">
-                @if (!string.IsNullOrEmpty(ViewBag.PasswordResetSuccess))
-                {
-                    <div class="alert alert-success">@ViewBag.PasswordResetSuccess</div>
-                }
-                @if (!String.IsNullOrWhiteSpace(ViewBag.Error))
-                {
-                    <label class="bg-error text-white alertmsg">@ViewBag.Error</label>
-                }
-                <br> <br />
-                <div class="login-from shadow-lg p-3 mb-5  rounded  box-shadow" style="margin: 0 auto; max-width: 400px; border-radius: 15px; background-color: white; padding: 20px; box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;">
-                    @*  <center><h1 style="color:cadetblue; font:bolder 50px timesnewroman;">TMS</h1></center>*@
-                    <div class="login-logo mb-4 text-center">
-                        <a href=""><img src="~/Content/images/tms.png" width="200"></a>
-                    </div>
-                    <center><h2 style="font-family:'Segoe UI' ;font-weight:bold ; color:#212121">Sign In</h2></center>
-                    <form method="post">
-                        <div class="form-group">
-                            <label class="label-title">User Name<strong style="color:red ;font-weight:bold ; font-size:larger">*</strong></label>
-                            @Html.TextBoxFor(model => model.UserName, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
-                        </div>
-                        <div class="form-group">
-                            <label class="label-title">Password<strong style="color:red ;font-weight:bold ; font-size:larger">*</strong></label>
+                  <div class="login-from box-shadow">
 
-                            @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
-
-                            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-
-                        </div>
-                        <div class="form-group">
-                            @Html.CheckBoxFor(model => model.RememberMe)
-                            &nbsp;@Html.LabelFor(model => model.RememberMe, htmlAttributes: new { @class = "control-label" })
-                            @Html.ValidationMessageFor(model => model.RememberMe, "", new { @class = "text-danger" })
-                            <a style="margin-left:31%">@Html.ActionLink("Forgot Password?", "ForgotPassword", "Account")</a>
-                        </div>
-                        <div class="mt-4">
-                            <button class="w-100 center-block  btn-lg  btn-primary " id="btnlogin" type="submit" style="width: 350px;border-width:0px; border-radius:15px;height: 50px; background-color: #4b91f1 " ;>Sign In</button>
-                        </div>
-                    </form>
-                </div>
-
+                      <br> <br />
+                     
+                      <div class="login-from shadow-lg p-3 mb-5  rounded  box-shadow" style="margin: 0 auto; max-width: 400px; border-radius: 15px; background-color: white; padding: 20px; box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;">
+                          @*  <center><h1 style="color:cadetblue; font:bolder 50px timesnewroman;">TMS</h1></center>*@
+                          <div class="login-logo mb-4 text-center">
+                              <a href=""><img src="~/Content/images/tms.png" width="200"></a>
+                          </div>
+                          <center><h2 style="font-family:'Segoe UI' ;font-weight:bold ; color:#212121">Sign In</h2></center>
+                          <div>
+                              @* @if (@TempData["CUMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissable">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <i class="glyphicon glyphicon-ok-circle" aria-hidden="true"></i> @TempData["CUMessage"]
             </div>
-        </section>
+        }
+        @if (@TempData["ChangePassword"] != null)
+        {
+            <div class="alert alert-success alert-dismissable">
+
+                <i class="glyphicon glyphicon-ok-circle" aria-hidden="true"></i> @TempData["ChangePassword"]
+            </div>
+        }*@
+                              @if (ViewBag.ChangePasswordSuccess != null)
+                              {
+                                  <div class="alert alert-success">
+                                      @ViewBag.ChangePasswordSuccess
+                                  </div>
+                              }
+
+
+                          </div>
+                          <form method="post">
+                              <div class="form-group">
+                                  <label class="label-title">User Name<strong style="color:red ;font-weight:bold ; font-size:larger">*</strong></label>
+                                  @Html.TextBoxFor(model => model.UserName, new { @class = "form-control" })
+                                  @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                              </div>
+                              <div class="form-group">
+                                  <label class="label-title">Password<strong style="color:red ;font-weight:bold ; font-size:larger">*</strong></label>
+
+                                  @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+
+                                  @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+
+                              </div>
+                              <div class="form-group">
+                                  @Html.CheckBoxFor(model => model.RememberMe)
+                                  &nbsp;@Html.LabelFor(model => model.RememberMe, htmlAttributes: new { @class = "control-label" })
+                                  @Html.ValidationMessageFor(model => model.RememberMe, "", new { @class = "text-danger" })
+                                  <a style="margin-left:31%">@Html.ActionLink("Forgot Password?", "ForgotPassword", "Account")</a>
+                              </div>
+                              <div class="mt-4">
+                                  <button class="w-100 center-block  btn-lg  btn-primary " id="btnlogin" type="submit" style="width: 350px;border-width:0px; border-radius:15px;height: 50px; background-color: #4b91f1 " ;>Sign In</button>
+                              </div>
+                          </form>
+                      </div>
+                     
+                  </div>
+                  
+              </section>
 
     }
 
     <script src="Content/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+

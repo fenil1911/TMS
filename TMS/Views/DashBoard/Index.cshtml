@@ -15,6 +15,7 @@
 </head>
 <body>
     <div class=" container">
+        <input type="hidden" id="priority-param" value="" />
         <div class="row" style="margin-top: 70px;">
             <div class="col-md-3">
                 <div class="white_box_home  first_1_box clearfix ">
@@ -66,7 +67,7 @@
                 <label style="align-items: center;  font-size: 18px; color: #3535359c">Top 5 Tickets</label>
             </div>
         </div>
-        
+
         <div class="row ;col ; white_boxdashboard" style=" margin-top: 25px;margin-left:-4px">
 
             @(Html.Kendo().Grid<TMS.Model.TicketModel>()
@@ -79,9 +80,9 @@
             columns.Bound(p => p.TypeName).Title("Type").Width(110);
             columns.Bound(p => p.PriorityName).Title("Priority").Width(80);
             columns.Bound(p => p.StatusName).Title("Status").Width(90);
-         
+
             columns.Bound(p => p.AssignedToName).Title("Assigned To").Width(120);
-           
+
 
             columns.Bound(p => p.CreatedToName).Title("Created By").Width(120);
             columns.Bound(p => p.ImageName)
@@ -120,7 +121,7 @@
     }
 </style>
 <script>
-
+    
     $('.white_box_home').click(function () {
         var param = $(this).find('.ds_label').text();
         if (param === "Low" && @ViewBag.TotalLow == 0 || param === "Medium" && @ViewBag.TotalMedium == 0
@@ -128,6 +129,7 @@
             alert("Ticket Is Null");
             return false;
         }
+         var pass = $("#priority-param").val(param);
         window.location.href = "/Ticket/Index?Priority=" + param;
     });
 </script>
@@ -402,11 +404,21 @@ var totalHigh = @Html.Raw(Json.Encode(ViewBag.TotalHigh));
 
 
 
-<script>
-    $(document).ready(function () {
-        $("#Ticket tbody").on("click", "tr", function () {
-            var dataItem = $("#Ticket").data("kendoGrid").dataItem(this);
-            window.location.href = "/Ticket/Comment/" + dataItem.Id;
+
+    <script>
+        $(document).ready(function () {
+        var grid = $("#Ticket").data("kendoGrid");
+
+
+
+        $("#Ticket tbody").on("click", "td[role='gridcell']:not(.k-hierarchy-cell)", function (e) {
+            var cell = $(e.currentTarget);
+        var column = grid.columns[cell.index()];
+        if (column.field === "TicketName" || column.field === "TypeName" || column.field === "PriorityName"  ||
+        column.field === "StatusName" || column.field === "AssignedToName" || column.field === "CreatedToName" || column.field === "CreatedOn" ){
+                var dataItem = grid.dataItem(cell.closest("tr"));
+        window.location.href = "/Ticket/Comment/" + dataItem.Id;
+            }
         });
     });
 </script>

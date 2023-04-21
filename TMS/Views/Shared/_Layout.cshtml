@@ -46,7 +46,7 @@
                     <div class="align-center" style="margin-top: 7px ">
                             <div class="user_img" style="color:black;font-weight:bold">
 
-                               @* @SessionHelper.UserName[0].ToString().ToLower()*@
+                              @*  @SessionHelper.UserName[0].ToString().ToLower()*@
 
                             </div>
                         <div class="userName align-center">
@@ -55,8 +55,8 @@
                             <div class="userInfoDiv">
                                 <div class="userInfoBox">
 
-                                    @Html.ActionLink("LogOut", "LogOut", "Account")
                                     @Html.ActionLink("Change Password", "ChangePassword", "Account")
+                                    @Html.ActionLink("LogOut", "LogOut", "Account")
                                 </div>
                             </div>
                         </div>

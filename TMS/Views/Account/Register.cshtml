@@ -9,15 +9,16 @@
 
 </head>
 
-@if (TempData["AlertMessage"] != null)
-{
-    <div class="alert @TempData["AlertType"] alert-dismissible fade show" role="alert">
-        @TempData["AlertMessage"]
 
-    </div>
-}
 
 <div class="white_box" style="margin-top: 80px;">
+    @if (@TempData["AlertMessage"] != null)
+    {
+        <div id="alert" class="alert alert-danger alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <i class="glyphicon glyphicon-alert" aria-hidden="true"></i> @TempData["AlertMessage"]
+        </div>
+    }
     <div class="container-fluid">
         @using (Html.BeginForm())
         {
@@ -31,19 +32,19 @@
 
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="form-label labelform">First Name<strong>*</strong></label>
+                        <label class="form-label labelform">First Name<strong style="color:red " >*</strong></label>
                         @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label labelform">Last Name<strong>*</strong></label>
+                        <label class="form-label labelform">Last Name<strong style="color:red " >*</strong></label>
                         @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="form-label labelform">User Name<strong>*</strong></label>
+                        <label class="form-label labelform">User Name<strong style="color:red " >*</strong></label>
 
                         @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
@@ -51,7 +52,7 @@
 
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label labelform">Email Id<strong>*</strong></label>
+                        <label class="form-label labelform">Email Id<strong style="color:red " >*</strong></label>
 
                         @Html.EditorFor(model => model.EmailId, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.EmailId, "", new { @class = "text-danger" })
@@ -60,13 +61,13 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="form-label labelform">Password<strong>*</strong></label>
+                        <label class="form-label labelform">Password<strong style="color:red " >*</strong></label>
 
                         @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label labelform">Confirm Password<strong>*</strong></label>
+                        <label class="form-label labelform">Confirm Password<strong style="color:red " >*</strong></label>
 
                         @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
@@ -76,7 +77,7 @@
                 <div class="row">
 
                     <div class="col-md-6">
-                        <label class="form-label labelform">Role<strong>*</strong></label>
+                        <label class="form-label labelform">Role<strong style="color:red " >*</strong></label>
                         @Html.DropDownListFor(model => model.Role,
                            new SelectList(Model.RoleDropdown, "Key", "Name", Model.Role), "ROLE", new { @class = "form-control" })
 
@@ -84,8 +85,8 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label labelform ">Active</label>
-                        <div class="checkbox" style="margin-top: -22px; margin-left: 90px; ">
+                        <label class="form-label labelform ">Is Active</label>
+                        <div class="checkbox" style=" margin-top: -4px; margin-left: 19px; ">
                             @Html.EditorFor(model => model.IsActive)
                             @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
                         </div>
@@ -131,3 +132,13 @@
         });
     </script>
 }
+
+
+<script>
+    $(document).ready(function () {
+     
+        setTimeout(function () {
+            $('#alert').fadeOut('fast');
+        }, 3000);
+    });
+</script>

@@ -20,7 +20,10 @@ namespace TMS.Controllers
         {
             try
             {
-
+                if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.DASHBOARD.ToString(), AccessPermission.IsView))
+                {
+                    return RedirectToAction("AccessDenied", "Base");
+                }
                 int CreatedBy = SessionHelper.UserId;
                 if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.DASHBOARD.ToString(), AccessPermission.IsView))
                 {

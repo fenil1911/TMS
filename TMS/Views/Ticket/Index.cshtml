@@ -7,10 +7,15 @@
 
 
 <div class="container-fluid">
-    <div class="users-container @if (!TMS.Model.AccessPermission.Add) { <text>no-create-button</text> }" style="margin-top:80px ;margin-bottom:64px">
-        <h2 style="font-weight: bold; @if (!TMS.Model.AccessPermission.Add) { <text>margin-top: 0 ; margin-bottom:20px;</text> }">Tickets</h2>
-        <div style="margin-bottom: -40px; margin-left: 835px;" id="priority-dropdown"></div>
 
+    <div class="users-container @if (!TMS.Model.AccessPermission.Add) { <text>no-create-button</text> }" style="margin-top:80px ;margin-bottom:64px">
+        <h2 style="font-weight: bold; @if (!TMS.Model.AccessPermission.Add) { <text>margin-top: 0 ;margin-bottom:5px;</text> }">Tickets</h2>
+        @if (!TMS.Model.AccessPermission.Add)
+        {
+            <div style=" margin-left: 835px; margin-top: -40px;" id="priority-dropdown"></div>
+
+        }  @if (TMS.Model.AccessPermission.Add)
+        {<div style="margin-bottom: -40px; margin-left: 835px;" id="priority-dropdown"></div>}
         @if (TMS.Model.AccessPermission.Add)
         {
 
@@ -18,6 +23,8 @@
         }
     </div>
     <div class="row  ; white_box " style="margin-top: -40px;">
+        <input type="hidden" id="priority-param" value="@ViewBag.Priority">
+
         @if (SessionHelper.UserId == 1)
         {
             @(Html.Kendo().Grid<TMS.Model.TicketModel>()
@@ -78,14 +85,32 @@
                     columns.Bound(p => p.TypeName).Title("Type").Width(110);
                     columns.Bound(p => p.PriorityName).Title("Priority").Width(100);
                     columns.Bound(p => p.StatusName).Title("Status").Width(90);
-                 
+
                     columns.Bound(p => p.CreatedToName).Title("Created By").Width(120);
-                    columns.Bound(p => p.ImageName)
+                   @* columns.Bound(p => p.ImageName)
                     .Title("Attachment")
                     .ClientTemplate("#if (ImageName != null && ImageName != '') { #" +
                     "<a href='" + Url.Action("DownloadFile", "Ticket", new { fileName = "#=ImageName#" }) + "' target='_blank'>#=ImageName#</a>" +
                     "# } #")
-                    .Width(150).Filterable(false); ;
+                    .Width(150).Filterable(false);*@
+                   @* columns.Bound(p => p.ImageName)
+                   .Title("Attachment")
+                   .ClientTemplate("#if (ImageName != null && ImageName != '') { #" +
+                       "<a style='pointer-events: none;' href='" + Url.Action("DownloadFile", "Ticket", new { fileName = "#=ImageName#" }) + "' target='_blank'>#=ImageName#</a>" +
+                   "# } #")
+                   .Width(150)
+                   .Filterable(false);*@
+                 columns.Bound(p => p.ImageName)
+                   .Title("Attachment")
+                   .ClientTemplate("#if (ImageName != null && ImageName != '') { #" +
+                       "#=ImageName#" +
+                   "# } #")
+                   .Width(150)
+                   .Filterable(false)
+                   .Sortable(false)
+                   .HtmlAttributes(new { style = " cursor: default;" });
+
+
                     columns.Bound(p => p.CreatedOn).Title("Created On").Format("{0:dd/MM/yyyy}").Width(100).Filterable(false); ;
                     columns.Bound(p => p.Id).ClientTemplate(
                     "<a href='" + Url.Action("Comment", "Ticket") + "/#=Id#'>Details   </a>"
@@ -120,12 +145,35 @@
     </div>
 </div>
 
+@*
+    <script>
 
+        $(document).ready(function () {
+            $("#Ticket tbody").on("click", "tr", function (e) {
+                var grid = $("#Ticket").data("kendoGrid");
+                var dataItem = grid.dataItem(this);
+                if (e.target.tagName.toLowerCase() === "a") {
+                    e.preventDefault();
+                } else {
+                    window.location.href = "/Ticket/Comment/" + dataItem.Id;
+                }
+            });
+        });
+    </script>*@
 <script>
     $(document).ready(function () {
-        $("#Ticket tbody").on("click", "tr", function () {
-            var dataItem = $("#Ticket").data("kendoGrid").dataItem(this);
-            window.location.href = "/Ticket/Comment/" + dataItem.Id;
+        var grid = $("#Ticket").data("kendoGrid");
+
+     
+       
+        $("#Ticket tbody").on("click", "td[role='gridcell']:not(.k-hierarchy-cell)", function (e) {
+            var cell = $(e.currentTarget);
+            var column = grid.columns[cell.index()];
+            if (column.field === "TicketName" || column.field === "TypeName" || column.field === "PriorityName"  ||
+                column.field === "StatusName" || column.field === "AssignedToName" || column.field === "CreatedToName" || column.field === "CreatedOn" ){
+                var dataItem = grid.dataItem(cell.closest("tr"));
+                window.location.href = "/Ticket/Comment/" + dataItem.Id;
+            }
         });
     });
 </script>
@@ -133,9 +181,11 @@
 
 
 
+
+
 <script>
     $(function () {
-        // Initialize the Kendo DropDownList
+        var param = $("#priority-param").val();
         $("#priority-dropdown").kendoDropDownList({
             dataTextField: "text",
             dataValueField: "value",
@@ -148,17 +198,21 @@
                 ]
             },
             optionLabel: "Select priority",
+            value: param,
             change: function (e) {
                 var value = this.value();
                 if (value) {
-                    // Update the Kendo Grid's filter with the selected priority value
                     var grid = $("#Ticket").data("kendoGrid");
                     grid.dataSource.filter({ field: "PriorityName", operator: "eq", value: value });
-                    // Change the dropdown button name
+
                     this.text(value);
                 }
             }
         });
+        if (param) {
+            var grid = $("#Ticket").data("kendoGrid");
+            grid.dataSource.filter({ field: "PriorityName", operator: "eq", value: param });
+        }
     });
 </script>
 

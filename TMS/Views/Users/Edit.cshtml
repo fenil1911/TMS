@@ -28,12 +28,12 @@
 
                     <div class="row">
                         <div class="col-md-6">
-                            <label class="form-label labelform">First Name<strong>*</strong></label>
+                            <label class="form-label labelform">First Name<strong style="color:red " >*</strong></label>
                             @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label labelform">Last Name<strong>*</strong></label>
+                            <label class="form-label labelform">Last Name<strong style="color:red " >*</strong></label>
                             @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
                         </div>
@@ -42,7 +42,7 @@
                     <div class="row">
 
                         <div class="col-md-6">
-                            <label class="form-label labelform">Role<strong>*</strong></label>
+                            <label class="form-label labelform">Role<strong style="color:red " >*</strong></label>
                             @Html.DropDownListFor(model => model.Role,
                                new SelectList(Model.RoleDropdown, "Key", "Name", Model.Role), "ROLE", new { @class = "form-control" })
 
@@ -50,8 +50,8 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label labelform ">Active</label>
-                            <div class="checkbox" style="margin-top: -22px; margin-left: 90px; ">
+                            <label class="form-label labelform ">Is Active</label>
+                            <div class="checkbox" style=" margin-top: -4px; margin-left: 19px; ">
                                 @Html.EditorFor(model => model.IsActive)
                                 @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
                             </div>

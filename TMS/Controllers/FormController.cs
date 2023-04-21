@@ -56,6 +56,10 @@ namespace TMS.Controllers
         {
             try
             {
+                if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.FORMMASTER.ToString(), AccessPermission.IsAdd))
+                {
+                    return RedirectToAction("AccessDenied", "Base");
+                }
                 string actionPermission = "";
                 if (id == null)
                 {

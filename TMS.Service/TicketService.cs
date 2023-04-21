@@ -52,17 +52,24 @@ namespace TMS.Service
         {
             return ticketProvider.CreateTickets(ticket, CreatedBy);
         }
-
-
         public List<TicketModel> GetAllStatus()
         {
             var index = ticketProvider.GetAllStatus();
             return index;
+        }   
+        public List<TicketModel> GetAllPriority()
+        {
+            var index = ticketProvider.GetAllPriority();
+            return index;
         }  
-
         public List<TicketModel> GetAllStatususer()
         {
             var index = ticketProvider.GetAllStatususer();
+            return index;
+        }
+        public List<TicketModel> GetAllPriorityuser()
+        {
+            var index = ticketProvider.GetAllPriorityuser();
             return index;
         }     
         public int CreateTicketStatus(TicketStatus ticket, int CreatedBy)
@@ -77,7 +84,6 @@ namespace TMS.Service
         {
              ticketProvider.EditAttachment(ticket, UpdatedBy);
         }
-
         public List<MyDropdown> BindEmployee()
         {
             return ticketProvider.BindEmployee();
@@ -97,8 +103,7 @@ namespace TMS.Service
         {
             return commonLookupProvider.GetAllCommonLookup().Where(a => a.Type.ToLower() == key.ToLower()).ToList();
 
-        }
-        
+        }         
         public int CreateTicketComment(TicketCommentViewModel comment, int CreatedBy, string CreatedBy1)
         {
             return ticketProvider.CreateTicketComment(comment, CreatedBy, CreatedBy1);
@@ -115,8 +120,7 @@ namespace TMS.Service
         {
             var GetAllComment = ticketProvider.GetAllComment(Id);
             return GetAllComment;
-        } 
-       
+        }           
         public int TotalHigh()
         {
             return ticketProvider.TotalHigh();
@@ -161,7 +165,6 @@ namespace TMS.Service
             };
             ticketProvider.CreateComment(comment);
         }
-
         public TicketCommentViewModel GetCommentById(int id)
         {
             var comment = ticketProvider.GetCommentById(id);
@@ -180,29 +183,9 @@ namespace TMS.Service
             }
             return null;
         }
-
-    /*    public void UpdateComment(TicketCommentViewModel model)
-        {
-            var comment = new TicketComment
-            {
-                Id = model.Id,
-                TicketId = model.TicketId,
-                Comment = model.Comment,
-                CreatedBy = model.CreatedBy,
-                CreatedOn = model.CreatedOn,
-                UserName = model.UserName
-            };
-            ticketProvider.UpdateComment(comment);
-        }*/
-
-
-
         public void DeleteComment(int Id)
         {
             ticketProvider.DeleteComment(Id);
         }
-
-
-
     }
 }

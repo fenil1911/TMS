@@ -35,6 +35,7 @@ namespace TMS.Model
             [Display(Name = "New Password:")]
             [Required(ErrorMessage = "New Password is required.")]
             [DataType(DataType.Password)]
+           // [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,5000}$", ErrorMessage = "Use 8 or more characters with a mix of letters,numbers & symbols")]
             public string NewPassword { get; set; }
 
             [Display(Name = "Confirm New Password:")]
@@ -48,6 +49,7 @@ namespace TMS.Model
         {
             [Required(ErrorMessage = "Please enter new password")]
             [DataType(DataType.Password)]
+            //[RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,5000}$", ErrorMessage = "Use 8 or more characters with a mix of letters,numbers & symbols")]
             public string NewPassword { get; set; }
 
             [DataType(DataType.Password)]
@@ -62,6 +64,7 @@ namespace TMS.Model
         public class ForgotPasswordModel
         {
             [Required(ErrorMessage = "Email Id is required.")]
+         
             [RegularExpression(@"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$", ErrorMessage = "Invalid Email ID")]
             public string EmailId { get; set; }
         }

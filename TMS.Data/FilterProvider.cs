@@ -43,7 +43,9 @@ namespace TMS.Data
                                      PageUrl = c.PageUrl,
                                         UserName = ae.UserName,
                                      count = GetCount
-                                 })
+                                 }).OrderBy(x => x.Id) 
+                                         
+                                         
                                  .AsQueryable();
                 return GetFilter;
             }

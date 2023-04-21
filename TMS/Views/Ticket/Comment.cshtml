@@ -1,6 +1,6 @@
 ﻿@model TMS.Model.TicketCommentViewModel
 
- 
+
 @{
     ViewBag.Title = "";
 }
@@ -14,6 +14,9 @@ else
 }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/timeago.js/4.0.2/timeago.min.js"></script>
 <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.13/jquery.validate.unobtrusive.min.js"></script>
+
 
 <div>
     <div class="col-md-6">
@@ -42,17 +45,11 @@ else
                 <div>
                     <div class="form-group">
 
-                        <div class="col-md-5">
+                        <div class="col-md-6">
                             @Html.HiddenFor(m => m.Id)
-                            @Html.EditorFor(model => model.Comment, new
-                       {
-                           htmlAttributes = new
-                           {
-                               @class = "form-control Comment",
-                               placeholder = "Comment",
-                               id = "Comment"
-                           }
-                       })
+
+                            @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control", id = "Comment" } })
+
                             @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -132,9 +129,12 @@ else
             type: 'GET',
             url: '@Url.Action("getTicketDetails")',
             dataType: 'json',
-            data: { id: '@Model.TicketId' },
+                data: { id: '@Model.TicketId' },
+
             success: function (data) {
-            var record =
+                var assignedTo = '';
+
+                var record =
             "<tr>"
             + "<th>Ticket Name</th>" +  "<td>" + data.TicketName + "</td>"+ "</tr>"
 
@@ -144,16 +144,21 @@ else
             +"<tr>"
             + "<th>Status </th>" + "<td>" + data.StatusName + "</td>" + "</tr>"
 
-            +"<tr>"
-            + "<th>Assigned To </th>" + "<td>" + data.AssignedTo + "</td>" + "</tr>"
-
-            +"<tr>"
+            + "<tr>"
             + "<th>Type Name</th>" + "<td>" + data.TypeName + "</td>" + "</tr>"
+
+            + "<tr>"
+            + "<th>Assigned To </th>" + "<td>" + data.AssignedToName + "</td>" + "</tr>"
+
+            + "<tr>"
+            + "<th>Created By</th>" + "<td>" + data.CreatedToName + "</td>" + "</tr>"
+
+
 
 
 
             + "<tr>"
-            + "<th>Description Data</th>" + "<td>" + data.DescriptionData + "</td>" + "</tr>"
+                + "<th>Description Data</th>" + "<td>" + (data.DescriptionData ? data.DescriptionData : '-') + "</td>" + "</tr>"
 
             + "<tr>"
 
@@ -178,7 +183,7 @@ else
             url: '@Url.Action("getTicketComment")',
             dataType: 'json',
                 data: { id: '@Model.TicketId' },
-                
+
             success: function (data) {
 
             var items = '';
@@ -195,10 +200,10 @@ else
             + "<span class='username'>" + item.UserName + "</span>"
                     + "<span class='timeago'> (" + timeAgoString + ")</span>"
 
-                
-                + (item.UserName == '@ViewBag.UserName'    ?  "<a href='javascript:void(0);' style='margin-inline-start: auto;' class='edit-comment far fa-edit'  data-id=' " + item.Id + "'></a>"
+                    + (item.UserName == '@ViewBag.UserName'    ?  "<a href='javascript:void(0);' style='margin-inline-start: auto;' class='edit-comment far fa-edit'  data-id=' " + item.Id + "'></a>"
                         + "<a href='javascript:void(0);' style='margin-left:10px' class='delete-comment far fa-trash-alt' ;' data-id='" + item.Id + "'></a>"        : ''                               )
-               
+
+
                     + "</div>"
                 + "<div class='commentarea'>" + item.Comment + "</div>"
                 + "</td>"
@@ -227,21 +232,32 @@ else
             return false;
       }
 
-            //-------------------------Delete----------------------------------
-      function deleteComment(Id) {
+    //-------------------------Delete----------------------------------
+    function deleteComment(Id) {
+
+        var  deletecomment= confirm("Are you sure to delete this comment?");
+        if (!deletecomment) {
+            return;
+                             } 
             $.ajax({
-            type: 'POST',
-            url: '@Url.Action("DeleteComment")',
-            dataType: 'json',
-            data: { id: Id },
-            success: function (data) {
-            getTicketComment();
-            },
-            error: function (ex) {
-            alert("Error while deleting comment");
-            }
+                type: 'POST',
+                url: '@Url.Action("DeleteComment")',
+                dataType: 'json',
+                data: { id: Id },
+
+                success: function (data) {
+                    getTicketComment();
+                },
+                error: function (ex) {
+                    alert("Error while deleting comment");
+                }
             });
-    }
+        }
+
+        
+   
+   
+
 
     function editComment(Id) {
         $.ajax({
@@ -292,8 +308,8 @@ align-items: center;
 }
 
 .username {
-font-size: 16px;
-color: #8d8741;
+font-size: 17px;
+color: #337ab7;
 }
 
 .timeago {

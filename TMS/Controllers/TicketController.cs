@@ -23,7 +23,6 @@ namespace TMS.Controllers
         private readonly UsersService _usersService;
         public TMSEntities _db;
 
-
         public TicketController()
         {
             _ticketService = new TicketService();
@@ -32,15 +31,17 @@ namespace TMS.Controllers
             _db = new TMSEntities();
 
         }
-
+        
+       
         public ActionResult Index([DataSourceRequest] DataSourceRequest request, string Priority = "")
         {
             try
             {
+                ViewBag.Priority = Priority;
                 TempData["Priority"] = Priority;
                 if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.TICKET.ToString(), AccessPermission.IsView))
                 {
-                
+
                     return RedirectToAction("AccessDenied", "Base", new { viewPermission = "ticket" });
                 }
                 return View();
@@ -50,11 +51,13 @@ namespace TMS.Controllers
                 throw ex;
             }
         }
+        
+
+
         public ActionResult GetGridData([DataSourceRequest] DataSourceRequest request)
         {
             try
             {
-               
                 string filterCondition = "";
                 foreach (IFilterDescriptor filter in request.Filters)
                 {
@@ -66,7 +69,6 @@ namespace TMS.Controllers
                 {
                     filterCondition = TempData["Priority"].ToString();
                 }
-
                 IQueryable<TicketModel> List;
                 int totalCount = 0;
                 if (SessionHelper.UserId == 1)
@@ -95,60 +97,7 @@ namespace TMS.Controllers
             {
                 throw ex;
             }
-        }
-        public JsonResult ClientFiltering_GetProducts()
-        {
-            var northwind = new TMSEntities();
-
-
-            var products = northwind.Tickets.Select(product => new TicketModel
-            {
-                PriorityId = product.PriorityId,
-           
-            });
-
-            return Json(products, JsonRequestBehavior.AllowGet);
-        }
-        /*  public ActionResult GetGridData([DataSourceRequest] DataSourceRequest request)
-          {
-              try
-              {
-                  int CreatedBy = SessionHelper.UserId;
-                  string filterCondition = "";
-                  foreach (IFilterDescriptor filter in request.Filters)
-                  {
-                      FilterDescriptor filterDesc = (FilterDescriptor)filter;
-                      filterCondition = filterDesc.Value.ToString();
-                  }
-                  IQueryable<TicketModel> List;
-                  if (SessionHelper.UserId == 1)
-                  {
-                      List = _ticketService.GetAllTicketsAdmin(request.PageSize, request.Page, request.Sorts, filterCondition);              
-                  }
-                  else
-                  {
-                      List = _ticketService.GetAllTickets(request.PageSize, request.Page, request.Sorts, filterCondition);
-                  }
-
-                  DataSourceResult result = List.ToDataSourceResult(request);
-                  var sortedlist = ApplyOrdersSorting(List, request.Sorts, request.PageSize, request.Page);
-                  var returndata = new DataSourceResult()
-                  {
-                      Data = sortedlist,
-                      Total = List.ToList().Count > 0 ? List.ToList().Count: 0
-                  };
-
-
-
-
-
-                  return Json(returndata, JsonRequestBehavior.AllowGet);
-              }
-              catch (Exception ex)
-              {
-                  throw ex;
-              }
-          }*/
+        }                
 
 
         public IQueryable<TicketModel> ApplyOrdersSorting(IQueryable<TicketModel> data, IList<SortDescriptor> sortDescriptors, int PageSize, int Page)
@@ -163,8 +112,8 @@ namespace TMS.Controllers
             return data;
         }
 
-        public IQueryable<TicketModel> AddSortExpression(IQueryable<TicketModel> data, ListSortDirection
-                        sortDirection, string memberName, int PageSize, int Page)
+
+        public IQueryable<TicketModel> AddSortExpression(IQueryable<TicketModel> data, ListSortDirection sortDirection, string memberName, int PageSize, int Page)
         {
             if (sortDirection == ListSortDirection.Ascending)
             {
@@ -182,7 +131,6 @@ namespace TMS.Controllers
                     case "DescriptionData":
                         data = data.OrderBy(order => order.DescriptionData).Skip((Page - 1) * PageSize).Take(PageSize);
                         break;
-
                     case "TypeName":
                         data = data.OrderBy(order => order.TypeName).Skip((Page - 1) * PageSize).Take(PageSize);
                         break;
@@ -213,7 +161,6 @@ namespace TMS.Controllers
                     case "DescriptionData":
                         data = data.OrderByDescending(order => order.DescriptionData).Skip((Page - 1) * PageSize).Take(PageSize);
                         break;
-
                     case "TypeName":
                         data = data.OrderByDescending(order => order.TypeName).Skip((Page - 1) * PageSize).Take(PageSize);
                         break;
@@ -231,6 +178,7 @@ namespace TMS.Controllers
             return data;
         }
 
+
         public ActionResult Create()
         {
             try
@@ -240,14 +188,12 @@ namespace TMS.Controllers
                     return RedirectToAction("AccessDenied", "Base");
                 }
                 TicketModel model = new TicketModel();
-
                 model.StatusDropdown = _ticketService.GetDropdownBykey("Status")
                    .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
                 model.PriorityDropdown = _ticketService.GetDropdownBykey1("Priority")
                    .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
                 model.TypeDropdown = _ticketService.GetDropdownBykey2("Task")
                     .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
-
                 model.AssignedDropdown = _usersService.GetAlluser()
                     .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
 
@@ -258,6 +204,7 @@ namespace TMS.Controllers
                 throw ex;
             }
         }
+
         [HttpPost]
         public ActionResult Create(TicketModel model, HttpPostedFileBase imgfile)
         {
@@ -267,7 +214,6 @@ namespace TMS.Controllers
                 {
                     int CreatedBy = SessionHelper.UserId;
                     var ticketId = _ticketService.CreateTickets(model, CreatedBy);
-
                     var statusStr = _commonLookupService.GetCommonLookupById(model.StatusId).Name;
                     if (imgfile != null)
                     {
@@ -298,7 +244,6 @@ namespace TMS.Controllers
                         _ticketService.CreateAttachment(obj1, CreatedBy);
                     }
                     TempData["Message"] = "Data Updated Successfully!!";
-
                     return RedirectToAction("Index");
                 }
                 else
@@ -309,7 +254,6 @@ namespace TMS.Controllers
                        .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
                     model.TypeDropdown = _ticketService.GetDropdownBykey2("Task")
                         .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
-
                     model.AssignedDropdown = _usersService.GetAlluser()
                         .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
 
@@ -318,57 +262,51 @@ namespace TMS.Controllers
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
 
         }
+
         public FileResult DownloadFile(string fileName)
         {
             try
             {
-
                 string contentType = string.Empty;
                 contentType = "application/force-download";
                 string fullPath = Path.Combine(Server.MapPath("~/Content/Uploadimage/") + fileName);
                 return File(fullPath, contentType, fileName);
-
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
+
         public ActionResult Edit(int Id)
         {
             try
             {
-
                 if (!CheckPermission(AuthorizeFormAccess.FormAccessCode.TICKET.ToString(), AccessPermission.IsEdit))
                 {
                     return RedirectToAction("AccessDenied", "Base");
                 }
                 TicketModel obj = _ticketService.GetTicketsById(Id);
-
                 obj.StatusDropdown = _ticketService.GetDropdownBykey("Status")
                 .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
                 obj.PriorityDropdown = _ticketService.GetDropdownBykey1("Priority")
                    .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
                 obj.TypeDropdown = _ticketService.GetDropdownBykey2("Task")
                     .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
-
                 obj.AssignedDropdown = _usersService.GetAlluser()
                     .Select(x => new MyDropdown() { id = x.Id, name = x.UserName }).ToList();
                 return View(obj);
-
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
+
         [HttpPost]
         public ActionResult Edit(TicketModel model, HttpPostedFileBase imgfile)
         {
@@ -376,7 +314,6 @@ namespace TMS.Controllers
             {
                 if (ModelState.IsValid)
                 {
-
                     int UpdatedBy = SessionHelper.UserId;
                     var ticketId = _ticketService.UpdateTicket(model, UpdatedBy);
                     var statusStr = _commonLookupService.GetCommonLookupById(model.StatusId).Name;
@@ -401,10 +338,10 @@ namespace TMS.Controllers
                     };
 
                     _ticketService.CreateTicketStatus(obj, UpdatedBy);
-                            if (imgfile != null)
-                            {
-                                _ticketService.EditAttachment(obj1, UpdatedBy);
-                            }
+                    if (imgfile != null)
+                    {
+                        _ticketService.EditAttachment(obj1, UpdatedBy);
+                    }
                     TicketService objservice = new TicketService();
                     TicketModel objmodels = objservice.UpdateTicket(model, UpdatedBy);
                     return RedirectToAction("Index");
@@ -417,7 +354,6 @@ namespace TMS.Controllers
                        .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
                     model.TypeDropdown = _ticketService.GetDropdownBykey2("Task")
                         .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
-
                     model.AssignedDropdown = _usersService.GetAlluser()
                         .Select(x => new MyDropdown() { id = x.Id, name = x.Name }).ToList();
 
@@ -429,6 +365,7 @@ namespace TMS.Controllers
                 throw ex;
             }
         }
+
         public ActionResult Display(int Id)
         {
             try
@@ -441,6 +378,7 @@ namespace TMS.Controllers
                 throw ex;
             }
         }
+
         public ActionResult TicketDetails(int TicketId)
         {
             try
@@ -453,6 +391,7 @@ namespace TMS.Controllers
                 throw ex;
             }
         }
+
         public JsonResult getTicketDetails(int id)
         {
             try
@@ -465,9 +404,10 @@ namespace TMS.Controllers
                 throw ex;
             }
         }
-        
-        
-        public ActionResult Delete(int Id)
+
+
+
+     public ActionResult Delete(int Id)
         {
             try
             {
@@ -483,6 +423,7 @@ namespace TMS.Controllers
                 throw ex;
             }
         }
+
         public ActionResult CommentIndex(int Id)
         {
             try
@@ -500,16 +441,11 @@ namespace TMS.Controllers
             }
         }
 
-
-      //------------------Comment--------------------------------
-
-        public ActionResult Comment(TicketComment modeledit , int Id)
+        public ActionResult Comment(TicketComment modeledit, int Id)
         {
             try
             {
                 ViewBag.UserName = SessionHelper.UserName;
-                
-
                 TicketCommentViewModel model = new TicketCommentViewModel();
                 model.TicketId = Id;
                 return View(model);
@@ -518,14 +454,7 @@ namespace TMS.Controllers
             {
                 throw ex;
             }
-        }        
-        
-    
-
-
-
-
-
+        }
 
         public JsonResult postTicketComment(int id)
         {
@@ -540,10 +469,7 @@ namespace TMS.Controllers
             }
         }
 
-
-
-        //---------------------Comment---------------------------------
-
+    
         public JsonResult getTicketComment(int id)
         {
             try
@@ -557,28 +483,34 @@ namespace TMS.Controllers
             }
         }
 
-
         [HttpPost]
         public JsonResult Comment(TicketCommentViewModel model)
         {
             try
             {
-                int CreatedBy = SessionHelper.UserId;
-                string CreatedBy1 = SessionHelper.UserName;
-                int UpdatedBy = CreatedBy;
-                string UpdatedBy1 = CreatedBy1;
-                if (model.Id == 0)
+                if (model.Comment != null)
                 {
-                    _ticketService.CreateTicketComment(model, CreatedBy, CreatedBy1);
-                    
+                    int CreatedBy = SessionHelper.UserId;
+                    string CreatedBy1 = SessionHelper.UserName;
+                    int UpdatedBy = CreatedBy;
+                    string UpdatedBy1 = CreatedBy1;
+                    if (model.Id == 0)
+                    {
+                        _ticketService.CreateTicketComment(model, CreatedBy, CreatedBy1);
+                    }
+                    else
+                    {
+                        _ticketService.UpdatedTicketComment(model, UpdatedBy, UpdatedBy1);
+                    }
+                    string message = "SUCCESS";
+                    return Json(new { model = message, JsonRequestBehavior.AllowGet });
                 }
-                else{
-                    _ticketService.UpdatedTicketComment(model, UpdatedBy, UpdatedBy1);
-                    
-
+                else
+                {
+                    ModelState.AddModelError("Comment", "Comment is required");
+                    string message = "error";
+                    return Json(new { model = message, JsonRequestBehavior.AllowGet });
                 }
-                string message = "SUCCESS";
-                return Json(new { model = message, JsonRequestBehavior.AllowGet });
             }
             catch (Exception ex)
             {
@@ -586,11 +518,7 @@ namespace TMS.Controllers
             }
         }
 
-
-
-        //============================Edit Comment========================================
-
-
+     
         public JsonResult GetTicketEditComment(int id)
         {
             try
@@ -627,12 +555,6 @@ namespace TMS.Controllers
             }
         }
 
-
-
-
-
-        //----------------------Delete-------------------------------
-
        
         [HttpPost]
         public JsonResult DeleteComment(int Id)
@@ -640,8 +562,6 @@ namespace TMS.Controllers
             _ticketService.DeleteComment(Id);
             return Json(new { success = true });
         }
-
-
     }
 }
 
